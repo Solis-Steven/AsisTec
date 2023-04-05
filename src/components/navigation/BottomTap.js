@@ -1,9 +1,9 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import EventosScreen from "../screens/EventosScreen";
-import HorarioScreen from "../screens/HorarioScreen";
+import EventosScreen from "../../screens/EventosScreen";
+import HorarioScreen from "../../screens/HorarioScreen";
 import React from "react";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import NotificationScreen from "../screens/NotificacionScreen";
+import NotificationScreen from "../../screens/NotificacionScreen";
 const Tab = createBottomTabNavigator();
 
 export const BottomTab = () => {
