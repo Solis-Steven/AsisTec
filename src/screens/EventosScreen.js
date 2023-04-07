@@ -5,10 +5,11 @@ import {
   TouchableOpacity, 
   Modal
 } from "react-native";
-import React, {useEffect, useState} from "react";
-import {Calendar} from "react-native-calendars";
+import React, { useState } from "react";
 import Icon from "react-native-vector-icons/FontAwesome";
 import EventModal from "../components/Events/EventModal";
+import EventCalendar from "../components/Events/EventCalendar";
+
 
 const EventosScreen = () => {
   const [daySelected, setDaySelected] = useState("");
@@ -24,27 +25,8 @@ const EventosScreen = () => {
       flex: 1,
       backgroundColor: isModalVisible ? "rgba(0,0,0,0.5)" : "white"
     }}>
-      <Calendar
-        onDayPress={day => {
-          setDaySelected(day.dateString);
-        }}
-        markedDates={{
-          [daySelected]: {
-            selected: true, 
-            disableTouchEvent: true, 
-            selectedDotColor: "green"
-          }
-        }}
-        theme={{
-          selectedDayBackgroundColor: "#8BB8A6",
-          selectedDayTextColor: "#ffffff",
-          arrowColor: "#8FC1A9",
-          todayTextColor: "#ffffff",
-          todayBackgroundColor: "#54C18C",
-          dayTextColor: "#000000",
-          calendarBackground: "#F4F4F4"
-        }}
-      />
+      <EventCalendar />
+
       <TouchableOpacity 
         onPress={changeModalVisible}
         style={{
@@ -70,6 +52,8 @@ const EventosScreen = () => {
             changeModalVisible={changeModalVisible}
             daySelected={daySelected}/>
       </Modal>
+
+      
     </View> 
   );
 };
