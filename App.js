@@ -1,13 +1,11 @@
-import { View, Text } from "react-native";
-import { useState } from "react";
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
-import { BottomTab } from "./src/components/navigation/BottomTap";
+import StackNavigator from "./StackNavigator";
 
 const App = () => {
   return (
     <NavigationContainer>
-      <BottomTab/>
+      <StackNavigator/>
     </NavigationContainer>
   );
 };
