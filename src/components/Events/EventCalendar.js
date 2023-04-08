@@ -1,38 +1,52 @@
 import React, { useState } from "react";
-import {Calendar, Agenda} from "react-native-calendars";
+import {Calendar, Agenda, LocaleConfig} from "react-native-calendars";
 import moment from 'moment';
 import { 
   View, 
-  Text
+  Text,
+  TouchableOpacity
 } from "react-native";
-import { ProgressBar } from 'react-native-paper';
+import EventListItem from "./EventListItem";
+import EventItem from "./EventItem";
+import { useEffect } from "react";
+
+LocaleConfig.locales['es'] = {
+  monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+  monthNamesShort: ['Ene.', 'Feb.', 'Mar', 'Abr', 'May.', 'Jun', 'Jul.', 'Ago', 'Sept.', 'Oct.', 'Nov.', 'Dic.'],
+  dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+  dayNamesShort: ['Dom.', 'Lun.', 'Mar.', 'Mié.', 'Jue.', 'Vie.', 'Sáb.'],
+  today: 'Hoy'
+};
+
+LocaleConfig.defaultLocale = 'es';
     
-const EventCalendar = () => {
-    const [daySelected, setDaySelected] = useState("");
+const EventCalendar = ({daySelected, setDaySelected}) => {
     const [eventItems, setEventItems] = useState({
-      "2023-04-06": [{name: "Evento 1", time: "10:00 AM - 11:00 AM"}, {name: "Evento 2", time: "1:00 PM - 2:00 PM"}],
-      "2023-04-07": [{name: "Evento 3", time: "9:00 AM - 10:00 AM"}],
+      "2023-04-06": [{name: "Reunion de Admin", initialHour: "10:00 AM", finalHour: "11:00 AM", date: "2023-04-06"}, 
+      {name: "Cita en el hospital", initialHour: "1:00 PM", finalHour: "5:00 PM", date: ""}],
+      "2023-04-07": [{name: "Trabajar en diseno", initialHour: "9:00 AM", finalHour: "6:00 PM", date: "2023-04-07"}],
+      "2023-04-15": [{name: "Avance de compi", initialHour: "1:00 PM", finalHour: "2:00 PM", date: "2023-04-15"}],
+      "2023-04-28": [{name: "Avance de admin", initialHour: "7:00 PM", finalHour: "8:00 PM", date: "2023-04-28"}]
     });
-
-    const loadEvents = (day) => {
-      // Aquí es donde debe cargar los eventos correspondientes a la fecha seleccionada y agregarlos a la variable de estado "eventItems".
-      // Por ahora, simplemente agregaremos un evento de prueba a la fecha seleccionada.
-      const event = {name: "Mi evento de prueba", time: "12:00 PM - 1:00 PM"};
-      setEventItems({[day.dateString]: [event]});
-      console.log("Estoyu", day);
-    }
-
+    const [selectedDayEvents, setSelectedDayEvents] = useState(new Date());
+    const [unselectedEvent, setUnselectedEvent] = useState(true);
+    const [itemInfo, setItemInfo] = useState({});
 
     return (
       <>
-        {/* <Calendar
+        <Calendar
           onDayPress={day => {
             setDaySelected(day.dateString);
-            loadEvents(day.dateString);
+            setUnselectedEvent(true);
+            // setSelectedDayEvents(day.dateString);
+            // console.log(day.dateString);
           }}
           markingType={"custom"}
-          markedDates={{
-            [daySelected]: {
+          markedDates={Object.keys(eventItems).reduce((obj, date) => {
+            obj[date] = {
+              marked: true
+            }
+            obj[daySelected] = {
               selected: true, 
               disableTouchEvent: true, 
               selectedDotColor: "green",
@@ -48,80 +62,74 @@ const EventCalendar = () => {
                   color: "#8FC1A9"
                 }
               }
-            },
-            [moment().format('YYYY-MM-DD')]: {
+            }
+            obj[moment().format('YYYY-MM-DD')] = {
               customStyles: {
                 container: {
                   backgroundColor: "#8FC1A9",
-                  borderRadius: 7,
+                  borderRadius: 7
                 },
                 text: {
-                  color: "#FFFFFF"
-                }
+                  color: "#FFFFFF",
+                  fontWeight: "bold"
+                },
               }
             }
-          }}
+            return obj;
+          }, {})}
           theme={{
             arrowColor: "#8FC1A9",
-            calendarBackground: "#F4F4F4"
-          }}
-        /> */}
-
-        
-        <Agenda
-          items={eventItems}
-          markingType={"custom"}
-          markedDates={{
-            [daySelected]: {
-              selected: true, 
-              disableTouchEvent: true, 
-              selectedDotColor: "green",
-              customStyles: {
-                container: {
-                  backgroundColor: "#F4F4F4",
-                  borderRadius: 7,
-                  borderColor: "#8FC1A9",
-                  borderWidth: 1
-                },
-                text: {
-                  fontWeight: "600",
-                  color: "#8FC1A9"
-                }
-              }
-            },
-            [moment().format('YYYY-MM-DD')]: {
-              customStyles: {
-                container: {
-                  backgroundColor: "#8FC1A9",
-                  borderRadius: 7,
-                },
-                text: {
-                  color: "#FFFFFF"
-                }
-              }
-            }
-          }}
-          theme={{
-            arrowColor: "#8FC1A9",
-            backgroundColor: "#FFFFFF"
-          }}
-          renderItem={(item) => {
-            return (
-              <View style={{
-                  backgroundColor: "#FAF3DD", 
-                  padding: 10, 
-                  margin: 10,
-                  borderRadius: 10
-                }}>
-                  <ProgressBar progress={0.5} color={'red'} />
-                <Text style={{fontWeight: "600"}}>{item.name}</Text>
-                <Text>{item.time}</Text>
-              </View>
-            )
+            calendarBackground: "#F4F4F4",
+            // dotColor: "#F10B0B"
           }}
         />
+        
+        {
+          unselectedEvent
+          ? (
+            <Agenda
+              items={eventItems}
+              selected={daySelected}
+              hideKnob={true}
+              hideDayNames={true}
+              hideExtraDays={true}
+              hideArrows={true}
+              theme={{
+                backgroundColor: "#FFFFFF",
+                selectedDayBackgroundColor: "#FFFFFF",
+                calendarBackground: "#FFFFFF",
+                agendaDayNumColor: "#5B83B0",
+                agendaTodayColor: "#8FC1A9",
+                agendaDayTextColor: "#5B83B0",
+                selectedDayTextColor: "#FFFFFF",
+                textSectionTitleColor:"#FFFFFF",
+                headerText: "#FFFFFF",
+                dotColor: "#FFFFFF",
+                dayTextColor: "#FFFFFF",
+                todayTextColor: "#FFFFFF",
+
+              }}
+              renderItem={ item => (
+                <TouchableOpacity onPress={() => {
+                  setUnselectedEvent(false)
+                  setItemInfo(item)
+                  setSelectedDayEvents(item.date)
+                }}>
+                  <EventListItem 
+                    item={item} />
+                </TouchableOpacity>
+              )}
+            />
+          )
+          : (
+            <EventItem 
+              itemInfo={itemInfo}
+              selectedDayEvents={selectedDayEvents}/>
+          )
+        }
+
+        
       </>
     );
   };
 export default EventCalendar;
-  
