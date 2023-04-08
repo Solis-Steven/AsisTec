@@ -7,6 +7,7 @@ import {
 import React, { useState } from 'react';
 import moment from 'moment';
 import { ProgressBar } from 'react-native-paper';
+import PushNotification from '../components/Notification/PushNotification';
 
 const spanishWeekDays = {
     "Sun": "Dom",
@@ -137,6 +138,8 @@ const NotificationScreen = () => {
                                 }}>
                                     Ver mas
                                 </Text>
+
+                                <PushNotification body={event.name} />
                             </TouchableOpacity>
                         )
                     })}
