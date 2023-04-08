@@ -9,10 +9,10 @@ import React, { useState } from "react";
 import Icon from "react-native-vector-icons/FontAwesome";
 import EventModal from "../components/Events/EventModal";
 import EventCalendar from "../components/Events/EventCalendar";
-
+import moment from 'moment';
 
 const EventosScreen = () => {
-  const [daySelected, setDaySelected] = useState("");
+  const [daySelected, setDaySelected] = useState(moment().format('YYYY-MM-DD'));
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const changeModalVisible = () => {
@@ -23,9 +23,11 @@ const EventosScreen = () => {
     <View style={{
       position: "relative",
       flex: 1,
-      backgroundColor: isModalVisible ? "rgba(0,0,0,0.5)" : "white"
+      backgroundColor: "#FFFFFF"
     }}>
-      <EventCalendar />
+      <EventCalendar 
+        daySelected={daySelected}
+        setDaySelected={setDaySelected} />
 
       <TouchableOpacity 
         onPress={changeModalVisible}
