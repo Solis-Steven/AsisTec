@@ -17,17 +17,17 @@ import {SelectList}  from "react-native-dropdown-select-list";
 const WIDTH = Dimensions.get("window").width - 70;
 const HEIGHT = Dimensions.get("window").height - 160;
 
-const EventModal = ({ changeModalVisible, daySelected }) => {
+const EventModal = ({ changeModalVisible, daySelected, isModalVisible }) => {
   //States
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   //TimePicker
-  const [isTimePickerVisible, setTimePickerVisibility] = useState(false);
   const [initialHour, setInitialHour] = useState(new Date());
-  const [initialHourText, setInitialHourText] = useState("Seleccionar hora");
   const [finalHour, setFinalHour] = useState(new Date());
+  const [initialHourText, setInitialHourText] = useState("Seleccionar hora");
   const [finalHourText, setFinalHourText] = useState("Seleccionar hora");
-  const [showPicker, setShowPicker] = useState(false);
+  const [showInitialHour, setShowInitialHour] = useState(false);
+  const [showFinalHour, setShowFinalHour] = useState(false);
   //DropDownPicker
   const [selectedReminder, setSelectedReminder] = useState("1 dia antes");
   //Switcher
@@ -35,25 +35,28 @@ const EventModal = ({ changeModalVisible, daySelected }) => {
 
   //Functions
   const onInitialHourChange = (event, selectedHour) => {
-    setShowPicker(!showPicker);
+    setShowInitialHour(false);
     const currentHour = selectedHour || initialHour;
     const formatedHour = moment(selectedHour || initialHour).format("hh:mm a");
-    setShowPicker(Platform.OS === "ios");
     setInitialHour(currentHour);
     setInitialHourText(formatedHour);
   };
 
   const onFinalHourChange = (event, selectedHour) => {
-    setShowPicker(!showPicker);
+    setShowFinalHour(false);
     const currentHour = selectedHour || finalHour;
     const formatedHour = moment(selectedHour || finalHour).format("hh:mm a");
-    setShowPicker(Platform.OS === "ios");
     setFinalHour(currentHour);
     setFinalHourText(formatedHour);
+    
+
   };
 
-  const showDatepicker = () => {
-    setShowPicker(true);
+  const showInitialDatepicker = () => {
+    setShowInitialHour(true);
+  };
+  const showFinalDatepicker = () => {
+    setShowFinalHour(true);
   };
 
 
@@ -208,7 +211,7 @@ const EventModal = ({ changeModalVisible, daySelected }) => {
               </Text>
 
               <TouchableOpacity
-                onPress={showDatepicker}
+                onPress={showInitialDatepicker}
                 style={{
                   width: "90%",
                   borderBottomWidth: 1,
@@ -218,7 +221,7 @@ const EventModal = ({ changeModalVisible, daySelected }) => {
               >
                 <Text style={{ fontSize: 16 }}>{initialHourText}</Text>
               </TouchableOpacity>
-              {showPicker && (
+              {showInitialHour && (
                 <DateTimePicker
                   testID="dateTimePicker"
                   value={initialHour}
@@ -243,7 +246,7 @@ const EventModal = ({ changeModalVisible, daySelected }) => {
               </Text>
 
               <TouchableOpacity
-                onPress={showDatepicker}
+                onPress={showFinalDatepicker}
                 style={{
                   width: "90%",
                   borderBottomWidth: 1,
@@ -253,7 +256,7 @@ const EventModal = ({ changeModalVisible, daySelected }) => {
               >
                 <Text style={{ fontSize: 16 }}>{finalHourText}</Text>
               </TouchableOpacity>
-              {showPicker && (
+              {showFinalHour && (
                 <DateTimePicker
                   testID="dateTimePicker"
                   value={finalHour}
