@@ -1,9 +1,12 @@
-import {View, Text, TouchableOpacity, Button} from "react-native";
+import {View, Text, TouchableOpacity, Modal} from "react-native";
 import React from "react";
 import { TimelineCalendar, MomentConfig  } from "@howljs/calendar-kit";
 import { useState } from "react";
+import Icon from "react-native-vector-icons/FontAwesome";
 import WeekView from "../components/Schedule/WeekView";
 import DayView from "../components/Schedule/DayView";
+import CourseModal from "../components/Schedule/CourseModal";
+import ActivityModal from "../components/Schedule/ActivityModal";
 
 MomentConfig.updateLocale('es', {
     weekdaysShort: 'Dom_Lun_Mar_Mié_Jue_Vie_Sáb'.split('_'),
@@ -11,6 +14,11 @@ MomentConfig.updateLocale('es', {
 
 const HorarioScreen= () => {
     const [viewMode, setViewMode] = useState("week");
+    const [isModalVisible, setIsModalVisible] = useState(false);
+
+    const changeModalVisible = () => {
+        setIsModalVisible(!isModalVisible);
+      }
     const events = [
         {
             id: 1,
@@ -143,6 +151,31 @@ const HorarioScreen= () => {
 
                 }}
             />
+
+            <TouchableOpacity 
+                onPress={changeModalVisible}
+                style={{
+                position: "absolute",
+                backgroundColor: "#5B83B0",
+                borderRadius: 30,
+                width: 50,
+                height: 50,
+                justifyContent: "center",
+                alignItems: "center",
+                bottom: 15,
+                right: 15,
+            }}>
+                <Icon name="plus" type="font-awesome" color="#ffffff" size={24} />
+            </TouchableOpacity>
+
+            <Modal
+                transparent={true}
+                animationType="fade"
+                visible={isModalVisible}
+                nRequestClose={changeModalVisible}>
+                <ActivityModal 
+                    changeModalVisible={changeModalVisible}/>
+            </Modal>
         </View>
     );
 }
