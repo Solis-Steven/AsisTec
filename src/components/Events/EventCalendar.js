@@ -19,19 +19,22 @@ LocaleConfig.locales['es'] = {
 };
 
 LocaleConfig.defaultLocale = 'es';
+
+
+
     
-const EventCalendar = ({daySelected, setDaySelected}) => {
-    const [eventItems, setEventItems] = useState({
-      "2023-04-06": [{name: "Reunion de Admin", initialHour: "10:00 AM", finalHour: "11:00 AM", date: "2023-04-06"}, 
-      {name: "Cita en el hospital", initialHour: "1:00 PM", finalHour: "5:00 PM", date: ""}],
-      "2023-04-07": [{name: "Trabajar en diseno", initialHour: "9:00 AM", finalHour: "6:00 PM", date: "2023-04-07"}],
-      "2023-04-15": [{name: "Avance de compi", initialHour: "1:00 PM", finalHour: "2:00 PM", date: "2023-04-15"}],
-      "2023-04-28": [{name: "Avance de admin", initialHour: "7:00 PM", finalHour: "8:00 PM", date: "2023-04-28"}]
-    });
+const EventCalendar = ({daySelected, setDaySelected, eventCalendarItems}) => {
+    
+
     const [selectedDayEvents, setSelectedDayEvents] = useState(new Date());
     const [unselectedEvent, setUnselectedEvent] = useState(true);
     const [itemInfo, setItemInfo] = useState({});
 
+
+    useEffect(() => {
+      console.log(eventCalendarItems);
+    }, [eventCalendarItems]);
+    
     return (
       <>
         <Calendar
@@ -42,7 +45,7 @@ const EventCalendar = ({daySelected, setDaySelected}) => {
             // console.log(day.dateString);
           }}
           markingType={"custom"}
-          markedDates={Object.keys(eventItems).reduce((obj, date) => {
+          markedDates={Object.keys(eventCalendarItems).reduce((obj, date) => {
             obj[date] = {
               marked: true
             }
@@ -88,7 +91,7 @@ const EventCalendar = ({daySelected, setDaySelected}) => {
           unselectedEvent
           ? (
             <Agenda
-              items={eventItems}
+              items={eventCalendarItems}
               selected={daySelected}
               hideKnob={true}
               hideDayNames={true}

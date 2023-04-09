@@ -17,14 +17,40 @@ const EventosScreen = () => {
   const [backgroundStyle, setBackgroundStyle] = useState({
     backgroundColor: "transparent",
   });
+  
+  const [eventItems, setEventItems] = useState({
+    "2023-04-06": [{name: "Reunion de Admin", initialHour: "10:00 AM", finalHour: "11:00 AM", date: "2023-04-06", 
+    description: "Reunion de admin para discutir el avance del proyecto", isAllDay: false
+  }, 
+    {name: "Cita en el hospital", initialHour: "1:00 PM", finalHour: "5:00 PM", date: "2023-04-06", 
+    description: "Cita en el hospital para revisar el avance de la cirugia", isAllDay: false}],
+    "2023-04-07": [{name: "Trabajar en diseno", initialHour: "9:00 AM", finalHour: "6:00 PM", date: "2023-04-07"}],
+    "2023-04-15": [{name: "Avance de compi", initialHour: "1:00 PM", finalHour: "2:00 PM", date: "2023-04-15"}],
+    "2023-04-28": [{name: "Avance de admin", initialHour: "7:00 PM", finalHour: "8:00 PM", date: "2023-04-28"}],
+  });
 
+  const handleEventCreated = (event) => {
+
+
+    const eventDate = Object.keys(event)[0];
+    const eventsDates = Object.keys(eventItems);
+
+    console.log([...eventItems[eventDate]]);
+    if(eventsDates.includes(eventDate)){
+      console.log(event[eventDate])
+      setEventItems({...eventItems, [eventDate] : [...eventItems[eventDate], event[eventDate][0]]});
+    } else {
+      setEventItems({...eventItems, [eventDate] : event[eventDate]});
+    }
+   
+  }
   const changeModalVisible = () => {
     setIsModalVisible(!isModalVisible);
-    // Actualiza el estilo del fondo oscuro
     setBackgroundStyle({
       backgroundColor: isModalVisible ? "transparent" : "rgba(0,0,0,0.4)",
     });
   };
+
 
   return (
     <View
@@ -38,6 +64,7 @@ const EventosScreen = () => {
       <EventCalendar
         daySelected={daySelected}
         setDaySelected={setDaySelected}
+        eventCalendarItems={eventItems}
       />
 
       <TouchableOpacity
@@ -67,6 +94,7 @@ const EventosScreen = () => {
           changeModalVisible={changeModalVisible}
           daySelected={daySelected}
           isModalVisible={isModalVisible}
+          onEventCreated={handleEventCreated}
         />
       </Modal>
     </View>

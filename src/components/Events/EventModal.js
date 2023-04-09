@@ -8,16 +8,16 @@ import {
   TextInput,
   Switch,
 } from "react-native";
-import { Input} from "react-native-elements";
+import { Input } from "react-native-elements";
 import Icon from "react-native-vector-icons/Ionicons";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import moment from "moment";
-import {SelectList}  from "react-native-dropdown-select-list";
+import { SelectList } from "react-native-dropdown-select-list";
 
 const WIDTH = Dimensions.get("window").width - 70;
 const HEIGHT = Dimensions.get("window").height - 160;
 
-const EventModal = ({ changeModalVisible, daySelected, isModalVisible }) => {
+const EventModal = ({ changeModalVisible, daySelected, onEventCreated, isModalVisible }) => {
   //States
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -48,8 +48,6 @@ const EventModal = ({ changeModalVisible, daySelected, isModalVisible }) => {
     const formatedHour = moment(selectedHour || finalHour).format("hh:mm a");
     setFinalHour(currentHour);
     setFinalHourText(formatedHour);
-    
-
   };
 
   const showInitialDatepicker = () => {
@@ -59,12 +57,48 @@ const EventModal = ({ changeModalVisible, daySelected, isModalVisible }) => {
     setShowFinalHour(true);
   };
 
-
-
   const closeModal = () => {
     changeModalVisible();
   };
 
+  const handleOnCreateEvent = () => {
+    //Validar que todos los campos esten completos
+    if (
+      title &&
+      description &&
+      initialHourText &&
+      finalHourText &&
+      selectedReminder
+    ) {
+      const newEvent = {
+        [daySelected] : [
+          {
+            name: title,
+            description: description,
+            initialHour: initialHourText,
+            finalHour: finalHourText,
+            reminder: reminderValues[selectedReminder - 1].value,
+            isAllDay: isAllDay,
+            date: daySelected,
+          },
+        ],
+      };
+
+      //Resetear los valores
+      setTitle("");
+      setDescription("");
+      closeModal();
+      setFinalHourText("Seleccionar hora");
+      setInitialHourText("Seleccionar hora");
+      setSelectedReminder("1 dia antes");
+      setIsAllDay(false);
+
+      onEventCreated(newEvent);
+      changeModalVisible();
+    } else {
+      alert("Por favor, complete todos los campos");
+    }
+  };
 
   //ReminderValues
   const reminderValues = [
@@ -81,6 +115,7 @@ const EventModal = ({ changeModalVisible, daySelected, isModalVisible }) => {
         flex: 1,
         alignItems: "center",
         justifyContent: "center",
+        backgroundColor: isModalVisible ? "rgba(0,0,0,0.4)" : "transparent", // Cambia el fondo a oscuro cuando el modal está abierto
       }}
     >
       <View
@@ -277,38 +312,38 @@ const EventModal = ({ changeModalVisible, daySelected, isModalVisible }) => {
                   color="#808080"
                   style={{ marginTop: 15 }}
                 />
-                <SelectList 
-                    data={reminderValues}
-                    setSelected={setSelectedReminder}
-                    dropdownStyles={{ width: 150, backgroundColor: '#F6F6F6', borderWidth: 0}}
-                    inputStyles={{fontSize: 16, textAlign:'left'}}
-                    placeholder={selectedReminder}
-                    search={false}
-                    boxStyles={{width: 150,borderWidth: 0}}
-                    defaultOption={{ key: 3, value: "1 dia antes" }}
-                    maxHeight={150}
+                <SelectList
+                  data={reminderValues}
+                  setSelected={setSelectedReminder}
+                  dropdownStyles={{
+                    width: 150,
+                    backgroundColor: "#F6F6F6",
+                    borderWidth: 0,
+                  }}
+                  inputStyles={{ fontSize: 16, textAlign: "left" }}
+                  placeholder={selectedReminder}
+                  search={false}
+                  boxStyles={{ width: 150, borderWidth: 0 }}
+                  defaultOption={{ key: 3, value: "1 dia antes" }}
+                  maxHeight={150}
                 />
               </View>
             </View>
-            <View style={{ flex: 1 , flexDirection: 'row'}}>
-
-              <Text style={{marginTop:10, fontSize:16}}>Todo el dia</Text>
-              <Switch style={{marginLeft: 10, position: 'absolute', right: 0}}
+            <View style={{ flex: 1, flexDirection: "row" }}>
+              <Text style={{ marginTop: 10, fontSize: 16 }}>Todo el dia</Text>
+              <Switch
+                style={{ marginLeft: 10, position: "absolute", right: 0 }}
                 trackColor={{ false: "grey", true: "green" }}
                 ios_backgroundColor={"grey"}
                 thumbColor={isAllDay ? "#f4f3f4" : "#f4f3f4"}
                 onValueChange={setIsAllDay}
                 value={isAllDay}
-              
               />
-              
-
             </View>
-            
           </View>
 
           <TouchableOpacity
-            onPress={closeModal}
+            onPress={handleOnCreateEvent}
             style={{
               backgroundColor: "#8FC1A9",
               margin: 5,
