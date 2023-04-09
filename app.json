@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "AsisTec",
-    "slug": "AsisTec",
+    "slug": "asistec",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -25,6 +25,12 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "58f1ad89-65dd-469b-a09b-be14022f0dd4"
+      }
+    },
+    "owner": "s.solis"
   }
 }
