@@ -15,6 +15,19 @@ MomentConfig.updateLocale('es', {
 const HorarioScreen= () => {
     const [viewMode, setViewMode] = useState("week");
     const [isModalVisible, setIsModalVisible] = useState(false);
+    const [activityType, setActivityType] = useState(1);
+    const [modalityType, setModalityType] = useState(1);
+
+    const activityTypeValues = [
+        { key: 1, value: "Agregar Curso" },
+        { key: 2, value: "Agregar Actividad" }
+    ];
+
+    const modalityValues = [
+        { key: 1, value: "Presencial" },
+        { key: 2, value: "Virtual" },
+        { key: 3, value: "Semipresencial" }
+    ]
 
     const changeModalVisible = () => {
         setIsModalVisible(!isModalVisible);
@@ -147,7 +160,7 @@ const HorarioScreen= () => {
                     },
                     dragHourContainer: {
                         backgroundColor:"#000000"
-                    }
+                    },
 
                 }}
             />
@@ -173,8 +186,30 @@ const HorarioScreen= () => {
                 animationType="fade"
                 visible={isModalVisible}
                 nRequestClose={changeModalVisible}>
-                <ActivityModal 
-                    changeModalVisible={changeModalVisible}/>
+                    {console.log("Tipo de actividad", activityType)}
+                {
+                    activityType === 1
+                    ? (
+                        <CourseModal 
+                            changeModalVisible={changeModalVisible}
+                            setActivityType={setActivityType}
+                            activityTypeValues={activityTypeValues}
+                            activityType={activityType}
+                            modalityValues={modalityValues}
+                            modalityType={modalityType}
+                            setModalityType={setModalityType} />
+                    )
+                    : (
+                        <ActivityModal 
+                            changeModalVisible={changeModalVisible}
+                            setActivityType={setActivityType}
+                            activityTypeValues={activityTypeValues}
+                            activityType={activityType}
+                            modalityValues={modalityValues}
+                            modalityType={modalityType}
+                            setModalityType={setModalityType} />
+                    )
+                }
             </Modal>
         </View>
     );
