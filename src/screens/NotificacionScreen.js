@@ -2,13 +2,18 @@ import {
     View, 
     Text, 
     FlatList, 
-    TouchableOpacity 
+    TouchableOpacity ,
+    StyleSheet
 } from 'react-native';
 import React, { useState } from 'react';
+
 import moment from 'moment';
 import { ProgressBar } from 'react-native-paper';
-import PushNotification from '../components/Notification/PushNotification';
 
+import PushNotification from '../components/Notification/PushNotification';
+import { calculatePercentage } from '../helpers/CalculatePercentage';
+
+// Map of abbreviated weekday names in English to their Spanish equivalents
 const spanishWeekDays = {
     "Sun": "Dom",
     "Mon": "Lun",
@@ -20,137 +25,127 @@ const spanishWeekDays = {
 }
 
 const NotificationScreen = () => {
+    // Initial state for the list of events
     const [items, setItems] = useState({
         "2023-04-06": [
-        { name: "Reunion de Admin", initialHour: "10:00 AM", finalHour: "11:00 AM", date: "2023-04-06" },
-        { name: "Cita en el hospital", initialHour: "1:00 PM", finalHour: "5:00 PM", date: "2023-04-06" }
+        { name: "Admin Meeting", initialHour: "10:00 AM", finalHour: "11:00 AM", date: "2023-04-06" },
+        { name: "Hospital Appointment", initialHour: "1:00 PM", finalHour: "5:00 PM", date: "2023-04-06" }
         ],
-        "2023-04-07": [{ name: "Trabajar en diseno", initialHour: "9:00 AM", finalHour: "6:00 PM", date: "2023-04-07" }],
-        "2023-04-15": [{ name: "Avance de compiladores", initialHour: "1:00 PM", finalHour: "2:00 PM", date: "2023-04-15" }],
-        "2023-04-28": [{ name: "Avance de admin", initialHour: "7:00 PM", finalHour: "8:00 PM", date: "2023-04-28" }]
+        "2023-04-07": [{ name: "Work on Design", initialHour: "9:00 AM", finalHour: "6:00 PM", date: "2023-04-07" }],
+        "2023-04-15": [{ name: "Compilers Progress", initialHour: "1:00 PM", finalHour: "2:00 PM", date: "2023-04-15" }],
+        "2023-04-28": [{ name: "Admin Progress", initialHour: "7:00 PM", finalHour: "8:00 PM", date: "2023-04-28" }]
     });
 
-    const currentDate = new Date(moment().format('YYYY-MM-DD'));
-    const calculatePercentage = (date) => {
-        let days = Math.round((new Date(date) - currentDate) / (1000 * 60 * 60 * 24));
-    
-        if (days <= 0) {
-            return { percentage: 1, color: "#F10B0B" };
-        }
-        if (days >= 20) {
-            days = 19;
-        }
-    
-        const percentageChange = Math.abs(1 - ((days / 20)).toFixed(2));
-        if (percentageChange > 0.75) {
-            return { percentage: percentageChange, color: "#F10B0B" };
-        }
-        if (percentageChange > 0.25 && percentageChange <= 0.5) {
-            return { percentage: percentageChange, color: "#E3D447" };
-        }
-        if (percentageChange <= 0.75 && percentageChange > 0.5) {
-            return { percentage: percentageChange, color: "#EC7752" };
-        }
-        return { percentage: percentageChange, color: "#64B149" };
-    }
-    
+    // Convert the object of events into an array of {date, events} objects
     const events = Object.entries(items).map(([date, events]) => ({
         date,
         events
     }));
 
-  return (
-    <View style={{backgroundColor: "#FFFFFF", height: "100%"}}>
-      <FlatList
-        data={events}
-        renderItem={({ item }) => (
-            <View style={{
-                backgroundColor: '#FFFFFF',
-                padding: 10,
-                marginVertical: 5,
-                borderRadius: 5,
-                flexDirection: "row"
-            }}>
+    return (
+        <View style={{backgroundColor: "#FFFFFF", height: "100%"}}>
+            <FlatList
+                data={events}
+                renderItem={({ item }) => (
+                    <View style={styles.listContainer}>
 
-                <View>
+                        <View>
+                            {/* Display the abbreviated weekday name in Spanish */}
+                            <Text style={styles.dayText}>
+                                {spanishWeekDays[moment(item.date).format('ddd')]}
+                            </Text>
 
-                    <Text style={{
-                        fontSize: 15, 
-                        textAlign: "center",
-                        color: "#8FC1A9"
-                    }}>
-                        {spanishWeekDays[moment(item.date).format('ddd')]}
-                    </Text>
-
-                    <View style={{
-                        backgroundColor: "#8FC1A9",
-                        width: 40,
-                        height: 40,
-                        borderRadius: 20,
-                        justifyContent: "center",
-                        alignItems: "center",                    
-                    }}>
-                        <Text style={{
-                            textAlign: "center",
-                            fontSize: 20,
-                            color: "white"
-                        }}>
-                            {moment(item.date).date()}
-                        </Text>
-                    </View>
-                </View>
-
-                <View style={{
-                    gap: 10,
-                    marginLeft: 10,
-                    alignItems: "flex-start",
-                    justifyContent: "center",
-                    flex: 1,
-                }}>
-                    {item.events.map((event, index) => {
-                        const info = calculatePercentage(event.date);
-
-                        return (
-                            <TouchableOpacity 
-                                key={index}
-                                style={{
-                                    marginVertical: 5,
-                                    width: "70%"
-                                }}>
-                                <ProgressBar 
-                                    progress={info.percentage} 
-                                    color={info.color}
-                                    style={{ 
-                                        height: 10,
-                                        borderRadius: 10,
-                                        backgroundColor: "#F3F3F3",
-                                        marginBottom: 5
-                                }}/>
+                            {/* Display the day of the month */}
+                            <View style={styles.dayNumber}>
                                 <Text style={{
-                                    fontSize: 15,
-                                    marginBottom: 5,
+                                    textAlign: "center",
+                                    fontSize: 20,
+                                    color: "white"
                                 }}>
-                                    {event.name}
+                                    {moment(item.date).date()}
                                 </Text>
-                                <Text style={{
-                                    fontSize: 12,
-                                    color: "#5B83B0"
-                                }}>
-                                    Ver mas
-                                </Text>
+                            </View>
+                        </View>
 
-                                <PushNotification body={event.name} />
-                            </TouchableOpacity>
-                        )
-                    })}
+                        <View style={styles.NotificationContainer}>
+                            {
+                                item.events.map((event, index) => {
+                                    // Calculate the percentage of the day that has elapsed since the start of the event
+                                    const info = calculatePercentage(event.date);
+
+                                    return (
+                                        <TouchableOpacity 
+                                            key={index}
+                                            style={{
+                                                marginVertical: 5,
+                                                width: "70%"
+                                            }}
+                                        >
+                                            {/* Display a progress bar showing the percentage of the day that has elapsed */}
+                                            <ProgressBar 
+                                                progress={info.percentage} 
+                                                color={info.color}
+                                                style={styles.progressBar}
+                                            />
+
+                                            {/* Display the name of the event */}
+                                            <Text style={{fontSize: 15, marginBottom: 5}}>{event.name}</Text>
+
+                                            <Text style={{fontSize: 12, color: "#5B83B0"}}>Ver mas</Text>
+
+                                            <PushNotification body={event.name} />
+                                        </TouchableOpacity>
+                                    )
+                                })
+                            }
+                        </View>
+                        
                 </View>
-                
-          </View>
-        )}
-        keyExtractor={(item, index) => index.toString()}
-      />
-    </View>
-  );
+                )}
+                keyExtractor={(item, index) => index.toString()}
+            />
+        </View>
+    );
 }
+
+const styles = StyleSheet.create({
+    listContainer: {
+        backgroundColor: '#FFFFFF',
+        padding: 10,
+        marginVertical: 5,
+        borderRadius: 5,
+        flexDirection: "row"
+    },
+
+    dayText: {
+        fontSize: 15, 
+        textAlign: "center",
+        color: "#8FC1A9"
+    },
+
+    dayNumber: {
+        backgroundColor: "#8FC1A9",
+        width: 40,
+        height: 40,
+        borderRadius: 20,
+        justifyContent: "center",
+        alignItems: "center",                    
+    },
+
+    NotificationContainer: {
+        gap: 10,
+        marginLeft: 10,
+        alignItems: "flex-start",
+        justifyContent: "center",
+        flex: 1,
+    },
+
+    progressBar: { 
+        height: 10,
+        borderRadius: 10,
+        backgroundColor: "#F3F3F3",
+        marginBottom: 5
+    }
+})
 
 export default NotificationScreen;
