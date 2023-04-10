@@ -68,33 +68,37 @@ const EventModal = ({ changeModalVisible, daySelected, onEventCreated, isModalVi
       description &&
       initialHourText &&
       finalHourText &&
-      selectedReminder
+      selectedReminder 
     ) {
-      const newEvent = {
-        [daySelected] : [
-          {
-            name: title,
-            description: description,
-            initialHour: initialHourText,
-            finalHour: finalHourText,
-            reminder: reminderValues[selectedReminder - 1].value,
-            isAllDay: isAllDay,
-            date: daySelected,
-          },
-        ],
-      };
+        if(initialHour.getTime() < finalHour.getTime()){
+        const newEvent = {
+          [daySelected] : [
+            {
+              name: title,
+              description: description,
+              initialHour: initialHourText,
+              finalHour: finalHourText,
+              reminder: reminderValues[selectedReminder - 1].value,
+              isAllDay: isAllDay,
+              date: daySelected,
+            },
+          ],
+        };
 
-      //Resetear los valores
-      setTitle("");
-      setDescription("");
-      closeModal();
-      setFinalHourText("Seleccionar hora");
-      setInitialHourText("Seleccionar hora");
-      setSelectedReminder("1 dia antes");
-      setIsAllDay(false);
+        //Resetear los valores
+        setTitle("");
+        setDescription("");
+        closeModal();
+        setFinalHourText("Seleccionar hora");
+        setInitialHourText("Seleccionar hora");
+        setSelectedReminder("1 dia antes");
+        setIsAllDay(false);
 
-      onEventCreated(newEvent);
-      changeModalVisible();
+        onEventCreated(newEvent);
+        changeModalVisible();
+        } else {
+          alert("La hora de inicio debe ser menor a la hora final");
+        }
     } else {
       alert("Por favor, complete todos los campos");
     }

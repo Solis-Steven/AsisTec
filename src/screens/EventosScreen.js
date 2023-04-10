@@ -35,11 +35,10 @@ const EventosScreen = () => {
     const eventDate = Object.keys(event)[0];
     const eventsDates = Object.keys(eventItems);
 
-    console.log([...eventItems[eventDate]]);
     if(eventsDates.includes(eventDate)){
-      console.log(event[eventDate])
       setEventItems({...eventItems, [eventDate] : [...eventItems[eventDate], event[eventDate][0]]});
     } else {
+      
       setEventItems({...eventItems, [eventDate] : event[eventDate]});
     }
    

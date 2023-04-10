@@ -9,11 +9,15 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@howljs/calendar-kit": "^1.13.2",
+    "@ide/backoff": "^1.0.0",
     "@react-native-community/datetimepicker": "6.7.3",
     "@react-navigation/bottom-tabs": "^6.5.7",
     "@react-navigation/native": "^6.1.6",
     "@react-navigation/native-stack": "^6.9.12",
     "expo": "^48.0.10",
+    "expo-device": "~5.2.1",
+    "expo-notifications": "~0.18.1",
     "expo-status-bar": "~1.4.4",
     "moment": "^2.29.4",
     "react": "18.2.0",
@@ -24,13 +28,12 @@
     "react-native-elements": "^3.4.3",
     "react-native-modal-datetime-picker": "^14.0.1",
     "react-native-paper": "^5.6.0",
+    "react-native-reanimated": "^2.14.4",
     "react-native-safe-area-context": "^4.5.0",
     "react-native-screens": "^3.20.0",
     "react-native-vector-icons": "^9.2.0",
     "react-native-web": "~0.18.11",
-    "rn-fetch-blob": "^0.12.0",
-    "expo-notifications": "~0.18.1",
-    "expo-device": "~5.2.1"
+    "rn-fetch-blob": "^0.12.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"
