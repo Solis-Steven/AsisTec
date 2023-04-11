@@ -13,12 +13,13 @@ import Icon from "react-native-vector-icons/Ionicons";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import moment from "moment";
 import { SelectList } from "react-native-dropdown-select-list";
+import { useEffect } from "react";
 
 const WIDTH = Dimensions.get("window").width - 70;
 const HEIGHT = Dimensions.get("window").height - 160;
 
-const EventModal = ({ changeModalVisible, daySelected, onEventCreated, isModalVisible }) => {
-  //States
+const EventModal = ({ changeModalVisible, daySelected, onEventCreated, isModalVisible, selectedEvent }) => {
+  //---------------------------------States---------------------------------
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   //TimePicker
@@ -32,8 +33,11 @@ const EventModal = ({ changeModalVisible, daySelected, onEventCreated, isModalVi
   const [selectedReminder, setSelectedReminder] = useState("1 dia antes");
   //Switcher
   const [isAllDay, setIsAllDay] = useState(false);
+  //Button
+  const [modalTitle, setModalTitle] = useState("Crear evento");
+  const [buttonText, setButtonText] = useState("Crear");
 
-  //Functions
+  //-------------------------------Functions---------------------------------
   const onInitialHourChange = (event, selectedHour) => {
     setShowInitialHour(false);
     const currentHour = selectedHour || initialHour;
@@ -61,6 +65,22 @@ const EventModal = ({ changeModalVisible, daySelected, onEventCreated, isModalVi
     changeModalVisible();
   };
 
+  //----------------------------Edit Verification------------------------------
+  useEffect (() => {
+    if(selectedEvent !== null){
+      setTitle(selectedEvent.name);
+      setDescription(selectedEvent.description);
+      setInitialHour(selectedEvent.initialHour);
+      setInitialHourText(selectedEvent.initialHourText);
+      setFinalHour(selectedEvent.finalHour);
+      setFinalHourText(selectedEvent.finalHourText);
+      setSelectedReminder(selectedEvent.reminder);
+      setIsAllDay(selectedEvent.isAllDay);
+      setModalTitle("Editar evento");
+      setButtonText("Aceptar");
+    }
+  },[]);
+
   const handleOnCreateEvent = () => {
     //Validar que todos los campos esten completos
     if (
@@ -76,14 +96,19 @@ const EventModal = ({ changeModalVisible, daySelected, onEventCreated, isModalVi
             {
               name: title,
               description: description,
-              initialHour: initialHourText,
-              finalHour: finalHourText,
-              reminder: reminderValues[selectedReminder - 1].value,
+              initialHour: initialHour,
+              finalHour: finalHour,
+              initialHourText: initialHourText,
+              finalHourText: finalHourText,
+              reminder: selectedReminder,
+              reminderText: reminderValues[selectedReminder - 1].value,
               isAllDay: isAllDay,
               date: daySelected,
             },
           ],
         };
+
+        console.log(newEvent);
 
         //Resetear los valores
         setTitle("");
@@ -91,9 +116,11 @@ const EventModal = ({ changeModalVisible, daySelected, onEventCreated, isModalVi
         closeModal();
         setFinalHourText("Seleccionar hora");
         setInitialHourText("Seleccionar hora");
-        setSelectedReminder("1 dia antes");
+        setSelectedReminder(3);
         setIsAllDay(false);
-
+        setInitialHour(new Date());
+        setFinalHour(new Date());
+        
         onEventCreated(newEvent);
         changeModalVisible();
         } else {
@@ -172,7 +199,7 @@ const EventModal = ({ changeModalVisible, daySelected, onEventCreated, isModalVi
               color: "white",
             }}
           >
-            Crear Evento
+            {modalTitle}
           </Text>
 
           <Text
@@ -367,7 +394,7 @@ const EventModal = ({ changeModalVisible, daySelected, onEventCreated, isModalVi
                 fontWeight: "bold",
               }}
             >
-              Crear
+              {buttonText}
             </Text>
           </TouchableOpacity>
         </View>

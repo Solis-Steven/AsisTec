@@ -21,9 +21,13 @@ const spanishWeekDays = {
     "Sat": "Sáb"
 }
     
-const EventItem = ({itemInfo, selectedDayEvents}) => {
+const EventItem = ({itemInfo, selectedDayEvents, changeModalVisible, setSelectedEvent}) => {
     const [progress, setProgress] = useState(0);
     const [color, setColor] = useState("#64B149");
+    const [itemName, setItemName] = useState(itemInfo.name);
+    const [itemDescription, setItemDescription] = useState(itemInfo.description);
+    const [itemInitialHourText, setItemInitialHourText] = useState(itemInfo.initialHourText);
+    const [itemFinalHourText, setItemFinalHourText] = useState(itemInfo.finalHourText);
     
     const currentDate = new Date(moment().format('YYYY-MM-DD'));
     const calculatePercentage = () => {
@@ -58,9 +62,16 @@ const EventItem = ({itemInfo, selectedDayEvents}) => {
 
     useEffect(() => {
         calculatePercentage()
-    }, [])
+
+    }, [itemInfo])
 
     const day = moment(selectedDayEvents).format('ddd')
+
+
+    const handleEditEvent = () => {
+        setSelectedEvent(itemInfo);
+        changeModalVisible();
+    }
 
     return (
         <>
@@ -119,11 +130,12 @@ const EventItem = ({itemInfo, selectedDayEvents}) => {
                                 maxWidth: "80%"
                         }} 
                         />
-                        <Text style={{fontWeight: "600", fontSize: 15, alignSelf: "flex-start"}}>{itemInfo.name}</Text>
+                        <Text style={{fontWeight: "600", fontSize: 15, alignSelf: "flex-start"}}>{itemName}</Text>
                     </View>
                 </View>
 
-                <TouchableOpacity>
+                <TouchableOpacity 
+                    onPress={handleEditEvent}>
                     <Ionicons 
                         name="pencil" size={30} 
                         color="black"/>
@@ -132,10 +144,10 @@ const EventItem = ({itemInfo, selectedDayEvents}) => {
 
             <View style={{paddingHorizontal: 20}}>
                 <View style={{marginVertical: 10, gap: 5}}>
-                    <Text>Hora inicial: {itemInfo.initialHour}</Text>
-                    <Text>Hora final: {itemInfo.finalHour}</Text>
+                    <Text>Hora inicial: {itemInitialHourText}</Text>
+                    <Text>Hora final: {itemFinalHourText}</Text>
                 </View>
-                        <Text style={{color: "#5B83B0", marginTop: 10, marginBottom: 3}}>Descripcion</Text>
+                        <Text style={{color: "#5B83B0", marginTop: 10, marginBottom: 3}}>{itemDescription}</Text>
                         <TextInput
                             editable={false}
                             multiline

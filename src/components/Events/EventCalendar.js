@@ -23,7 +23,7 @@ LocaleConfig.defaultLocale = 'es';
 
 
     
-const EventCalendar = ({daySelected, setDaySelected, eventCalendarItems}) => {
+const EventCalendar = ({daySelected, setDaySelected, eventCalendarItems, changeModalVisible, setSelectedEvent}) => {
     
 
     const [selectedDayEvents, setSelectedDayEvents] = useState(new Date());
@@ -127,7 +127,10 @@ const EventCalendar = ({daySelected, setDaySelected, eventCalendarItems}) => {
           : (
             <EventItem 
               itemInfo={itemInfo}
-              selectedDayEvents={selectedDayEvents}/>
+              selectedDayEvents={selectedDayEvents}
+              changeModalVisible={changeModalVisible}
+              setSelectedEvent={setSelectedEvent}
+              />
           )
         }
 

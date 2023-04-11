@@ -74,7 +74,7 @@ const EventListItem = ({item}) => {
                 textAlign: "center",
                 fontSize: 13
                 }}>
-                {item.initialHour} - {item.finalHour}
+                {item.initialHourText} - {item.finalHourText}
             </Text>
         </View>
     )
