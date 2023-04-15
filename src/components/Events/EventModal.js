@@ -90,44 +90,40 @@ const EventModal = ({ changeModalVisible, daySelected, onEventCreated, isModalVi
       finalHourText &&
       selectedReminder 
     ) {
-        if(initialHour.getTime() < finalHour.getTime()){
-        const newEvent = {
-          [daySelected] : [
-            {
-              name: title,
-              description: description,
-              initialHour: initialHour,
-              finalHour: finalHour,
-              initialHourText: initialHourText,
-              finalHourText: finalHourText,
-              reminder: selectedReminder,
-              reminderText: reminderValues[selectedReminder - 1].value,
-              isAllDay: isAllDay,
-              date: daySelected,
-            },
-          ],
-        };
+        // if(initialHour[0] < finalHour[0]){
+          const newEvent = {
+            [daySelected] : [
+              {
+                name: title,
+                description: description,
+                initialHour: initialHour,
+                finalHour: finalHour,
+                initialHourText: initialHourText,
+                finalHourText: finalHourText,
+                reminder: selectedReminder,
+                reminderText: reminderValues[selectedReminder - 1].value,
+                isAllDay: isAllDay,
+                date: daySelected,
+              },
+            ],
+          };
 
-        console.log("Evento a crear");
-        console.log(newEvent);
-
-        //Resetear los valores
-        setTitle("");
-        setDescription("");
-        closeModal();
-        setFinalHourText("Seleccionar hora");
-        setInitialHourText("Seleccionar hora");
-        setSelectedReminder(3);
-        setIsAllDay(false);
-        setInitialHour(new Date());
-        setFinalHour(new Date());
-        
-        onEventCreated(newEvent);
-        console.log("Evento creado");
-        changeModalVisible();
-        } else {
-          alert("La hora de inicio debe ser menor a la hora final");
-        }
+          // Resetear los valores
+          setTitle("");
+          setDescription("");
+          closeModal();
+          setFinalHourText("Seleccionar hora");
+          setInitialHourText("Seleccionar hora");
+          setSelectedReminder(3);
+          setIsAllDay(false);
+          setInitialHour(new Date());
+          setFinalHour(new Date());
+          
+          onEventCreated(newEvent);
+          changeModalVisible();
+        // } else {
+        //   alert("La hora de inicio debe ser menor a la hora final");
+        // }
     } else {
       alert("Por favor, complete todos los campos");
     }

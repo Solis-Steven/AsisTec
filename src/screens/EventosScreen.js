@@ -1,11 +1,9 @@
 import {
   View,
-  SafeAreaView,
-  Text,
   TouchableOpacity,
   Modal,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Icon from "react-native-vector-icons/FontAwesome";
 import EventModal from "../components/Events/EventModal";
 import EventCalendar from "../components/Events/EventCalendar";
@@ -14,9 +12,7 @@ import moment from "moment";
 const EventosScreen = () => {
   const [daySelected, setDaySelected] = useState(moment().format("YYYY-MM-DD"));
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [backgroundStyle, setBackgroundStyle] = useState({
-    backgroundColor: "transparent",
-  });
+  const [itemInfo, setItemInfo] = useState({});
   
   const [eventItems, setEventItems] = useState({
     "2023-04-06": [{name: "Reunion de Admin", initialHour: [new Date()], initialHourText: "10:00 AM" , finalHour: [new Date()], finalHourText: "2:00 PM",
@@ -37,20 +33,15 @@ const EventosScreen = () => {
   const [selectedEvent, setSelectedEvent] = useState(null);
 
   const handleEventCreated = (event) => {
-
-
     const eventDate = Object.keys(event)[0];
     const eventsDates = Object.keys(eventItems);
-
 
     // Si ya hay un evento en la fecha seleccionada, se agrega el nuevo evento
     if(eventsDates.includes(eventDate) && selectedEvent === null) {
 
       setEventItems({...eventItems, [eventDate] : [...eventItems[eventDate], event[eventDate][0]]});
-      
-      
-    
     }
+
     // Si ya hay un evento en la fecha seleccionada y se esta editando, se actualiza el evento
     else if(eventsDates.includes(eventDate) && selectedEvent !== null) {
       // Se actualiza el evento
@@ -63,27 +54,22 @@ const EventosScreen = () => {
   
       });
       setEventItems({...eventItems, [eventDate] : newEventItems});
+      setItemInfo(newEventItems[0]);
 
-    }
-    else {
-      
+    } else {
       setEventItems({...eventItems, [eventDate] : event[eventDate]});
     }
    
   }
+
   const changeModalVisible = () => {
 
     if(isModalVisible) {
       setSelectedEvent(null);
     }
     setIsModalVisible(!isModalVisible);
-    setBackgroundStyle({
-      backgroundColor: isModalVisible ? "transparent" : "rgba(0,0,0,0.4)",
-    });
-    
   
   };
-
 
 
   return (
@@ -91,8 +77,7 @@ const EventosScreen = () => {
       style={{
         position: "relative",
         flex: 1,
-        backgroundColor: "#FFFFFF",
-        ...backgroundStyle, // Copia todas las propiedades de backgroundStyle en el estilo de la vista
+        backgroundColor: "#FFFFFF"
       }}
     >
       <EventCalendar
@@ -101,6 +86,8 @@ const EventosScreen = () => {
         eventCalendarItems={eventItems}
         changeModalVisible={changeModalVisible}
         setSelectedEvent={setSelectedEvent}
+        itemInfo={itemInfo}
+        setItemInfo={setItemInfo}
       />
 
       <TouchableOpacity
@@ -138,4 +125,5 @@ const EventosScreen = () => {
     </View>
   );
 };
+
 export default EventosScreen;

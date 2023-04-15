@@ -19,21 +19,14 @@ LocaleConfig.locales['es'] = {
 };
 
 LocaleConfig.defaultLocale = 'es';
-
-
-
     
-const EventCalendar = ({daySelected, setDaySelected, eventCalendarItems, changeModalVisible, setSelectedEvent}) => {
+const EventCalendar = ({
+  daySelected, setDaySelected, eventCalendarItems, 
+  changeModalVisible, setSelectedEvent, itemInfo, setItemInfo}) => {
     
-
     const [selectedDayEvents, setSelectedDayEvents] = useState(new Date());
     const [unselectedEvent, setUnselectedEvent] = useState(true);
-    const [itemInfo, setItemInfo] = useState({});
 
-
-    useEffect(() => {
-      console.log(eventCalendarItems);
-    }, [eventCalendarItems]);
     
     return (
       <>
@@ -41,8 +34,6 @@ const EventCalendar = ({daySelected, setDaySelected, eventCalendarItems, changeM
           onDayPress={day => {
             setDaySelected(day.dateString);
             setUnselectedEvent(true);
-            // setSelectedDayEvents(day.dateString);
-            // console.log(day.dateString);
           }}
           markingType={"custom"}
           markedDates={Object.keys(eventCalendarItems).reduce((obj, date) => {
