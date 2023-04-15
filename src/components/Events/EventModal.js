@@ -108,6 +108,7 @@ const EventModal = ({ changeModalVisible, daySelected, onEventCreated, isModalVi
           ],
         };
 
+        console.log("Evento a crear");
         console.log(newEvent);
 
         //Resetear los valores
@@ -122,6 +123,7 @@ const EventModal = ({ changeModalVisible, daySelected, onEventCreated, isModalVi
         setFinalHour(new Date());
         
         onEventCreated(newEvent);
+        console.log("Evento creado");
         changeModalVisible();
         } else {
           alert("La hora de inicio debe ser menor a la hora final");

@@ -73,10 +73,14 @@ const EventosScreen = () => {
   }
   const changeModalVisible = () => {
 
+    if(isModalVisible) {
+      setSelectedEvent(null);
+    }
     setIsModalVisible(!isModalVisible);
     setBackgroundStyle({
       backgroundColor: isModalVisible ? "transparent" : "rgba(0,0,0,0.4)",
     });
+    
   
   };
 
