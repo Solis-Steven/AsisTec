@@ -14,27 +14,17 @@ const EventosScreen = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [itemInfo, setItemInfo] = useState({});
   
-  const [eventItems, setEventItems] = useState({
-    "2023-04-06": [{name: "Reunion de Admin", initialHour: [new Date()], initialHourText: "10:00 AM" , finalHour: [new Date()], finalHourText: "2:00 PM",
-    date: "2023-04-06", description: "Reunion de admin para discutir el avance del proyecto", isAllDay: false, reminder: 1, reminderText: "5 minutos antes"
-  }, 
-    {name: "Cita en el hospital", date: "2023-04-06", description: "Cita en el hospital para revisar el avance de la cirugia", 
-    isAllDay: false, reminder: 1, reminderText: "5 minutos antes", initialHour: [new Date()], initialHourText: "3:00 PM", finalHour: [new Date()], 
-    finalHourText: "4:00 PM"}],
-    "2023-04-07": [{name: "Trabajar en diseno", date: "2023-04-07", description: "Trabajar en el diseno de la aplicacion", isAllDay: false, 
-    reminder: 1, reminderText: "5 minutos antes", initialHour: [new Date()], initialHourText: "10:00 AM", finalHour: [new Date()], finalHourText: "2:00 PM"}],
-    "2023-04-15": [{name: "Avance de compi", date: "2023-04-15", description: "Avance de compi", isAllDay: false, reminder: 1, reminderText: "5 minutos antes", 
-    initialHour: [new Date()], initialHourText: "10:00 AM", finalHour: [new Date()], finalHourText: "2:00 PM"}],
-    "2023-04-28": [{name: "Avance de admin", date: "2023-04-28",
-    description: "Avance de admin", isAllDay: false, reminder: 1, reminderText: "5 minutos antes", initialHour: [new Date()], initialHourText: "10:00 AM",
-    finalHour: [new Date()], finalHourText: "2:00 PM"}],
-  });
+  const [eventItems, setEventItems] = useState({"init": "init"});
 
   const [selectedEvent, setSelectedEvent] = useState(null);
 
   const handleEventCreated = (event) => {
     const eventDate = Object.keys(event)[0];
     const eventsDates = Object.keys(eventItems);
+
+    if(eventItems["init"]) {
+      delete eventItems["init"]
+    }
 
     // Si ya hay un evento en la fecha seleccionada, se agrega el nuevo evento
     if(eventsDates.includes(eventDate) && selectedEvent === null) {
@@ -59,6 +49,7 @@ const EventosScreen = () => {
     } else {
       setEventItems({...eventItems, [eventDate] : event[eventDate]});
     }
+
    
   }
 
@@ -70,6 +61,21 @@ const EventosScreen = () => {
     setIsModalVisible(!isModalVisible);
   
   };
+
+  const onDelete = (item) => {
+    const itemToDelete = eventItems[item["date"]];
+    const newItemsArray = itemToDelete.filter(event => event["name"] != item["name"]);
+
+    if(newItemsArray.length === 0) {
+      delete eventItems[item["date"]];
+
+      if(Object.keys(eventItems).length === 0) {
+        setEventItems({"init": "init"});
+      }
+    } else {
+      setEventItems({...eventItems, [item["date"]]: newItemsArray})
+    }
+  }
 
 
   return (
@@ -88,6 +94,7 @@ const EventosScreen = () => {
         setSelectedEvent={setSelectedEvent}
         itemInfo={itemInfo}
         setItemInfo={setItemInfo}
+        onDelete={onDelete}
       />
 
       <TouchableOpacity
