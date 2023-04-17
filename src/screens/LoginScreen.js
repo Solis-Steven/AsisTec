@@ -1,6 +1,6 @@
 import {
     View, Text, Image, 
-    Pressable, StyleSheet 
+    Pressable, StyleSheet
 } from 'react-native';
 import React from 'react';
 
@@ -31,6 +31,7 @@ const LoginScreen= () => {
 
                 <Input
                     type="password" 
+                    secureTextEntry={true}
                     inputContainerStyle={{borderBottomWidth:0}} 
                     placeholder="Contraseña" 
                     placeholderTextColor={"#00000066"}
