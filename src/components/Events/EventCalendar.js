@@ -1,10 +1,9 @@
-import React, { useState, useRef, useEffect } from "react";
-import {Calendar, Agenda, LocaleConfig} from "react-native-calendars";
+import React, { useState } from "react";
+import {Calendar, LocaleConfig} from "react-native-calendars";
 import moment from 'moment';
-import { TouchableOpacity, View, Text } from 'react-native';
-import EventListItem from "./EventListItem";
+import { FlatList, View, Text } from 'react-native';
 import EventItem from "./EventItem";
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import Agenda from "./Agenda";
 
 
 LocaleConfig.locales['es'] = {
@@ -25,19 +24,7 @@ const EventCalendar = ({
     const [selectedDayEvents, setSelectedDayEvents] = useState(new Date());
     const [unselectedEvent, setUnselectedEvent] = useState(true);
     const [isDeleting, setIsDeleting] = useState(false);
-    const [selectedEventName, setSelectedEventName] = useState("");
-
-    const handleDelete = (item) => {
-      onDelete(item);
-      setIsDeleting(false);
-    }
-
-    const handleLongPress = (item) => {
-      console.log(item["name"]);
-      setIsDeleting(true);
-      setItemInfo(item)
-      setSelectedEventName(item["name"]);
-    }
+    
 
     return (
       <>
@@ -88,89 +75,43 @@ const EventCalendar = ({
             calendarBackground: "#F4F4F4"
           }}
         />
-
         {
           unselectedEvent
-          ? (
-            <Agenda
-              items={eventCalendarItems}
-              selected={daySelected}
-              hideKnob={true}
-              hideDayNames={true}
-              hideExtraDays={true}
-              hideArrows={true}
-              theme={{
-                backgroundColor: "#FFFFFF",
-                selectedDayBackgroundColor: "#FFFFFF",
-                calendarBackground: "#FFFFFF",
-                agendaDayNumColor: "#5B83B0",
-                agendaTodayColor: "#8FC1A9",
-                agendaDayTextColor: "#5B83B0",
-                selectedDayTextColor: "#FFFFFF",
-                textSectionTitleColor:"#FFFFFF",
-                headerText: "#FFFFFF",
-                dotColor: "#FFFFFF",
-                dayTextColor: "#FFFFFF",
-                todayTextColor: "#FFFFFF",
-
-              }}
-              renderEmptyData={() => (
-                <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-                  <Text>No hay eventos para mostrar</Text>
-                </View>
-              )}
-              renderItem={(items) => (
-                <TouchableOpacity
-                  key={items["name"]}
-                  onLongPress={() => handleLongPress(items)}
-                  onPress={() => {
-                    setIsDeleting(false);
-                    setUnselectedEvent(false);
-                    setItemInfo(items);
-                    setSelectedDayEvents(items.date);
+          ? 
+            eventCalendarItems[daySelected]
+              ? (
+                <FlatList
+                  data={eventCalendarItems[daySelected]}
+                  renderItem={({item}) => {
+                    return(
+                      <Agenda 
+                      item={item}
+                      isDeleting={isDeleting}
+                      setIsDeleting={setIsDeleting}
+                      setUnselectedEvent={setUnselectedEvent}
+                      setSelectedDayEvents={setSelectedDayEvents}
+                      itemInfo={itemInfo}
+                      setItemInfo={setItemInfo}
+                      onDelete={onDelete}/>
+                    )
                   }}
-                >
-                {/* {console.log("Items name:  ", items["name"], " , itemInfo: ", itemInfo["name"], " , selectedEventName: ", selectedEventName)} */}
-                {
-                  isDeleting && itemInfo["name"] === selectedEventName
-                    ? (
-                      <>
-                      
-                        <TouchableOpacity onPress={() => handleDelete(items)}>
-                          <View 
-                            style={{ 
-                                backgroundColor: "#FF0000", 
-                                padding: 20, 
-                                margin: 10,
-                                borderRadius: 10, 
-                                flexDirection: "row", 
-                                justifyContent: "center",
-                                alignItems: "center",
-                                gap: 5
-                            }}>
-                            <Ionicons name="trash-bin-outline" size={24} color="white" />
-                          </View>
-                        </TouchableOpacity>
-                      </>
-                    )
-                    : (
-                        <EventListItem 
-                          item={items} />
-                    )
-                  
-                }
-                </TouchableOpacity>
-                )}
-              
-              />
-          )
+                  keyExtractor={item => item["name"]}
+                />
+              )
+              : (
+                <View style={{alignItems:"center"}}>
+                  <Text style={{marginTop: 10, fontSize: 14}}>
+                    No hay eventos para mostrar
+                  </Text>
+                </View>
+              )
           : (
             <EventItem 
               itemInfo={itemInfo}
               selectedDayEvents={selectedDayEvents}
               changeModalVisible={changeModalVisible}
               setSelectedEvent={setSelectedEvent}
-              />
+            />
           )
         }
 
