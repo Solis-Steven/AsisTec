@@ -44,9 +44,6 @@ const EventosScreen = () => {
       });
       setEventItems({...eventItems, [eventDate] : newEventItems});
       setItemInfo(event[Object.keys(event)][0]);
-      console.log("AQUI", event[Object.keys(event)][0]);
-      // console.log("Desde evitar ", event[Object.keys(event)[0][0]]);
-      // console.log("Desde editar ", newEventItems[0]);
 
     } else {
       setEventItems({...eventItems, [eventDate] : event[eventDate]});
