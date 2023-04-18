@@ -36,8 +36,6 @@ const Agenda = ({
                 {
                     isDeleting && itemInfo["name"] === selectedEventName
                         ? (
-                            <>
-                            
                             <TouchableOpacity onPress={() => handleDelete(item)}>
                                 <View 
                                 style={{ 
@@ -53,7 +51,6 @@ const Agenda = ({
                                 <Ionicons name="trash-bin-outline" size={24} color="white" />
                                 </View>
                             </TouchableOpacity>
-                            </>
                         )
                         : (
                             <EventListItem 

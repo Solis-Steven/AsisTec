@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 import {Calendar, LocaleConfig} from "react-native-calendars";
 import moment from 'moment';
-import { FlatList, View, Text } from 'react-native';
+import { FlatList, View, Text, StyleSheet } from 'react-native';
 import EventItem from "./EventItem";
 import Agenda from "./Agenda";
-
 
 LocaleConfig.locales['es'] = {
   monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
@@ -80,23 +79,44 @@ const EventCalendar = ({
           ? 
             eventCalendarItems[daySelected]
               ? (
-                <FlatList
-                  data={eventCalendarItems[daySelected]}
-                  renderItem={({item}) => {
-                    return(
-                      <Agenda 
-                      item={item}
-                      isDeleting={isDeleting}
-                      setIsDeleting={setIsDeleting}
-                      setUnselectedEvent={setUnselectedEvent}
-                      setSelectedDayEvents={setSelectedDayEvents}
-                      itemInfo={itemInfo}
-                      setItemInfo={setItemInfo}
-                      onDelete={onDelete}/>
-                    )
-                  }}
-                  keyExtractor={item => item["name"]}
-                />
+                <View style={{flexDirection:"row", paddingHorizontal: 5}}>
+                  <View style={{paddingTop: 12}}>
+                            {/* Display the abbreviated weekday name in Spanish */}
+                            <Text style={styles.dayText}>
+                                {moment(daySelected).format('ddd')}
+                            </Text>
+
+                            {/* Display the day of the month */}
+                            <View style={styles.dayNumber}>
+                                <Text style={{
+                                    textAlign: "center",
+                                    fontSize: 20,
+                                    color: "white"
+                                }}>
+                                    {moment(daySelected).date()}
+                                </Text>
+                            </View>
+                        </View>
+                  
+                  <FlatList
+                    data={eventCalendarItems[daySelected]}
+                    renderItem={({item}) => {
+                      return(
+                        <Agenda 
+                        item={item}
+                        isDeleting={isDeleting}
+                        setIsDeleting={setIsDeleting}
+                        setUnselectedEvent={setUnselectedEvent}
+                        setSelectedDayEvents={setSelectedDayEvents}
+                        itemInfo={itemInfo}
+                        setItemInfo={setItemInfo}
+                        onDelete={onDelete}/>
+                      )
+                    }}
+                    keyExtractor={item => item["name"]}
+                    style={{height:"100%"}}
+                  />
+                </View>
               )
               : (
                 <View style={{alignItems:"center"}}>
@@ -105,14 +125,16 @@ const EventCalendar = ({
                   </Text>
                 </View>
               )
-          : (
-            <EventItem 
+          : 
+            (
+              <EventItem 
               itemInfo={itemInfo}
               selectedDayEvents={selectedDayEvents}
               changeModalVisible={changeModalVisible}
               setSelectedEvent={setSelectedEvent}
-            />
-          )
+              />
+            )
+          
         }
 
         
@@ -120,5 +142,46 @@ const EventCalendar = ({
     );
   };
 
-export default EventCalendar;
+  const styles = StyleSheet.create({
+    listContainer: {
+        backgroundColor: '#FFFFFF',
+        padding: 10,
+        marginVertical: 5,
+        borderRadius: 5,
+        flexDirection: "row"
+    },
 
+    dayText: {
+        fontSize: 15, 
+        textAlign: "center",
+        color: "#8FC1A9"
+    },
+
+    dayNumber: {
+        backgroundColor: "#8FC1A9",
+        width: 40,
+        height: 40,
+        borderRadius: 20,
+        justifyContent: "center",
+        alignItems: "center",                    
+    },
+
+    NotificationContainer: {
+        gap: 10,
+        marginLeft: 10,
+        alignItems: "flex-start",
+        justifyContent: "center",
+        flex: 1,
+    },
+
+    progressBar: { 
+        height: 10,
+        borderRadius: 10,
+        backgroundColor: "#F3F3F3",
+        marginBottom: 5
+    }
+})
+
+
+
+export default EventCalendar;

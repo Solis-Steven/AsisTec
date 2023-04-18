@@ -13,16 +13,6 @@ import { ProgressBar } from 'react-native-paper';
 import PushNotification from '../components/Notification/PushNotification';
 import { calculatePercentage } from '../helpers/CalculatePercentage';
 
-// Map of abbreviated weekday names in English to their Spanish equivalents
-const spanishWeekDays = {
-    "Sun": "Dom",
-    "Mon": "Lun",
-    "Tue": "Mar",
-    "Wed": "Mié",
-    "Thu": "Jue",
-    "Fri": "Vie",
-    "Sat": "Sáb"
-}
 
 const NotificationScreen = () => {
     // Initial state for the list of events
@@ -52,7 +42,7 @@ const NotificationScreen = () => {
                         <View>
                             {/* Display the abbreviated weekday name in Spanish */}
                             <Text style={styles.dayText}>
-                                {spanishWeekDays[moment(item.date).format('ddd')]}
+                                {moment(item.date).format('ddd')}
                             </Text>
 
                             {/* Display the day of the month */}
