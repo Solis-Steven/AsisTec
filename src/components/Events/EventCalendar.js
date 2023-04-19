@@ -99,7 +99,7 @@ const EventCalendar = ({
                     </Text>
                   </View>
                 </View>
-                <View style={{height: 310 ,flex: 1, flexDirection: "column", marginTop:1 }}>
+                <View style={{height: "80%", flex: 1, flexDirection: "column", marginTop:1 }}>
                   <FlatList
                     style={{ height: "100%", flexDirection: "column" }}
                     data={eventCalendarItems[daySelected]}
