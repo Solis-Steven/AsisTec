@@ -23,7 +23,7 @@ const Agenda = ({
     return (
         <>
             <TouchableOpacity
-                key={item["name"]}
+                key={item["id"]}
                 onLongPress={() => handleLongPress(item)}
                 onPress={() => {
                 setIsDeleting(false);

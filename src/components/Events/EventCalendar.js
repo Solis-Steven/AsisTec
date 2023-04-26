@@ -101,8 +101,8 @@ const EventCalendar = ({
                 </View>
                 <View style={{height: "80%", flex: 1, flexDirection: "column", marginTop:1 }}>
                   <FlatList
-                    style={{ height: "100%", flexDirection: "column" }}
-                    data={eventCalendarItems[daySelected]}
+                    style={{ height: "80%", flexDirection: "column" }}
+                    data={eventCalendarItems[daySelected].sort((a, b) => a.initialHour.toISOString().localeCompare(b.initialHour.toISOString()))}
                     renderItem={({ item }) => {
                       return (
                         <Agenda
@@ -116,7 +116,7 @@ const EventCalendar = ({
                           onDelete={onDelete} />
                       )
                     }}
-                    keyExtractor={item => item["name"]}
+                    keyExtractor={item => item["id"]}
                     
                   />
                 </View>

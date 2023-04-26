@@ -14,11 +14,12 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import moment from "moment";
 import { SelectList } from "react-native-dropdown-select-list";
 import { useEffect } from "react";
+import { idGenerator } from "../../helpers/IdGenerator";
 
 const WIDTH = Dimensions.get("window").width - 70;
 const HEIGHT = Dimensions.get("window").height - 160;
 
-const EventModal = ({ changeModalVisible, daySelected, onEventCreated, isModalVisible, selectedEvent }) => {
+const  EventModal = ({ changeModalVisible, daySelected, onEventCreated, isModalVisible, selectedEvent }) => {
   //---------------------------------States---------------------------------
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -86,15 +87,16 @@ const EventModal = ({ changeModalVisible, daySelected, onEventCreated, isModalVi
     if (
       title &&
       description &&
-      initialHourText &&
-      finalHourText &&
+      initialHourText !== "Seleccionar hora" &&
+      finalHourText !== "Seleccionar hora" &&
       selectedReminder 
     ) {
-        // if(initialHour[0] < finalHour[0]){
+        if(initialHour.getTime() < finalHour.getTime()){
           const newEvent = {
             [daySelected] : [
               {
                 name: title,
+                id: idGenerator(),
                 description: description,
                 initialHour: initialHour,
                 finalHour: finalHour,
@@ -121,9 +123,9 @@ const EventModal = ({ changeModalVisible, daySelected, onEventCreated, isModalVi
           
           onEventCreated(newEvent);
           changeModalVisible();
-        // } else {
-        //   alert("La hora de inicio debe ser menor a la hora final");
-        // }
+        } else {
+          alert("La hora de inicio debe ser menor a la hora final");
+        }
     } else {
       alert("Por favor, complete todos los campos");
     }
