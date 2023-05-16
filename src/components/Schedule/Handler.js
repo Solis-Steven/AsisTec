@@ -1,7 +1,10 @@
 import { useState } from "react";
 import moment from 'moment';
 
-const Handler = (props) => {
+const Handler = ({initialDate, finalDate,courseName,professorName,classroom,modalityType,initialHour,finalHour,selectDays}) => {
+    console.log('HORAA:'+initialDate)
+
+    obtenerFechas(initialDate,finalDate,selectDays,initialHour,finalHour);
 
     const [lastId, setLastId] = useState(0);
     const [event, setEvent] = useState({});
@@ -55,7 +58,7 @@ const Handler = (props) => {
     },]);
 
 
-    convertirAEventos(props.eventos, eventos);
+    
     /*
     {
         id: 1,
@@ -108,7 +111,9 @@ const Handler = (props) => {
             }
             fechaActual.add(1, 'day');
         }
+        console.log(ListaFechas);
         return ListaFechas;
+
     }
 
     // crear un evento por cada fecha
@@ -139,6 +144,7 @@ const Handler = (props) => {
 
         return false;
     }
+   
 
 
 }

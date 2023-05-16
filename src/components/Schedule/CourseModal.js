@@ -12,6 +12,7 @@ import {
   import DateTimePicker from "@react-native-community/datetimepicker";
   import moment from "moment";
   import Icon from "react-native-vector-icons/Ionicons";
+import Handler from "./Handler";
   
   const CourseModal = ({
     changeModalVisible,
@@ -55,8 +56,6 @@ import {
       const currentHour = selectedHour || initialHour;
       const formatedHour = moment(selectedHour || initialHour).format("hh:mm a");
       setInitialHour(currentHour);
-      console.log(currentHour);
-      console.log(formatedHour);
       setInitialHourText(formatedHour);
     };
   
@@ -116,7 +115,6 @@ import {
       } else {
         selectDays.push(index + 1);
       }
-      console.log(selectDays);
       const updatedDays = [...DAYS_OF_WEEK];
       updatedDays[index].selected = !updatedDays[index].selected;
       setSelectedDays(updatedDays.filter((day) => day.selected));
@@ -139,7 +137,8 @@ import {
         alert("Por favor llena todos los espacios");
         return;
       } else {
-        {/* <Handler
+        Handler({initialDate, finalDate,courseName,professorName,classroom,modalityType,initialHour,finalHour,selectDays});
+    /*     <Handler
         initialDate={initialDate}
         finalDate={finalDate}
         title={courseName}
@@ -149,8 +148,7 @@ import {
         horaInicio={initialHour}
         horaFin={finalHour}
         seletedDays = {selectDays}
-
-      />  */}
+      /> */  
       setCourseName("");
       setProfessorName("");
       setClassroom("");
@@ -159,6 +157,7 @@ import {
       setInitialHourText("Seleccionar hora");
       setFinalHourText("Seleccionar hora");
       setSelectedDays([]);
+      return;
       }
      
     };
