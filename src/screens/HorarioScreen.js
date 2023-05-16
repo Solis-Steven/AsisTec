@@ -16,6 +16,7 @@ MomentConfig.updateLocale('es', { // setting moment.js locale to Spanish
 });
 
 const HorarioScreen= () => {
+
     // Define state variables with their initial values
     const [viewMode, setViewMode] = useState("week"); 
     const [isModalVisible, setIsModalVisible] = useState(false); 
@@ -27,18 +28,18 @@ const HorarioScreen= () => {
     const events = [ 
         {
             id: 1,
-            start: new Date(2023, 3, 3, 8, 0),
-            end: new Date(2023, 3, 3, 11, 0),
+            start: new Date(2023, 4, 17, 6, 0),
+            end: new Date(2023, 4, 17, 11, 0),
             title: "Diseño de Software",
             description: "Presentación de nuevos productos",
             location: "Oficina principal",
             color: "#F44336",
-        },
 
+        },
         {
-            id: 2,
-            start: new Date(2023, 3, 4, 9, 0),
-            end: new Date(2023, 3, 4, 11, 0),
+            id: 1,
+            start: new Date(2023, 4, 17, 12, 0),
+            end: new Date(2023, 4, 17, 18, 0),
             title: "Seminario de Estudios Filosoficos",
             description: "Presentación de nuevos productos",
             location: "Oficina principal",
@@ -47,8 +48,8 @@ const HorarioScreen= () => {
 
           {
             id: 3,
-            start: new Date(2023, 3, 4, 13, 0),
-            end: new Date(2023, 3, 4, 16, 0),
+            start: new Date(2023, 4, 15, 1, 0),
+            end: new Date(2023, 4, 15, 12, 0),
             title: "Administración de Proyectos",
             description: "Presentación de nuevos productos",
             location: "Oficina principal",
@@ -57,8 +58,8 @@ const HorarioScreen= () => {
 
           {
             id: 4,
-            start: new Date(2023, 3, 6, 13, 0),
-            end: new Date(2023, 3, 6, 16, 0),
+            start: new Date(2023, 4, 15, 13, 0),
+            end: new Date(2023, 4, 15, 20, 0),
             title: "Estadística",
             description: "Presentación de nuevos productos",
             location: "Oficina principal",
@@ -67,13 +68,14 @@ const HorarioScreen= () => {
 
           {
             id: 5,
-            start: new Date(2023, 3, 7, 8, 0),
-            end: new Date(2023, 3, 7,11, 0),
+            start: new Date(2023, 4, 16, 8, 0),
+            end: new Date(2023, 4, 16, 11, 0),
             title: "Compiladores E interpretes",
             description: "Presentación de nuevos productos",
             location: "Oficina principal",
             color: "#EC7752",
-          }
+          },
+
       ];
 
       return (
@@ -81,7 +83,7 @@ const HorarioScreen= () => {
             {/* Header */}
             <View style={styles.header}>
                 {/* Week view button */}
-                <TouchableOpacity 
+                <TouchableOpacity  
                 onPress={() => {
                     setViewMode("week")
                 }}
