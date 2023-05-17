@@ -1,8 +1,48 @@
 import { useState } from "react";
 import moment from 'moment';
+import { addDays, format, addHours } from 'date-fns';
+ // Funcion para obtener las fechas
+ const obtenerFechas = (startDate, lastDate, horaInicio, horaFin) => {
+
+    // Definir las fechas de inicio y fin del rango
+    var fechaInicio = moment(startDate).format('YYYY-MM-DD');
+    var fechaFin = moment(lastDate).format('YYYY-MM-DD');
+    console.log("fechaInicio: "+ fechaInicio)
+    console.log("fechaFin: "+ fechaFin)
+    // Definir las horas de inicio y fin del rango
+    var horaInicioLocal = moment(horaInicio, 'HH:mm').format('HH:mm');
+    var horaFinLocal = moment(horaFin, 'HH:mm').format('HH:mm');
+    console.log("Hora Inicio: "+ horaInicioLocal)
+    console.log("Hora Fin: "+horaFinLocal)
+
+    var ListaFechas = []; // Array para almacenar la lista fechas
+
+    var fechaActual = startDate; // Fecha actual
+    DaysList = [2, 3]; // Lista de dias de la semana
+    while (fechaActual <= lastDate) {
+        if (DaysList.includes(fechaActual.getDay())) {
+          
+            var fechas = []; // Array para almacenar las fechas
+            var formato = format(fechaActual, 'yyyy-MM-dd');
+            var dateTimeI = formato + " "+ format(horaInicio, 'hh:mm');
+            var dateTimeF = formato + " "+ format(horaFin, 'hh:mm');
+            
+            fechas.push(dateTimeI); // Agregar la fecha al array
+            fechas.push(dateTimeF); // Agregar la fecha al array
+            
+
+            ListaFechas.push(fechas);
+        }
+         fechaActual = addDays(fechaActual, 1);
+    }
+    console.log(ListaFechas);
+    return ListaFechas;
+
+}
+
 
 const Handler = ({ initialDate, finalDate, courseName, professorName, classroom, modalityType, initialHour, finalHour, selectDays }) => {
-
+    
     console.log("----------------------------------------Handler----------------------------------------");
     console.log("initialDate:" + initialDate);
     console.log("finalDate:" + finalDate);
@@ -12,156 +52,11 @@ const Handler = ({ initialDate, finalDate, courseName, professorName, classroom,
     console.log("modalityType:" + modalityType);
     console.log("initialHour:" + initialHour);
     console.log("finalHour:" + finalHour);
-    //console.log("selectDays:" + selectDays[0]);
+    obtenerFechas(initialDate,finalDate,initialHour,finalHour)
 
-    //obtenerFechas(initialDate, finalDate, selectDays, initialHour, finalHour);
-
-    const [lastId, setLastId] = useState(0);
-    const [event, setEvent] = useState({});
-    const [eventsList, setEventsList] = useState([{
-        id: 1,
-        idRelational: 1,
-        start: new Date(2023, 4, 17, 7, 0),
-        end: new Date(2023, 4, 17, 11, 0),
-        title: "Diseño de Software",
-        description: "Presentación de nuevos productos",
-        location: "Oficina principal",
-        color: "#F44336",
-        horaInicio: "10:00 AM",
-        horaFin: "11:00 AM",
-    },
-    {
-        id: 2,
-        idRelational: 1,
-        start: new Date(2023, 4, 24, 7, 0),
-        end: new Date(2023, 4, 24, 11, 0),
-        title: "Diseño de Software",
-        description: "Presentación de nuevos productos",
-        location: "Oficina principal",
-        color: "#F44336",
-        horaInicio: "10:00 AM",
-        horaFin: "11:00 AM",
-    },
-    {
-        id: 3,
-        idRelational: 1,
-        start: new Date(2023, 4, 31, 7, 0),
-        end: new Date(2023, 4, 31, 11, 0),
-        title: "Diseño de Software",
-        description: "Presentación de nuevos productos",
-        location: "Oficina principal",
-        color: "#F44336",
-        horaInicio: "10:00 AM",
-        horaFin: "11:00 AM",
-    },
-    {
-        id: 4,
-        idRelational: 1,
-        start: new Date(2023, 5, 7, 7, 0),
-        end: new Date(2023, 5, 7, 11, 0),
-        title: "Diseño de Software",
-        description: "Presentación de nuevos productos",
-        location: "Oficina principal",
-        color: "#F44336",
-        horaInicio: "10:00 AM",
-        horaFin: "11:00 AM",
-    },]);
-
-
-
-    /*
-    {
-        id: 1,
-        start: new Date(2023, 4, 17),
-        end: new Date(2023, 5, 7),
-        title: "Diseño de Software",
-        description: "Presentación de nuevos productos",
-        location: "Oficina principal",
-        color: "#F44336",
-        horaInicio: "10:00 AM",
-        horaFin: "11:00 AM",
-        dia: 3,
-    },
-    {
-        id: 2,
-        start: new Date(2023, 4, 16, 0, 0),
-        end: new Date(2023, 5, 6, 0, 0),
-        title: "Diseño de Software",
-        description: "Presentación de nuevos productos",
-        location: "Oficina principal",
-        color: "#F44336",
-        horaInicio: "10:00 AM",
-        horaFin: "11:00 AM",
-        },
-    */
-
-
-    // Funcion para obtener las fechas
-    const obtenerFechas = (startDate, lastDate, horaInicio, horaFin) => {
-
-        // Definir las fechas de inicio y fin del rango
-        var fechaInicio = moment(startDate).format('YYYY-MM-DD');
-        var fechaFin = moment(lastDate).format('YYYY-MM-DD');
-
-        // Definir las horas de inicio y fin del rango
-        var horaInicioLocal = moment(horaInicio, 'HH:mm').format('HH:mm');
-        var horaFinLocal = moment(horaFin, 'HH:mm').format('HH:mm');
-
-        var fechas = []; // Array para almacenar las fechas
-        var ListaFechas = []; // Array para almacenar la lista fechas
-
-        var fechaActual = moment(fechaInicio); // Fecha actual
-        DaysList = [2, 3]; // Lista de dias de la semana
-
-        while (fechaActual.isSameOrBefore(fechaFin)) {
-            if (DaysList.includes(fechaActual.day())) {
-
-                var dateTimeI = moment(fechaActual + ' ' + horaInicioLocal, 'DD/MM/YYYY HH:mm');
-                var dateTimeF = moment(fechaActual + ' ' + horaFinLocal, 'DD/MM/YYYY HH:mm');
-
-                fechas.push(dateTimeI.format('YYYY-MM-DD hh:mm a')); // Agregar la fecha al array
-                fechas.push(dateTimeF.format('YYYY-MM-DD hh:mm a')); // Agregar la fecha al array
-
-                ListaFechas.push(fechas);
-                fechas = [];
-            }
-            fechaActual.add(1, 'day');
-        }
-        console.log(ListaFechas);
-        return ListaFechas;
-
-    }
-
-    // crear un evento por cada fecha
-    // agregar el evento a la lista de eventos
-    // enviar la lista de eventos al componente de HorarioScreen
-    // HorarioScreen recibe la lista de eventos y los muestra en el calendario
-
-    const convertirAEventos = (listaEventos, eventos) => {
-
-        for (let i = 0; i < listaEventos.length; i++) {
-
-
-
-        }
-
-        return eventos;
-    }
-
-
-
-    const buscarSiExiste = (id) => {
-
-        for (let i = 0; i < props.events.length; i++) {
-            if (props.events[i].id === id) {
-                return true;
-            }
-        }
-
-        return false;
-    }
 
     return (
+        
         console.log("---------------------------- Handler return ----------------------------")
     )
 
