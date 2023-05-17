@@ -141,20 +141,17 @@ const CourseModal = ({
     ) {
       alert("Por favor llena todos los espacios");
       return;
+    }
+    else if(finalDate<initialDate ){
+      alert("La fecha final  inicia antes que la fecha inicial");
+      return;
+      
+    } else if(finalHour<initialHour){
+      alert("La hora final  inicia antes que la hora inicial");
+      return; 
     } else {
       Handler({ initialDate, finalDate, courseName, professorName, classroom, modalityType, 
         initialHour, finalHour, selectDays, listaComponents, setListaComponents , ultimoId, setUltimoId , ultimoIdRelacion, setUltimoIdRelacion });
-      /*     <Handler
-          initialDate={initialDate}
-          finalDate={finalDate}
-          title={courseName}
-          description={professorName}
-          location={classroom}
-          modalidad = {modalityType}
-          horaInicio={initialHour}
-          horaFin={finalHour}
-          seletedDays = {selectDays}
-        /> */
       setCourseName("");
       setProfessorName("");
       setClassroom("");
