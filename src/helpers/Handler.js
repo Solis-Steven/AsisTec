@@ -1,19 +1,10 @@
 import { useState } from "react";
 import moment from 'moment';
 import { addDays, format, addHours } from 'date-fns';
+import { useEffect } from "react";
  // Funcion para obtener las fechas
- const obtenerFechas = (startDate, lastDate, horaInicio, horaFin) => {
+ const obtenerFechas = (startDate, lastDate, horaInicio, horaFin, setListaComponents) => {
 
-    // Definir las fechas de inicio y fin del rango
-    var fechaInicio = moment(startDate).format('YYYY-MM-DD');
-    var fechaFin = moment(lastDate).format('YYYY-MM-DD');
-    console.log("fechaInicio: "+ fechaInicio)
-    console.log("fechaFin: "+ fechaFin)
-    // Definir las horas de inicio y fin del rango
-    var horaInicioLocal = moment(horaInicio, 'HH:mm').format('HH:mm');
-    var horaFinLocal = moment(horaFin, 'HH:mm').format('HH:mm');
-    console.log("Hora Inicio: "+ horaInicioLocal)
-    console.log("Hora Fin: "+horaFinLocal)
 
     var ListaFechas = []; // Array para almacenar la lista fechas
 
@@ -24,24 +15,25 @@ import { addDays, format, addHours } from 'date-fns';
           
             var fechas = []; // Array para almacenar las fechas
             var formato = format(fechaActual, 'yyyy-MM-dd');
-            var dateTimeI = formato + " "+ format(horaInicio, 'hh:mm');
-            var dateTimeF = formato + " "+ format(horaFin, 'hh:mm');
-            
-            fechas.push(dateTimeI); // Agregar la fecha al array
-            fechas.push(dateTimeF); // Agregar la fecha al array
-            
+            var dateTimeI = formato + " "+  moment(horaInicio, 'HH:mm').format('HH:mm');
+            var dateTimeF = formato + " "+ moment(horaFin, 'HH:mm').format('HH:mm');
 
+            var dateObject1 = new Date(dateTimeI).toLocaleString();
+            var dateObject2 = new Date(dateTimeF).toLocaleString();
+            fechas.push(dateObject1); // Agregar la fecha al array
+            fechas.push(dateObject2); // Agregar la fecha al array
+            //
             ListaFechas.push(fechas);
         }
          fechaActual = addDays(fechaActual, 1);
     }
     console.log(ListaFechas);
-    return ListaFechas;
+    setListaComponents(ListaFechas);
 
 }
 
 
-const Handler = ({ initialDate, finalDate, courseName, professorName, classroom, modalityType, initialHour, finalHour, selectDays }) => {
+const Handler = ({ initialDate, finalDate, courseName, professorName, classroom, modalityType, initialHour, finalHour, selectDays, listaComponents, setListaComponents}) => {
     
     console.log("----------------------------------------Handler----------------------------------------");
     console.log("initialDate:" + initialDate);
@@ -52,11 +44,11 @@ const Handler = ({ initialDate, finalDate, courseName, professorName, classroom,
     console.log("modalityType:" + modalityType);
     console.log("initialHour:" + initialHour);
     console.log("finalHour:" + finalHour);
-    obtenerFechas(initialDate,finalDate,initialHour,finalHour)
 
+    obtenerFechas(initialDate,finalDate,initialHour,finalHour, setListaComponents);
+    
 
     return (
-        
         console.log("---------------------------- Handler return ----------------------------")
     )
 

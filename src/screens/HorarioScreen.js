@@ -20,6 +20,12 @@ const HorarioScreen= () => {
     // Define state variables with their initial values
     const [viewMode, setViewMode] = useState("week"); 
     const [isModalVisible, setIsModalVisible] = useState(false); 
+    
+    // Variables para obtener las fechas
+    const [listaComponents, setListaComponents] = useState([]); // Array para almacenar la lista de componentes
+    
+    // Variable para actualizar la lista de componentes
+    const [estado, setEstado] = useState(false); // Estado para actualizar la lista de componentes
 
     const changeModalVisible = () => { 
         setIsModalVisible(!isModalVisible);
@@ -69,6 +75,7 @@ const HorarioScreen= () => {
       ];
 
       return (
+        console.log("Lista fechas en Horario Screen: " + listaComponents),
         <View style={styles.container}>
             {/* Header */}
             <View style={styles.header}>
@@ -144,7 +151,11 @@ const HorarioScreen= () => {
                 animationType="fade"
                 visible={isModalVisible}
                 onRequestClose={changeModalVisible}>
-                <ModalControls changeModalVisible={changeModalVisible}/>
+                <ModalControls 
+                    changeModalVisible={changeModalVisible } 
+                    listaComponents={listaComponents} 
+                    setListaComponents={setListaComponents} 
+                />
             </Modal>
         </View>
       );
