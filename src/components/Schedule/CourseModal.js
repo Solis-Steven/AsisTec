@@ -53,6 +53,7 @@ const CourseModal = ({
   const [showFinalDate, setShowFinalDate] = useState(false);
 
   const [selectedDays, setSelectedDays] = useState([]);
+  const [Days, setDays] = useState([]);
   const selectDays = [];
 
   // handler for initial hour change
@@ -113,16 +114,20 @@ const CourseModal = ({
     setFinalDate(currentDate);
     setFinalDateText(formatedDate);
   };
+
   // handler for selected days
   const handleDaysSelected = (index) => {
     if (index === 6) {
       selectDays.push(0);
+      setDays(Days.concat(selectDays))
     } else {
       selectDays.push(index + 1);
+      setDays(Days.concat(selectDays))
     }
     const updatedDays = [...DAYS_OF_WEEK];
     updatedDays[index].selected = !updatedDays[index].selected;
     setSelectedDays(updatedDays.filter((day) => day.selected));
+
   };
 
   const onCreateCourse = () => {
@@ -151,7 +156,7 @@ const CourseModal = ({
       return; 
     } else {
       Handler({ initialDate, finalDate, courseName, professorName, classroom, modalityType, 
-        initialHour, finalHour, selectDays, listaComponents, setListaComponents , ultimoId, setUltimoId , ultimoIdRelacion, setUltimoIdRelacion });
+        initialHour, finalHour, Days, listaComponents, setListaComponents , ultimoId, setUltimoId , ultimoIdRelacion, setUltimoIdRelacion });
       setCourseName("");
       setProfessorName("");
       setClassroom("");

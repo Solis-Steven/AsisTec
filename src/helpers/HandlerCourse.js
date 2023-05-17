@@ -111,10 +111,10 @@ const agregarComponente = (ListaFechas, listaComponents, setListaComponents, cou
 }
 
 const Handler = ({ initialDate, finalDate, courseName, professorName, classroom,
-    modalityType, initialHour, finalHour, selectDays, listaComponents,
+    modalityType, initialHour, finalHour, Days, listaComponents,
     setListaComponents, ultimoId, setUltimoId, ultimoIdRelacion, setUltimoIdRelacion }) => {
 
-
+    console.log("días: "+Days)
     // Variables para obtener las fechas
     ListaFechas = obtenerFechas(initialDate, finalDate, initialHour, finalHour);
 
