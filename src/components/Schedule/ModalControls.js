@@ -5,7 +5,7 @@ import CourseModal from "../Schedule/CourseModal";
 import ActivityModal from "../Schedule/ActivityModal";
 
 
-const ModalControls = ({ changeModalVisible, listaComponents, setListaComponents }) => {
+const ModalControls = ({ changeModalVisible, listaComponents, setListaComponents, ultimoId, setUltimoId , ultimoIdRelacion, setUltimoIdRelacion }) => {
     // Define state variables with their initial values
     const [activityType, setActivityType] = useState(1);
     const [modalityType, setModalityType] = useState(1);
@@ -51,7 +51,12 @@ const ModalControls = ({ changeModalVisible, listaComponents, setListaComponents
                     setModalityType={setModalityType}
                     WIDTH={WIDTH}
                     HEIGHT={HEIGHT}
-                    DAYS_OF_WEEK={DAYS_OF_WEEK} />
+                    DAYS_OF_WEEK={DAYS_OF_WEEK} 
+                    ultimoId={ultimoId}
+                    setUltimoId={setUltimoId}
+                    ultimoIdRelacion={ultimoIdRelacion}
+                    setUltimoIdRelacion={setUltimoIdRelacion}
+                    />
             )
             : (
                 <ActivityModal

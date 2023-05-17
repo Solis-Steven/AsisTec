@@ -3,16 +3,15 @@ import {
   View,
   TouchableOpacity,
   StyleSheet,
-  ScrollView,
 } from "react-native";
 import React, { useState } from "react";
 
-import { Input, Tile } from "react-native-elements";
+import { Input } from "react-native-elements";
 import { SelectList } from "react-native-dropdown-select-list";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import moment from "moment";
 import Icon from "react-native-vector-icons/Ionicons";
-import Handler from "../../helpers/Handler";
+import Handler from "../../helpers/HandlerCourse";
 
 const CourseModal = ({
   changeModalVisible,
@@ -26,7 +25,11 @@ const CourseModal = ({
   HEIGHT,
   DAYS_OF_WEEK,
   listaComponents,
-  setListaComponents
+  setListaComponents,
+  ultimoId, 
+  setUltimoId, 
+  ultimoIdRelacion, 
+  setUltimoIdRelacion
 }) => {
   // Define state variables with their initial values
   const [courseName, setCourseName] = useState("");
@@ -139,7 +142,8 @@ const CourseModal = ({
       alert("Por favor llena todos los espacios");
       return;
     } else {
-      Handler({ initialDate, finalDate, courseName, professorName, classroom, modalityType, initialHour, finalHour, selectDays, listaComponents, setListaComponents });
+      Handler({ initialDate, finalDate, courseName, professorName, classroom, modalityType, 
+        initialHour, finalHour, selectDays, listaComponents, setListaComponents , ultimoId, setUltimoId , ultimoIdRelacion, setUltimoIdRelacion });
       /*     <Handler
           initialDate={initialDate}
           finalDate={finalDate}

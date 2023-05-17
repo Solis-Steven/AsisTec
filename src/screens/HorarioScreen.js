@@ -17,12 +17,41 @@ MomentConfig.updateLocale('es', { // setting moment.js locale to Spanish
 
 const HorarioScreen= () => {
 
+    const [ultimoId, setUltimoId] = useState(2); // Ultimo id de la lista de componentes
+    const [ultimoIdRelacion, setUltimoIdRelacion] = useState(2); // Ultimo id de la lista de componentes
+
+    const events = [ 
+        {
+            id: 1,
+            idRelacion: 1,
+            start: new Date(2023, 4, 17, 8, 30),
+            end: new Date(2023, 4, 17, 11, 30),
+            title: "Diseño de Software",
+            professorName: "Juan Carlos Cubero",
+            location: "Oficina principal",
+            modalityType: "Presencial",
+            color: "#F44336",
+            type: "Clase",
+        },
+          {
+            id: 2,
+            idRelacion: 2,
+            start: new Date(2023, 4, 15, 7, 30),
+            end: new Date(2023, 4, 15, 12, 30),
+            title: "Salir a correr",
+            description: "Cada dia a las 7:00 AM",
+            modalityType: "Presencial",
+            color: "#64B149",
+            type: "Actividad",
+          },
+
+      ];
     // Define state variables with their initial values
     const [viewMode, setViewMode] = useState("week"); 
     const [isModalVisible, setIsModalVisible] = useState(false); 
     
     // Variables para obtener las fechas
-    const [listaComponents, setListaComponents] = useState([]); // Array para almacenar la lista de componentes
+    const [listaComponents, setListaComponents] = useState(events); // Array para almacenar la lista de componentes
     
     // Variable para actualizar la lista de componentes
     const [estado, setEstado] = useState(false); // Estado para actualizar la lista de componentes
@@ -31,51 +60,12 @@ const HorarioScreen= () => {
         setIsModalVisible(!isModalVisible);
     }
     
-    const events = [ 
-        {
-            id: 1,
-            start: new Date(2023, 4, 17, 6, 0),
-            end: new Date(2023, 4, 17, 11, 0),
-            title: "Diseño de Software",
-            description: "Presentación de nuevos productos",
-            location: "Oficina principal",
-            color: "#F44336",
-
-        },
-          {
-            id: 3,
-            start: new Date(2023, 4, 15, 1, 0),
-            end: new Date(2023, 4, 15, 12, 0),
-            title: "Administración de Proyectos",
-            description: "Presentación de nuevos productos",
-            location: "Oficina principal",
-            color: "#64B149",
-          },
-
-          {
-            id: 4,
-            start: new Date(2023, 4, 15, 13, 0),
-            end: new Date(2023, 4, 15, 20, 0),
-            title: "Estadística",
-            description: "Presentación de nuevos productos",
-            location: "Oficina principal",
-            color: "#EED91C",
-          },
-
-          {
-            id: 5,
-            start: new Date(2023, 4, 16, 8, 0),
-            end: new Date(2023, 4, 16, 11, 0),
-            title: "Compiladores E interpretes",
-            description: "Presentación de nuevos productos",
-            location: "Oficina principal",
-            color: "#EC7752",
-          },
-
-      ];
+    
 
       return (
-        console.log("Lista fechas en Horario Screen: " + listaComponents),
+
+        listaComponents.forEach(objeto => console.log(JSON.stringify(objeto))),
+
         <View style={styles.container}>
             {/* Header */}
             <View style={styles.header}>
@@ -104,7 +94,7 @@ const HorarioScreen= () => {
         
             {/* Calendar */}
             <TimelineCalendar 
-                events={events}
+                events={listaComponents}
                 renderEventContent={(event) => {
                 return viewMode === "week"
                     ? (<WeekView key={event.id} event={event}/>)
@@ -154,7 +144,11 @@ const HorarioScreen= () => {
                 <ModalControls 
                     changeModalVisible={changeModalVisible } 
                     listaComponents={listaComponents} 
-                    setListaComponents={setListaComponents} 
+                    setListaComponents={setListaComponents}
+                    ultimoId={ultimoId}
+                    setUltimoId={setUltimoId}
+                    ultimoIdRelacion={ultimoIdRelacion}
+                    setUltimoIdRelacion={setUltimoIdRelacion}
                 />
             </Modal>
         </View>
