@@ -1,10 +1,20 @@
 import { useState } from "react";
 import moment from 'moment';
 
-const Handler = ({initialDate, finalDate,courseName,professorName,classroom,modalityType,initialHour,finalHour,selectDays}) => {
-    console.log('HORAA:'+initialDate)
+const Handler = ({ initialDate, finalDate, courseName, professorName, classroom, modalityType, initialHour, finalHour, selectDays }) => {
 
-    obtenerFechas(initialDate,finalDate,selectDays,initialHour,finalHour);
+    console.log("----------------------------------------Handler----------------------------------------");
+    console.log("initialDate:" + initialDate);
+    console.log("finalDate:" + finalDate);
+    console.log("courseName:" + courseName);
+    console.log("professorName:" + professorName);
+    console.log("classroom:" + classroom);
+    console.log("modalityType:" + modalityType);
+    console.log("initialHour:" + initialHour);
+    console.log("finalHour:" + finalHour);
+    //console.log("selectDays:" + selectDays[0]);
+
+    //obtenerFechas(initialDate, finalDate, selectDays, initialHour, finalHour);
 
     const [lastId, setLastId] = useState(0);
     const [event, setEvent] = useState({});
@@ -58,7 +68,7 @@ const Handler = ({initialDate, finalDate,courseName,professorName,classroom,moda
     },]);
 
 
-    
+
     /*
     {
         id: 1,
@@ -87,21 +97,27 @@ const Handler = ({initialDate, finalDate,courseName,professorName,classroom,moda
 
 
     // Funcion para obtener las fechas
-    const obtenerFechas = (startDate, lastDate, DaysList, horaInicio, horaFin) => {
+    const obtenerFechas = (startDate, lastDate, horaInicio, horaFin) => {
+
         // Definir las fechas de inicio y fin del rango
         var fechaInicio = moment(startDate).format('YYYY-MM-DD');
         var fechaFin = moment(lastDate).format('YYYY-MM-DD');
+
+        // Definir las horas de inicio y fin del rango
+        var horaInicioLocal = moment(horaInicio, 'HH:mm').format('HH:mm');
+        var horaFinLocal = moment(horaFin, 'HH:mm').format('HH:mm');
 
         var fechas = []; // Array para almacenar las fechas
         var ListaFechas = []; // Array para almacenar la lista fechas
 
         var fechaActual = moment(fechaInicio); // Fecha actual
+        DaysList = [2, 3]; // Lista de dias de la semana
 
         while (fechaActual.isSameOrBefore(fechaFin)) {
             if (DaysList.includes(fechaActual.day())) {
 
-                var dateTimeI = moment(fechaActual + ' ' + horaInicio, 'DD/MM/YYYY HH:mm');
-                var dateTimeF = moment(fechaActual + ' ' + horaFin, 'DD/MM/YYYY HH:mm');
+                var dateTimeI = moment(fechaActual + ' ' + horaInicioLocal, 'DD/MM/YYYY HH:mm');
+                var dateTimeF = moment(fechaActual + ' ' + horaFinLocal, 'DD/MM/YYYY HH:mm');
 
                 fechas.push(dateTimeI.format('YYYY-MM-DD hh:mm a')); // Agregar la fecha al array
                 fechas.push(dateTimeF.format('YYYY-MM-DD hh:mm a')); // Agregar la fecha al array
@@ -144,8 +160,10 @@ const Handler = ({initialDate, finalDate,courseName,professorName,classroom,moda
 
         return false;
     }
-   
 
+    return (
+        console.log("---------------------------- Handler return ----------------------------")
+    )
 
 }
 

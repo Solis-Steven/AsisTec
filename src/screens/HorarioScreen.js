@@ -36,16 +36,6 @@ const HorarioScreen= () => {
             color: "#F44336",
 
         },
-        {
-            id: 1,
-            start: new Date(2023, 4, 17, 12, 0),
-            end: new Date(2023, 4, 17, 18, 0),
-            title: "Seminario de Estudios Filosoficos",
-            description: "Presentación de nuevos productos",
-            location: "Oficina principal",
-            color: "#66C5E3",
-          },
-
           {
             id: 3,
             start: new Date(2023, 4, 15, 1, 0),

@@ -12,7 +12,7 @@ import {
   import DateTimePicker from "@react-native-community/datetimepicker";
   import moment from "moment";
   import Icon from "react-native-vector-icons/Ionicons";
-import Handler from "./Handler";
+  import Handler from "../../helpers/Handler";
   
   const CourseModal = ({
     changeModalVisible,
