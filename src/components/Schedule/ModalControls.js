@@ -40,8 +40,6 @@ const ModalControls = ({ changeModalVisible, listaComponents, setListaComponents
         activityType === 1
             ? (
                 <CourseModal
-                    listaComponents={listaComponents}
-                    setListaComponents={setListaComponents}
                     changeModalVisible={changeModalVisible}
                     setActivityType={setActivityType}
                     activityTypeValues={activityTypeValues}
@@ -51,7 +49,9 @@ const ModalControls = ({ changeModalVisible, listaComponents, setListaComponents
                     setModalityType={setModalityType}
                     WIDTH={WIDTH}
                     HEIGHT={HEIGHT}
-                    DAYS_OF_WEEK={DAYS_OF_WEEK} 
+                    DAYS_OF_WEEK={DAYS_OF_WEEK}
+                    listaComponents={listaComponents}
+                    setListaComponents={setListaComponents}
                     ultimoId={ultimoId}
                     setUltimoId={setUltimoId}
                     ultimoIdRelacion={ultimoIdRelacion}

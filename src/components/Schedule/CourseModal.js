@@ -11,7 +11,7 @@ import { SelectList } from "react-native-dropdown-select-list";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import moment from "moment";
 import Icon from "react-native-vector-icons/Ionicons";
-import Handler from "../../helpers/HandlerCourse";
+import HandlerCourse from "../../helpers/HandlerCourse";
 
 const CourseModal = ({
   changeModalVisible,
@@ -155,7 +155,7 @@ const CourseModal = ({
       alert("La hora final  inicia antes que la hora inicial");
       return; 
     } else {
-      Handler({ initialDate, finalDate, courseName, professorName, classroom, modalityType, 
+      HandlerCourse({ initialDate, finalDate, courseName, professorName, classroom, modalityType, 
         initialHour, finalHour, Days, listaComponents, setListaComponents , ultimoId, setUltimoId , ultimoIdRelacion, setUltimoIdRelacion });
       setCourseName("");
       setProfessorName("");

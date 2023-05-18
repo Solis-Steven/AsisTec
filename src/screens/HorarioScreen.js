@@ -60,7 +60,6 @@ const HorarioScreen= () => {
         setIsModalVisible(!isModalVisible);
     }
     
-    
 
       return (
 
@@ -94,6 +93,30 @@ const HorarioScreen= () => {
         
             {/* Calendar */}
             <TimelineCalendar 
+
+               // Para edita un evento
+               onEventPress={(event) => {
+                    // se debe recibir el id del evento
+                    console.log("Evento presionado: " + event.id);
+                    console.log("Evento presionado: " + JSON.stringify(event));
+                    // se debe abrir el modal con los datos del evento
+                    // se debe identificar si es un curso o una actividad
+                    // se debe actualizar el evento
+                    // se debe actualizar la lista de componentes
+
+               }}
+
+                // Para eliminar un evento
+               onLongPressEvent={(event) => {
+                    // se debe recibir el id del evento
+                    console.log("Evento presionado: " + event.id);
+                    console.log("Evento presionado: " + JSON.stringify(event));
+                    // Se debe buscar el evento en la lista de componentes
+                    // Se deben eliminar los eventos relacionados con el evento
+                    // se debe eliminar el evento de la lista de componentes
+                    // se debe actualizar la lista de componentes
+
+               }}
                 events={listaComponents}
                 renderEventContent={(event) => {
                 return viewMode === "week"
