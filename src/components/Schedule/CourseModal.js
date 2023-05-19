@@ -93,7 +93,7 @@ const CourseModal = ({
   const showFinalDatepicker = () => {
     setShowFinalDate(true);
   };
-  // handler for initial hour change
+  // handler for initial Date change
   const onInitialDateChange = (event, selectedDate) => {
     setShowInitialDate(false);
     const currentDate = selectedDate || initialDate;
@@ -104,7 +104,7 @@ const CourseModal = ({
     setInitialDateText(formatedDate);
   };
 
-  // handler for final hour change
+  // handler for final Date change
   const onFinalDateChange = (event, selectedDate) => {
     setShowFinalDate(false);
     const currentDate = selectedDate || initialDate;
@@ -114,6 +114,7 @@ const CourseModal = ({
     setFinalDate(currentDate);
     setFinalDateText(formatedDate);
   };
+  
 
   // handler for selected days
   const handleDaysSelected = (index) => {
