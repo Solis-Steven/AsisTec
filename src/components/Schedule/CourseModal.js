@@ -107,8 +107,8 @@ const CourseModal = ({
   // handler for final Date change
   const onFinalDateChange = (event, selectedDate) => {
     setShowFinalDate(false);
-    const currentDate = selectedDate || initialDate;
-    const formatedDate = moment(selectedDate || initialDate).format(
+    const currentDate = selectedDate || finalDate;
+    const formatedDate = moment(selectedDate || finalDate).format(
       "YYYY-MM-DD"
     );
     setFinalDate(currentDate);

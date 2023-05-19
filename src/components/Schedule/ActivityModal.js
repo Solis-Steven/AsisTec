@@ -106,8 +106,8 @@ const onInitialDateChange = (event, selectedDate) => {
   // handler for final Date change
   const onFinalDateChange = (event, selectedDate) => {
     setShowFinalDate(false);
-    const currentDate = selectedDate || initialDate;
-    const formatedDate = moment(selectedDate || initialDate).format(
+    const currentDate = selectedDate || finalDate;
+    const formatedDate = moment(selectedDate || finalDate).format(
       "YYYY-MM-DD"
     );
     setFinalDate(currentDate);
@@ -164,7 +164,9 @@ const onInitialDateChange = (event, selectedDate) => {
     updatedDays[index].selected = !updatedDays[index].selected;
     // Update the selected days state variable with the selected days only
     setSelectedDays(updatedDays.filter((day) => day.selected));
+
   };
+
   const closeModal = () => {
     changeModalVisible()
 }
