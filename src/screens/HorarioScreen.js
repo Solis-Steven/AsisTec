@@ -7,7 +7,7 @@ import Icon from "react-native-vector-icons/FontAwesome";
 import WeekView from "../components/Schedule/WeekView";
 import DayView from "../components/Schedule/DayView";
 import ModalControls from "../components/Schedule/ModalControls";
-import { Messages } from "../components/Schedule/Edit/Message";
+import  Messages  from "../components/Schedule/Edit/Message";
 
 MomentConfig.updateLocale("es", {
   // setting moment.js locale to Spanish
@@ -18,7 +18,9 @@ const HorarioScreen = () => {
   const [ultimoId, setUltimoId] = useState(2); // Ultimo id de la lista de componentes
   const [ultimoIdRelacion, setUltimoIdRelacion] = useState(2); // Ultimo id de la lista de componentes
   const [isModalVisible, setIsModalVisible] = useState(false);
-
+  const [EditMessageVisible, setEditMessageVisible] = useState(false); //Al ser TRUE muestra el componente Message
+  const [editRelationComponent, setEditRelationComponent] = useState(false); // Al SER TRUE Cambia todos los eventos relacionados
+  const [typeExitMessage, setTypeExitMessage] = useState(false); //Tipo de salida del Message
   const events = [
     {
       id: 1,
@@ -56,9 +58,18 @@ const HorarioScreen = () => {
   const changeModalVisible = () => {
     setIsModalVisible(!isModalVisible);
   };
-
+  const changeEditMessageVisible = () => {
+    
+    setEditMessageVisible(!EditMessageVisible);
+  };
   return (
     //listaComponents.forEach(objeto => console.log(JSON.stringify(objeto))),
+    /* console.log("---------------------START-----------"),
+    console.log("editRelationComponent: " + editRelationComponent),
+    console.log("--------------------------------"),
+    console.log("EditMessageVisible: " + EditMessageVisible),
+    console.log("--------------------------------"),
+    console.log("typeExitMessage:  " + typeExitMessage), */
     <View style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
@@ -93,7 +104,8 @@ const HorarioScreen = () => {
           // se debe identificar si es un curso o una actividad
           // se debe actualizar el evento
           // se debe actualizar la lista de componentes
-          <Messages/>
+          changeEditMessageVisible();
+          
         }}
         // Para eliminar un evento
         onLongPressEvent={(event) => {
@@ -162,6 +174,20 @@ const HorarioScreen = () => {
           ultimoIdRelacion={ultimoIdRelacion}
           setUltimoIdRelacion={setUltimoIdRelacion}
           isModalVisible={isModalVisible}
+        />
+      </Modal>
+      {/* Show EDITMESSAGE */}
+      <Modal
+        transparent={true}
+        animationType="fade"
+        visible={EditMessageVisible}
+        onRequestClose={changeEditMessageVisible}
+      >
+        <Messages 
+        changeModalVisible={changeEditMessageVisible} 
+        EditMessageVisible = {EditMessageVisible}
+        setEditRelationComponent = {setEditRelationComponent}
+        setTypeExitMessage ={setTypeExitMessage}
         />
       </Modal>
     </View>
