@@ -1,4 +1,4 @@
-import { Text, View, TouchableOpacity, StyleSheet } from "react-native";
+import { Text, View, TouchableOpacity, StyleSheet, ScrollView } from "react-native";
 import React, { useState } from "react";
 
 import { Input } from "react-native-elements";
@@ -221,7 +221,7 @@ const onInitialDateChange = (event, selectedDate) => {
         </View>
 
         {/* Modal body */}
-        <View style={styles.modalBody}>
+        <ScrollView style={styles.modalBody}>
             {/* Description Input*/}
         <Text style={styles.text}>Descripción</Text>
           <Input
@@ -309,7 +309,7 @@ const onInitialDateChange = (event, selectedDate) => {
           <View style={{ flexDirection: "row", marginTop: 10 }}>
             <View style={{ flex: 1 }}>
               {/* Start time */}
-              <Text style={styles.bodyText}>Inicio</Text>
+              <Text style={styles.bodyText}>Hora Inicial</Text>
               <TouchableOpacity
                 onPress={showInitialHourpicker}
                 style={styles.selectHour}
@@ -331,7 +331,7 @@ const onInitialDateChange = (event, selectedDate) => {
             </View>
             <View style={{ flex: 1 }}>
               {/* End time */}
-              <Text style={styles.bodyText}>Fin</Text>
+              <Text style={styles.bodyText}>Hora Final</Text>
               <TouchableOpacity
                 onPress={showFinalHourpicker}
                 style={styles.selectHour}
@@ -369,7 +369,6 @@ const onInitialDateChange = (event, selectedDate) => {
               </TouchableOpacity>
             ))}
           </View>
-
           {/* Create button */}
           <TouchableOpacity onPress={OnCreateActivity} style={styles.createButton}>
             <Text
@@ -382,7 +381,7 @@ const onInitialDateChange = (event, selectedDate) => {
               Crear
             </Text>
           </TouchableOpacity>
-        </View>
+        </ScrollView>
       </View>
     </TouchableOpacity>
   );
@@ -479,13 +478,14 @@ const styles = StyleSheet.create({
   createButton: {
     backgroundColor: "#769ECB",
     margin: 5,
+    marginBottom: 30,
     padding: 15,
     borderRadius: 20,
     width: "40%",
     alignItems: "center",
-    position: "absolute",
-    bottom: 15,
-    right: 15,
+    //position: "absolute",
+    bottom: -5,
+    right: -160,
   },
 });
 

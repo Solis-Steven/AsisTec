@@ -3,6 +3,7 @@ import {
   View,
   TouchableOpacity,
   StyleSheet,
+  ScrollView,
 } from "react-native";
 import React, { useState } from "react";
 
@@ -225,7 +226,7 @@ const CourseModal = ({
         </View>
 
         {/* Modal body */}
-        <View style={styles.modalBody}>
+        <ScrollView style={styles.modalBody}>
           {/* Teacher name input */}
           <Text style={styles.text}>Profesor/a</Text>
           <Input
@@ -403,7 +404,7 @@ const CourseModal = ({
               Crear
             </Text>
           </TouchableOpacity>
-        </View>
+        </ScrollView>
       </View>
     </TouchableOpacity>
   );
@@ -496,13 +497,14 @@ const styles = StyleSheet.create({
   createButton: {
     backgroundColor: "#769ECB",
     margin: 5,
+    marginBottom: 30,
     padding: 15,
     borderRadius: 20,
     width: "40%",
     alignItems: "center",
-    position: "absolute",
-    bottom: 15,
-    right: 15,
+    //position: "absolute",
+    bottom: -5,
+    right: -160,
   },
 });
 
