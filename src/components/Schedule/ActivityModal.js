@@ -6,6 +6,8 @@ import { SelectList } from "react-native-dropdown-select-list";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import moment from "moment";
 import Icon from "react-native-vector-icons/Ionicons";
+import HandlerActivity from "../../helpers/HandlerActivity";
+
 
 const ActivityModal = ({
   changeModalVisible,
@@ -18,6 +20,12 @@ const ActivityModal = ({
   WIDTH,
   HEIGHT,
   DAYS_OF_WEEK,
+  listaComponents,
+  setListaComponents,
+  ultimoId, 
+  setUltimoId, 
+  ultimoIdRelacion, 
+  setUltimoIdRelacion
 }) => {
   // Define state variables with their initial values
   const [activityName, setActivityName] = useState("");
@@ -127,6 +135,9 @@ const onInitialDateChange = (event, selectedDate) => {
         alert("La hora final  inicia antes que la hora inicial");
         return; 
       }else{
+
+        HandlerActivity({ initialDate, finalDate, activityName, modalityType, description,
+          initialHour, finalHour, Days, listaComponents, setListaComponents , ultimoId, setUltimoId , ultimoIdRelacion, setUltimoIdRelacion });
         setActivityName("");
         setDescription("");
         setInitialDateText("Seleccionar una fecha");

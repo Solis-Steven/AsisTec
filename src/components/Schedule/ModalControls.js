@@ -69,7 +69,14 @@ const ModalControls = ({ changeModalVisible, listaComponents, setListaComponents
                     setModalityType={setModalityType}
                     WIDTH={WIDTH}
                     HEIGHT={HEIGHT}
-                    DAYS_OF_WEEK={DAYS_OF_WEEK} />
+                    DAYS_OF_WEEK={DAYS_OF_WEEK}
+                    listaComponents={listaComponents} 
+                    setListaComponents={setListaComponents}
+                    ultimoId={ultimoId}
+                    setUltimoId={setUltimoId}
+                    ultimoIdRelacion={ultimoIdRelacion}
+                    setUltimoIdRelacion={setUltimoIdRelacion}
+                    />
             )
     );
 }

@@ -1,8 +1,6 @@
-import { useState } from "react";
+
 import moment from 'moment';
-import { addDays, format, addHours } from 'date-fns';
-import { useEffect } from "react";
-import { da } from "date-fns/locale";
+import { addDays, format } from 'date-fns';
 
 const obtenerFechas = (startDate, lastDate, horaInicio, horaFin, Days) => {
 
@@ -32,30 +30,88 @@ const obtenerFechas = (startDate, lastDate, horaInicio, horaFin, Days) => {
 
 };
 
+function convertirFechas(fechaIncioArreglo, fechaFinalArreglo, fechaInicioComponent, fechaFinalComponent) {
+
+    var dateFechaIncioArreglo = new Date(fechaIncioArreglo);
+    var hora1 = dateFechaIncioArreglo.getHours();
+    var minuto1 = dateFechaIncioArreglo.getMinutes();
+
+    var dateFechaFinalArreglo = new Date(fechaFinalArreglo);
+    var hora2 = dateFechaFinalArreglo.getHours();
+    var minuto2 = dateFechaFinalArreglo.getMinutes();
+
+    var dateFechaInicioComponent = new Date(fechaInicioComponent);
+    var hora3 = dateFechaInicioComponent.getHours();
+    var minuto3 = dateFechaInicioComponent.getMinutes();
+
+    var dateFechaFinalComponent = new Date(fechaFinalComponent);
+    var hora4 = dateFechaFinalComponent.getHours();
+    var minuto4 = dateFechaFinalComponent.getMinutes();
+
+    lista = [[hora1, minuto1], [hora2, minuto2], [hora3, minuto3], [hora4, minuto4]];
+
+    return lista;
+}
+
+
 const verificarFechas = (ListaFechas, listaComponents) => {
 
+    var validacion = true;
     if (listaComponents.length == 0) {
-        console.log("No hay componentes");
-        return true;
+        return validacion;
     }
     else {
         listaComponents.forEach(componet => {
 
             for (let index = 0; index < ListaFechas.length; index++) {
-                const element = ListaFechas[index]; // [fechaInicio, fechaFinal]
-                // Verificar si ya existe
-                if (componet.start == element[0] || componet.end == element[1]) {
-                    console.log("Ya existe");
-                    return false;
+                const element = ListaFechas[index]; // [fechaInicio, fechaFinal] [hora, minuto]
+
+                var lista = convertirFechas(element[0], element[1], componet.start, componet.end);
+                // [inicalA=[hora1,minuto1], finalA=[hora2,minuto2], inicialC=[hora3,minuto3], finalC=[hora4,minuto4]]
+
+                if (lista[0][0] > lista[2][0] && lista[0][0] < lista[3][0] || lista[1][0] > lista[2][0] && lista[1][0] < lista[3][0]) {
+                    validacion = false;
+                    return validacion;
+                }
+
+                // Valida si las horas iniciales son iguales
+                if (lista[0][0] === lista[2][0]) {
+                    validacion = false;
+                    return validacion;
+
+                }
+
+                // Valida si la hora inicial es igual a la hora final 
+                if (lista[0][0] === lista[3][0]) {
+
+                    if (lista[0][1] <= lista[3][1]) {
+                        validacion = false;
+                        return validacion;
+                    }
+                }
+
+                // Valida si la hora final es igual a la hora inicial
+                if (lista[1][0] === lista[2][0]) {
+
+                    if (lista[1][1] >= lista[2][1]) {
+                        validacion = false;
+                        return validacion;
+                    }
+                }
+
+                // Valida si la hora final es igual a la hora final
+                if (lista[1][0] === lista[3][0]) {
+                    validacion = false;
+                    return validacion;
                 }
             }
-        }); console.log("No hay choque de horarios")
-        return true;
-    }
+        });
 
+        return validacion;
+    }
 }
 // Funcion para agregar el componente
-const agregarComponente = (ListaFechas, listaComponents, setListaComponents, title, description,
+const agregarComponente = (ListaFechas, listaComponents, setListaComponents, activityName, description,
     modalityType, ultimoId, setUltimoId, ultimoIdRelacion, setUltimoIdRelacion) => {
 
     // Obtener el ultimo id de la lista de componentes  
@@ -74,7 +130,7 @@ const agregarComponente = (ListaFechas, listaComponents, setListaComponents, tit
             idRelacion: ultimoIdRelacionTemp,
             start: element[0],
             end: element[1],
-            title: title,
+            title: activityName,
             description: description,
             modalityType: modalityType,
             color: "#F44336",
@@ -88,16 +144,11 @@ const agregarComponente = (ListaFechas, listaComponents, setListaComponents, tit
     // Actualizar el ultimo id de la lista de componentes
     setUltimoId(ultimoIdTemp);
     setUltimoIdRelacion(ultimoIdRelacionTemp);
-
-    //lista.forEach(objeto => console.log(JSON.stringify(objeto)));
     setListaComponents(listaComponents.concat(lista));
-    //listaComponents.forEach(objeto => console.log(JSON.stringify(objeto)));
-    console.log("Componente agregado");
 }
 
-const HandlerActivity = ({ initialDate, finalDate, title, description,
-    modalityType, initialHour, finalHour, Days, listaComponents,
-    setListaComponents, ultimoId, setUltimoId, ultimoIdRelacion, setUltimoIdRelacion }) => {
+const HandlerActivity = ({ initialDate, finalDate, activityName, modalityType, description,
+    initialHour, finalHour, Days, listaComponents, setListaComponents, ultimoId, setUltimoId, ultimoIdRelacion, setUltimoIdRelacion }) => {
 
     // Variables para obtener las fechas
     ListaFechas = obtenerFechas(initialDate, finalDate, initialHour, finalHour, Days);
@@ -106,15 +157,13 @@ const HandlerActivity = ({ initialDate, finalDate, title, description,
     var validacion = verificarFechas(ListaFechas, listaComponents);
 
     if (validacion) {
-        agregarComponente(ListaFechas, listaComponents, setListaComponents, title, description,
+        agregarComponente(ListaFechas, listaComponents, setListaComponents, activityName, description,
             modalityType, ultimoId, setUltimoId, ultimoIdRelacion, setUltimoIdRelacion);
     } else {
-        console.log("Choque de horarios");
+        alert("Choque de horarios");
     }
 
-    return (
-        console.log("HandlerActivity")
-    );
+    return;
 }
 
 export default HandlerActivity;
