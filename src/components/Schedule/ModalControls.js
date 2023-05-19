@@ -5,7 +5,7 @@ import CourseModal from "../Schedule/CourseModal";
 import ActivityModal from "../Schedule/ActivityModal";
 
 
-const ModalControls = ({ changeModalVisible, listaComponents, setListaComponents, ultimoId, setUltimoId , ultimoIdRelacion, setUltimoIdRelacion }) => {
+const ModalControls = ({ changeModalVisible, listaComponents, setListaComponents, ultimoId, setUltimoId , ultimoIdRelacion, setUltimoIdRelacion, isModalVisible }) => {
     // Define state variables with their initial values
     const [activityType, setActivityType] = useState(1);
     const [modalityType, setModalityType] = useState(1);
@@ -56,6 +56,7 @@ const ModalControls = ({ changeModalVisible, listaComponents, setListaComponents
                     setUltimoId={setUltimoId}
                     ultimoIdRelacion={ultimoIdRelacion}
                     setUltimoIdRelacion={setUltimoIdRelacion}
+                    isModalVisible={isModalVisible}
                     />
             )
             : (
@@ -76,6 +77,7 @@ const ModalControls = ({ changeModalVisible, listaComponents, setListaComponents
                     setUltimoId={setUltimoId}
                     ultimoIdRelacion={ultimoIdRelacion}
                     setUltimoIdRelacion={setUltimoIdRelacion}
+                    isModalVisible={isModalVisible}
                     />
             )
     );

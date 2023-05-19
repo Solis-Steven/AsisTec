@@ -30,7 +30,8 @@ const CourseModal = ({
   ultimoId, 
   setUltimoId, 
   ultimoIdRelacion, 
-  setUltimoIdRelacion
+  setUltimoIdRelacion,
+  isModalVisible
 }) => {
   // Define state variables with their initial values
   const [courseName, setCourseName] = useState("");
@@ -167,6 +168,7 @@ const CourseModal = ({
       setInitialHourText("Seleccionar hora");
       setFinalHourText("Seleccionar hora");
       setSelectedDays([]);
+      changeModalVisible();
       return;
     }
 
@@ -175,7 +177,9 @@ const CourseModal = ({
   return (
     // Modal
 
-    <TouchableOpacity disabled={true} style={styles.container}>
+    <TouchableOpacity disabled={true}     style={{...styles.container,
+      backgroundColor: isModalVisible ? "rgba(0,0,0,0.4)" : "transparent", // Cambia el fondo a oscuro cuando el modal está abierto
+    }}>
       {/* Modal content */}
       <View style={{ ...styles.modal, height: HEIGHT, width: WIDTH }}>
         {/* Modal header */}

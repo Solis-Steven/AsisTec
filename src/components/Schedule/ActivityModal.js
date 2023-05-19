@@ -25,7 +25,8 @@ const ActivityModal = ({
   ultimoId, 
   setUltimoId, 
   ultimoIdRelacion, 
-  setUltimoIdRelacion
+  setUltimoIdRelacion,
+  isModalVisible
 }) => {
   // Define state variables with their initial values
   const [activityName, setActivityName] = useState("");
@@ -116,6 +117,7 @@ const onInitialDateChange = (event, selectedDate) => {
   // Function that closes the modal
   const OnCreateActivity = () => { //cambiar por onCreateActivity
     changeModalVisible();
+    
     if(
         [   activityName,
             description,
@@ -145,6 +147,7 @@ const onInitialDateChange = (event, selectedDate) => {
         setInitialHourText("Seleccionar hora");
         setFinalHourText("Seleccionar hora");
         setSelectedDays([]);
+        changeModalVisible();
         return;
       } 
   };
@@ -172,7 +175,10 @@ const onInitialDateChange = (event, selectedDate) => {
 }
   return (
     // Modal
-    <TouchableOpacity disabled={true} style={styles.container}>
+    <TouchableOpacity disabled={true} 
+    style={{...styles.container,
+      backgroundColor: isModalVisible ? "rgba(0,0,0,0.4)" : "transparent", // Cambia el fondo a oscuro cuando el modal está abierto
+    }}>
       {/* Modal content */}
       <View style={{ ...styles.modal, height: HEIGHT, width: WIDTH }}>
         {/* Modal header */}

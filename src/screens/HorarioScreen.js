@@ -19,6 +19,7 @@ const HorarioScreen = () => {
 
     const [ultimoId, setUltimoId] = useState(2); // Ultimo id de la lista de componentes
     const [ultimoIdRelacion, setUltimoIdRelacion] = useState(2); // Ultimo id de la lista de componentes
+    const [isModalVisible, setIsModalVisible] = useState(false);
 
     const events = [
         {
@@ -48,7 +49,6 @@ const HorarioScreen = () => {
     ];
     // Define state variables with their initial values
     const [viewMode, setViewMode] = useState("week");
-    const [isModalVisible, setIsModalVisible] = useState(false);
 
     // Variables para obtener las fechas
     const [listaComponents, setListaComponents] = useState(events); // Array para almacenar la lista de componentes
@@ -167,6 +167,7 @@ const HorarioScreen = () => {
                     setUltimoId={setUltimoId}
                     ultimoIdRelacion={ultimoIdRelacion}
                     setUltimoIdRelacion={setUltimoIdRelacion}
+                    isModalVisible={isModalVisible}
                 />
             </Modal>
         </View>
