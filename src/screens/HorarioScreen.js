@@ -7,7 +7,8 @@ import Icon from "react-native-vector-icons/FontAwesome";
 import WeekView from "../components/Schedule/WeekView";
 import DayView from "../components/Schedule/DayView";
 import ModalControls from "../components/Schedule/ModalControls";
-import  Messages  from "../components/Schedule/Edit/Message";
+import  MessageEdit  from "../components/Schedule/Edit/Message";
+import  MessageDelete  from "../components/Schedule/Delete/Message";
 
 MomentConfig.updateLocale("es", {
   // setting moment.js locale to Spanish
@@ -18,9 +19,17 @@ const HorarioScreen = () => {
   const [ultimoId, setUltimoId] = useState(2); // Ultimo id de la lista de componentes
   const [ultimoIdRelacion, setUltimoIdRelacion] = useState(2); // Ultimo id de la lista de componentes
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [EditMessageVisible, setEditMessageVisible] = useState(false); //Al ser TRUE muestra el componente Message
-  const [editRelationComponent, setEditRelationComponent] = useState(false); // Al SER TRUE Cambia todos los eventos relacionados
-  const [typeExitMessage, setTypeExitMessage] = useState(false); //Tipo de salida del Message
+  
+  // Variables para mostrar el componente Message de editar
+  const [EditMessageVisible, setEditMessageVisible] = useState(false); //Al ser TRUE muestra el componente Message de editar
+  const [editRelationComponent, setEditRelationComponent] = useState(false); // Al SER TRUE Cambia todos los eventos relacionados al editar
+  const [typeExitMessage, setTypeExitMessage] = useState(false); //Tipo de salida del Message de editar
+  
+  // Variable para mostrar el componente Message de eliminar
+  const [DeleteMessageVisible, setDeleteMessageVisible] = useState(false); //Al ser TRUE muestra el componente Message de eliminar
+  const [deleteRelationComponent, setDeleteRelationComponent] = useState(false); // Al SER TRUE Cambia todos los eventos relacionados al eliminar
+  const [typeExitMessageDelete, setTypeExitMessageDelete] = useState(false); //Tipo de salida del Message de eliminar
+  
   const events = [
     {
       id: 1,
@@ -55,13 +64,25 @@ const HorarioScreen = () => {
   // Variable para actualizar la lista de componentes
   const [estado, setEstado] = useState(false); // Estado para actualizar la lista de componentes
 
+
+  // Funciones para mostrar modals de: Agregar, Editar y Eliminar
   const changeModalVisible = () => {
     setIsModalVisible(!isModalVisible);
   };
+
+  // Funciones para mostrar el componente Message de editar
   const changeEditMessageVisible = () => {
     
     setEditMessageVisible(!EditMessageVisible);
   };
+
+  // Funciones para mostrar el componente Message de eliminar
+  const changeDeleteMessageVisible = () => {
+    setDeleteMessageVisible(!DeleteMessageVisible);
+  };
+
+
+
   return (
     //listaComponents.forEach(objeto => console.log(JSON.stringify(objeto))),
     /* console.log("---------------------START-----------"),
@@ -70,6 +91,13 @@ const HorarioScreen = () => {
     console.log("EditMessageVisible: " + EditMessageVisible),
     console.log("--------------------------------"),
     console.log("typeExitMessage:  " + typeExitMessage), */
+
+    //console.log("---------------------START-----------"),
+    //console.log("deleteRelationComponent: " + deleteRelationComponent),
+    //console.log("DeleteMessageVisible: " + DeleteMessageVisible),
+    //console.log("typeExitMessageDelete:  " + typeExitMessageDelete),
+
+
     <View style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
@@ -116,6 +144,8 @@ const HorarioScreen = () => {
           // Se deben eliminar los eventos relacionados con el evento
           // se debe eliminar el evento de la lista de componentes
           // se debe actualizar la lista de componentes
+          changeDeleteMessageVisible();
+
         }}
         events={listaComponents}
         renderEventContent={(event) => {
@@ -176,18 +206,33 @@ const HorarioScreen = () => {
           isModalVisible={isModalVisible}
         />
       </Modal>
-      {/* Show EDITMESSAGE */}
+      {/* SHOW EDIT MESSAGE */}
       <Modal
         transparent={true}
         animationType="fade"
         visible={EditMessageVisible}
         onRequestClose={changeEditMessageVisible}
       >
-        <Messages 
+        <MessageEdit 
         changeModalVisible={changeEditMessageVisible} 
         EditMessageVisible = {EditMessageVisible}
         setEditRelationComponent = {setEditRelationComponent}
         setTypeExitMessage ={setTypeExitMessage}
+        />
+      </Modal>
+
+      {/* SHOW DELETE MESSAGE */}
+      <Modal
+        transparent={true}
+        animationType="fade"
+        visible={DeleteMessageVisible}
+        onRequestClose={changeDeleteMessageVisible}
+      >
+        <MessageDelete
+          changeModalVisible={changeDeleteMessageVisible}
+          EditMessageVisible={DeleteMessageVisible}
+          setEditRelationComponent={setDeleteRelationComponent}
+          setTypeExitMessage={setTypeExitMessageDelete}
         />
       </Modal>
     </View>
