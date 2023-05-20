@@ -150,20 +150,8 @@ const agregarComponente = (initialDate, finalDate, activityName, modalityType, d
 
 }
 
-export const HandlerEditActivity = ({ event, initialDate, finalDate, activityName, modalityType, description,
+export const HandlerEditOneActivity = ({ event, initialDate, finalDate, activityName, modalityType, description,
     initialHour, finalHour, Days, listaComponents, setListaComponents }) => {
-
-    console.log("--------------------------HandlerEditActivity--------------------------")
-    console.log("event: ", event)
-    console.log("initialDate: ", initialDate)
-    console.log("finalDate: ", finalDate)
-    console.log("activityName: ", activityName)
-    console.log("modalityType: ", modalityType)
-    console.log("description: ", description)
-    console.log("initialHour: ", initialHour)
-    console.log("finalHour: ", finalHour)
-    console.log("Days: ", Days)
-    console.log("--------------------------HandlerEditActivity--------------------------")
 
 
     // Obtener lista de componentes sin el componente a editar

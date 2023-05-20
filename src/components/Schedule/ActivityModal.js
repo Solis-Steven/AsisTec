@@ -497,8 +497,9 @@ const styles = StyleSheet.create({
     width: "40%",
     alignItems: "center",
     //position: "absolute",
-    bottom: -5,
+    bottom: -10,
     right: -160,
+
   },
 });
 

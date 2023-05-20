@@ -13,8 +13,9 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import moment from "moment";
 import Icon from "react-native-vector-icons/Ionicons";
 
-import { HandlerEditActivity } from "./HandlerEditActivity";
+import { HandlerEditOneActivity } from "./HandlerEditOneActivity";
 import { useEffect } from "react";
+import { set } from "date-fns";
 
 const EditActivityModal = ({
   event,
@@ -113,7 +114,7 @@ const EditActivityModal = ({
     const formatedDate = moment(selectedDate || initialDate).format(
       "YYYY-MM-DD"
     );
-    if(editRelationComponent == false){
+    if (editRelationComponent == false) {
       setFinalDate(currentDate);
       setFinalDateText(formatedDate);
     }
@@ -126,9 +127,9 @@ const EditActivityModal = ({
     setShowFinalDate(false);
     const currentDate = selectedDate || finalDate;
     const formatedDate = moment(selectedDate || finalDate).format("YYYY-MM-DD");
-    if(editRelationComponent == false){
+    if (editRelationComponent == false) {
       setInitialDate(currentDate)
-      
+      setInitialDateText(formatedDate);
     }
     setFinalDate(currentDate);
     setFinalDateText(formatedDate);
@@ -159,17 +160,17 @@ const EditActivityModal = ({
       alert("La hora final  inicia antes que la hora inicial");
       return;
     } else {
-      if(editRelationComponent == false){
+      if (editRelationComponent == false) {
         setDays([]);
         var day = initialDate.getDay();
         if (day == 0) {
           day = 6;
-        }else{
+        } else {
           day = day + 1;
         }
         setDays([day]);
       }
-      HandlerEditActivity({
+      HandlerEditOneActivity({
         event,
         initialDate,
         finalDate,
@@ -220,6 +221,18 @@ const EditActivityModal = ({
     setTypeExitMessage(false);
     changeOpenEditModal();
   };
+
+  const returnKey = () => {
+
+    if (event.modalityType == "Presencial") {
+      return 1;
+    } else if (event.modalityType == "Virtual") {
+      return 2;
+    } else if (event.modalityType == "Semipresencial") {
+      return 3;
+    }
+
+  }
   return (
     // Modal
     <TouchableOpacity
@@ -286,7 +299,7 @@ const EditActivityModal = ({
               width: "90%",
               fontSize: 26,
             }}
-            defaultOption={{ key: 1, value: "Presencial" }}
+            defaultOption={{ key: returnKey(), value: event.modalityType }}
             maxHeight={150}
           />
           {/* Start and end date */}
@@ -383,7 +396,7 @@ const EditActivityModal = ({
               )}
             </View>
           </View>
-           {/* Select days */}
+          {/* Select days */}
           {editRelationComponent == true ? (
             <View>
               <Text style={{ ...styles.bodyText, marginTop: 20 }}>Día/s</Text>
@@ -394,7 +407,7 @@ const EditActivityModal = ({
                     onPress={() => handleDaysSelected(index)}
                     style={{
                       ...styles.selectDay,
-                      borderColor: Days.includes(day.id) ? day.selected : "",
+                      borderColor: (Days.includes(day.id)) ? day.selected = true : "",
                       borderColor: day.selected ? "#8FC1A9" : "#000000",
                     }}
                   >
@@ -406,8 +419,8 @@ const EditActivityModal = ({
           ) : (
             null
           )}
-         
-    
+
+
           {/* Create button */}
           <TouchableOpacity
             onPress={OnCreateActivity}
