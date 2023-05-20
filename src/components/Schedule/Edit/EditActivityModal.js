@@ -1,4 +1,10 @@
-import { Text, View, TouchableOpacity, StyleSheet, ScrollView } from "react-native";
+import {
+  Text,
+  View,
+  TouchableOpacity,
+  StyleSheet,
+  ScrollView,
+} from "react-native";
 import React, { useState } from "react";
 
 import { Input } from "react-native-elements";
@@ -8,9 +14,7 @@ import moment from "moment";
 import Icon from "react-native-vector-icons/Ionicons";
 
 import { HandlerEditActivity } from "./HandlerEditActivity";
-
-
-
+import { useEffect } from "react";
 
 const EditActivityModal = ({
   event,
@@ -26,9 +30,7 @@ const EditActivityModal = ({
   openEditModal,
   setTypeExitMessage,
   editRelationComponent,
-
 }) => {
-
   // Define state variables with their initial values
   const [activityName, setActivityName] = useState(event.title);
   const [description, setDescription] = useState(event.description);
@@ -38,11 +40,19 @@ const EditActivityModal = ({
   const [initialDate, setInitialDate] = useState(new Date(event.start));
   const [finalDate, setFinalDate] = useState(new Date(event.end));
 
-  const [initialHourText, setInitialHourText] = useState(moment(event.start).format("hh:mm a"));
-  const [finalHourText, setFinalHourText] = useState(moment(event.end).format("hh:mm a"));
+  const [initialHourText, setInitialHourText] = useState(
+    moment(event.start).format("hh:mm a")
+  );
+  const [finalHourText, setFinalHourText] = useState(
+    moment(event.end).format("hh:mm a")
+  );
   //fechas
-  const [initialDateText, setInitialDateText] = useState(moment(event.start).format("YYYY-MM-DD"));
-  const [finalDateText, setFinalDateText] = useState(moment(event.end).format("YYYY-MM-DD"));
+  const [initialDateText, setInitialDateText] = useState(
+    moment(event.start).format("YYYY-MM-DD")
+  );
+  const [finalDateText, setFinalDateText] = useState(
+    moment(event.end).format("YYYY-MM-DD")
+  );
   const [showInitialHour, setShowInitialHour] = useState(false);
   const [showFinalHour, setShowFinalHour] = useState(false);
   //fechas
@@ -52,28 +62,6 @@ const EditActivityModal = ({
   const [selectedDays, setSelectedDays] = useState([]);
   const [Days, setDays] = useState([event.day]);
   const selectDays = [];
-
-
-
-  const dayColor = (day) => {
-
-    if (editRelationComponent == false) {
-
-      var dayC = initialDate.getDay();
-      if (dayC == 6) {
-        dayC = 0;
-      } else {
-        dayC = dayC + 1;
-      }
-      // Create a copy of the days of week array
-      const updatedDays = [...DAYS_OF_WEEK];
-      return (dayC == day.id) ? day.selected = true : "";
-
-    }
-    else {
-      return day.selected ? "#8FC1A9" : "#000000"
-    }
-  };
 
   // Function that handles the change of the initial hour
   const onInitialHourChange = (event, selectedHour) => {
@@ -125,6 +113,10 @@ const EditActivityModal = ({
     const formatedDate = moment(selectedDate || initialDate).format(
       "YYYY-MM-DD"
     );
+    if(editRelationComponent == false){
+      setFinalDate(currentDate);
+      setFinalDateText(formatedDate);
+    }
     setInitialDate(currentDate);
     setInitialDateText(formatedDate);
   };
@@ -133,24 +125,29 @@ const EditActivityModal = ({
   const onFinalDateChange = (event, selectedDate) => {
     setShowFinalDate(false);
     const currentDate = selectedDate || finalDate;
-    const formatedDate = moment(selectedDate || finalDate).format(
-      "YYYY-MM-DD"
-    );
+    const formatedDate = moment(selectedDate || finalDate).format("YYYY-MM-DD");
+    if(editRelationComponent == false){
+      setInitialDate(currentDate)
+      
+    }
     setFinalDate(currentDate);
     setFinalDateText(formatedDate);
   };
   // Function that closes the modal
-  const OnCreateActivity = () => { //cambiar por onCreateActivity
+  const OnCreateActivity = () => {
+    //cambiar por onCreateActivity
     changeOpenEditModal();
     setTypeExitMessage(false);
 
     if (
-      [activityName,
+      [
+        activityName,
         description,
         initialHour,
         finalHour,
         initialDate,
-        finalDate].includes("") ||
+        finalDate,
+      ].includes("") ||
       Days.length === 0
     ) {
       alert("Por favor llena todos los espacios");
@@ -158,14 +155,32 @@ const EditActivityModal = ({
     } else if (finalDate < initialDate) {
       alert("La fecha final  inicia antes que la fecha inicial");
       return;
-
     } else if (finalHour < initialHour) {
       alert("La hora final  inicia antes que la hora inicial");
       return;
     } else {
+      if(editRelationComponent == false){
+        setDays([]);
+        var day = initialDate.getDay();
+        if (day == 0) {
+          day = 6;
+        }else{
+          day = day + 1;
+        }
+        setDays([day]);
+      }
       HandlerEditActivity({
-        event, initialDate, finalDate, activityName, modalityType, description,
-        initialHour, finalHour, Days, listaComponents, setListaComponents
+        event,
+        initialDate,
+        finalDate,
+        activityName,
+        modalityType,
+        description,
+        initialHour,
+        finalHour,
+        Days,
+        listaComponents,
+        setListaComponents,
       });
       setActivityName("");
       setDescription("");
@@ -184,14 +199,14 @@ const EditActivityModal = ({
     if (index == 6) {
       indexPersonal = 0;
     } else {
-      indexPersonal = index + 1
+      indexPersonal = index + 1;
     }
     if (Days.includes(indexPersonal)) {
       const nuevaLista = Days.filter((item) => item !== indexPersonal);
       setDays(nuevaLista);
     } else {
       selectDays.push(indexPersonal);
-      setDays(Days.concat(selectDays))
+      setDays(Days.concat(selectDays));
     }
     // Create a copy of the days of week array
     const updatedDays = [...DAYS_OF_WEEK];
@@ -204,15 +219,16 @@ const EditActivityModal = ({
   const closeModal = () => {
     setTypeExitMessage(false);
     changeOpenEditModal();
-
-  }
+  };
   return (
     // Modal
-    <TouchableOpacity disabled={true}
+    <TouchableOpacity
+      disabled={true}
       style={{
         ...styles.container,
         backgroundColor: openEditModal ? "rgba(0,0,0,0.4)" : "transparent", // Cambia el fondo a oscuro cuando el modal está abierto
-      }}>
+      }}
+    >
       {/* Modal content */}
       <View style={{ ...styles.modal, height: HEIGHT, width: WIDTH }}>
         {/* Modal header */}
@@ -367,26 +383,36 @@ const EditActivityModal = ({
               )}
             </View>
           </View>
-
-          {/* Select days */}
-          <Text style={{ ...styles.bodyText, marginTop: 20 }}>Día/s</Text>
-          <View style={styles.selectDaysContainer}>
-            {DAYS_OF_WEEK.map((day, index) => (
-              <TouchableOpacity
-                key={index}
-                onPress={() => handleDaysSelected(index)}
-                style={{
-                  ...styles.selectDay,
-                  borderColor: day.selected ? "#8FC1A9" : "#000000",
-
-                }}
-              >
-                <Text style={{ padding: 2 }}>{day.name}</Text>
-              </TouchableOpacity>
-            ))}
-          </View>
+           {/* Select days */}
+          {editRelationComponent == true ? (
+            <View>
+              <Text style={{ ...styles.bodyText, marginTop: 20 }}>Día/s</Text>
+              <View style={styles.selectDaysContainer}>
+                {DAYS_OF_WEEK.map((day, index) => (
+                  <TouchableOpacity
+                    key={index}
+                    onPress={() => handleDaysSelected(index)}
+                    style={{
+                      ...styles.selectDay,
+                      borderColor: Days.includes(day.id) ? day.selected : "",
+                      borderColor: day.selected ? "#8FC1A9" : "#000000",
+                    }}
+                  >
+                    <Text style={{ padding: 2 }}>{day.name}</Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+            </View>
+          ) : (
+            null
+          )}
+         
+    
           {/* Create button */}
-          <TouchableOpacity onPress={OnCreateActivity} style={styles.createButton}>
+          <TouchableOpacity
+            onPress={OnCreateActivity}
+            style={styles.createButton}
+          >
             <Text
               style={{
                 color: "white",
