@@ -114,6 +114,7 @@ const onInitialDateChange = (event, selectedDate) => {
     setFinalDate(currentDate);
     setFinalDateText(formatedDate);
   };
+
   // Function that closes the modal
   const OnCreateActivity = () => { //cambiar por onCreateActivity
     changeModalVisible();
@@ -153,19 +154,26 @@ const onInitialDateChange = (event, selectedDate) => {
 
   // Function that handles the selection of days
   const handleDaysSelected = (index) => {
-    if (index === 6) {
-        selectDays.push(0);
+    var indexPersonal = index;
+    if(index == 6){
+      indexPersonal =0;
+    }else{
+      indexPersonal = index + 1
+    }
+    if (Days.includes(indexPersonal)) {
+      const nuevaLista = Days.filter((item) => item !== indexPersonal);
+      setDays(nuevaLista);
+    }else{
+        selectDays.push(indexPersonal);
         setDays(Days.concat(selectDays))
-      } else {
-        selectDays.push(index + 1);
-        setDays(Days.concat(selectDays))
-      }
+    }
     // Create a copy of the days of week array
     const updatedDays = [...DAYS_OF_WEEK];
     // Toggle the selected state of the selected day
     updatedDays[index].selected = !updatedDays[index].selected;
     // Update the selected days state variable with the selected days only
     setSelectedDays(updatedDays.filter((day) => day.selected));
+    
     
   };
 

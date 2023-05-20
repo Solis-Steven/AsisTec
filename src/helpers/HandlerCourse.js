@@ -33,86 +33,118 @@ const obtenerFechas = (startDate, lastDate, horaInicio, horaFin, Days) => {
 
 }
 
-function convertirFechas(fechaIncioArreglo, fechaFinalArreglo, fechaInicioComponent, fechaFinalComponent) {
-
+function convertirFechas(
+    fechaIncioArreglo,
+    fechaFinalArreglo,
+    fechaInicioComponent,
+    fechaFinalComponent
+  ) {
     var dateFechaIncioArreglo = new Date(fechaIncioArreglo);
+    var año1 = dateFechaIncioArreglo.getFullYear();
+    var mes1 = dateFechaIncioArreglo.getMonth();
+    var dia1 = dateFechaIncioArreglo.getDate();
     var hora1 = dateFechaIncioArreglo.getHours();
     var minuto1 = dateFechaIncioArreglo.getMinutes();
-
+  
     var dateFechaFinalArreglo = new Date(fechaFinalArreglo);
+    var año2 = dateFechaFinalArreglo.getFullYear();
+    var mes2 = dateFechaFinalArreglo.getMonth();
+    var dia2 = dateFechaFinalArreglo.getDate();
     var hora2 = dateFechaFinalArreglo.getHours();
     var minuto2 = dateFechaFinalArreglo.getMinutes();
-
+  
     var dateFechaInicioComponent = new Date(fechaInicioComponent);
+    var año3 = dateFechaInicioComponent.getFullYear();
+    var mes3 = dateFechaInicioComponent.getMonth();
+    var dia3 = dateFechaInicioComponent.getDate();
     var hora3 = dateFechaInicioComponent.getHours();
     var minuto3 = dateFechaInicioComponent.getMinutes();
-
+  
     var dateFechaFinalComponent = new Date(fechaFinalComponent);
+    var año4 = dateFechaFinalComponent.getFullYear();
+    var mes4 = dateFechaFinalComponent.getMonth();
+    var dia4 = dateFechaInicioComponent.getDate();
     var hora4 = dateFechaFinalComponent.getHours();
     var minuto4 = dateFechaFinalComponent.getMinutes();
-
-    lista = [[hora1, minuto1], [hora2, minuto2], [hora3, minuto3], [hora4, minuto4]];
-
+  
+    lista = [
+      [hora1, minuto1, año1, mes1, dia1],
+      [hora2, minuto2, año2, mes2, dia2],
+      [hora3, minuto3, año3, mes3, dia3],
+      [hora4, minuto4, año4, mes4, dia4],
+    ];
+  
     return lista;
-}
+  }
 // Funcion para verificar si ya existe la fecha en la lista de componentes
 const verificarFechas = (ListaFechas, listaComponents) => {
-
     var validacion = true;
     if (listaComponents.length == 0) {
-        return validacion;
-    }
-    else {
-        listaComponents.forEach(componet => {
-
-            for (let index = 0; index < ListaFechas.length; index++) {
-                const element = ListaFechas[index]; // [fechaInicio, fechaFinal] [hora, minuto]
-
-                var lista = convertirFechas(element[0], element[1], componet.start, componet.end);
-                // [inicalA=[hora1,minuto1], finalA=[hora2,minuto2], inicialC=[hora3,minuto3], finalC=[hora4,minuto4]]
-
-                if (lista[0][0] > lista[2][0] && lista[0][0] < lista[3][0] || lista[1][0] > lista[2][0] && lista[1][0] < lista[3][0]) {
-                    validacion = false;
-                    return validacion;
+      return validacion;
+    } else {
+      listaComponents.forEach((componet) => {
+        for (let index = 0; index < ListaFechas.length; index++) {
+          const element = ListaFechas[index]; // [fechaInicio, fechaFinal] [hora, minuto]
+  
+          var lista = convertirFechas(
+            element[0],
+            element[1],
+            componet.start,
+            componet.end
+          );
+          if (
+            lista[0][2] == lista[2][2] &&
+            lista[0][3] == lista[2][3] &&
+            lista[0][4] == lista[2][4]
+          ) {
+            // [inicalA=[hora1,minuto1], finalA=[hora2,minuto2], inicialC=[hora3,minuto3], finalC=[hora4,minuto4]]
+            if (
+              (lista[0][0] > lista[2][0] && lista[0][0] < lista[3][0]) ||
+              (lista[1][0] > lista[2][0] && lista[1][0] < lista[3][0])
+            ) {
+              validacion = false;
+  
+              return validacion;
+            } else {
+              // Valida si las horas iniciales son iguales
+              if (lista[0][0] === lista[2][0]) {
+                validacion = false;
+  
+                return validacion;
+              }
+  
+              // Valida si la hora inicial es igual a la hora final
+              if (lista[0][0] === lista[3][0]) {
+                if (lista[0][1] <= lista[3][1]) {
+                  validacion = false;
+  
+                  return validacion;
                 }
-
-                // Valida si las horas iniciales son iguales
-                if (lista[0][0] === lista[2][0]) {
-                    validacion = false;
-                    return validacion;
-
+              }
+  
+              // Valida si la hora final es igual a la hora inicial
+              if (lista[1][0] === lista[2][0]) {
+                if (lista[1][1] >= lista[2][1]) {
+                  validacion = false;
+  
+                  return validacion;
                 }
-
-                // Valida si la hora inicial es igual a la hora final 
-                if (lista[0][0] === lista[3][0]) {
-
-                    if (lista[0][1] <= lista[3][1]) {
-                        validacion = false;
-                        return validacion;
-                    }
-                }
-
-                // Valida si la hora final es igual a la hora inicial
-                if (lista[1][0] === lista[2][0]) {
-
-                    if (lista[1][1] >= lista[2][1]) {
-                        validacion = false;
-                        return validacion;
-                    }
-                }
-
-                // Valida si la hora final es igual a la hora final
-                if (lista[1][0] === lista[3][0]) {
-                    validacion = false;
-                    return validacion;
-                }
+              }
+  
+              // Valida si la hora final es igual a la hora final
+              if (lista[1][0] === lista[3][0]) {
+                validacion = false;
+  
+                return validacion;
+              }
             }
-        });
-
-        return validacion;
-
+          }
+        }
+      });
+  
+      return validacion;
     }
-}
+  };
 
 // Funcion para agregar el componente
 // necesito saber cual es el ultimo id de la lista de componentes
