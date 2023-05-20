@@ -19,7 +19,7 @@ MomentConfig.updateLocale("es", {
 const HorarioScreen = () => {
   const [ultimoId, setUltimoId] = useState(2); // Ultimo id de la lista de componentes
   const [ultimoIdRelacion, setUltimoIdRelacion] = useState(2); // Ultimo id de la lista de componentes
-  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(false); //Al ser TRUE muestra el modal de agregar
   
   // Variables para mostrar el componente Message de editar
   const [EditMessageVisible, setEditMessageVisible] = useState(false); //Al ser TRUE muestra el componente Message de editar
@@ -30,7 +30,8 @@ const HorarioScreen = () => {
   const [DeleteMessageVisible, setDeleteMessageVisible] = useState(false); //Al ser TRUE muestra el componente Message de eliminar
   const [deleteRelationComponent, setDeleteRelationComponent] = useState(false); // Al SER TRUE Cambia todos los eventos relacionados al eliminar
   const [typeExitMessageDelete, setTypeExitMessageDelete] = useState(false); //Tipo de salida del Message de eliminar
-  const [objectEvento, setObjectEvento] = useState({});
+  const [objectEvento, setObjectEvento] = useState({}); //Objeto del evento seleccionado
+  
   const events = [
     {
       id: 1,
@@ -101,7 +102,9 @@ const HorarioScreen = () => {
 
 
   return (
-    //listaComponents.forEach(objeto => console.log(JSON.stringify(objeto))),
+    console.log('--LISTA COMPONENTES--'),
+    listaComponents.forEach(objeto => console.log(JSON.stringify(objeto))),
+    console.log('---------------------'),
    /*  console.log("---------------------START-----------"),
     console.log("EditMessageVisible: " + EditMessageVisible),
     console.log("--------------------------------"),
@@ -143,6 +146,7 @@ const HorarioScreen = () => {
         onPressEvent={(event) => {
           // se debe recibir el id del evento
           console.log("Evento presionado: " + event.id);
+
           setObjectEvento(event);
           //console.log("Evento presionado: " + JSON.stringify(event));
           // se debe abrir el modal con los datos del evento

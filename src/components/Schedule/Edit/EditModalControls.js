@@ -6,14 +6,15 @@ import {
     ScrollView,
   } from "react-native";
   import { Dimensions } from "react-native";
-  import moment from "moment";
   import React, { useState } from "react";
 import EditActivityModal from "./EditActivityModal";
-  const EditControls = ({event,listaComponents, setListaComponents, ultimoId, setUltimoId , ultimoIdRelacion, setUltimoIdRelacion,setTypeExitMessage,editRelationComponent,changeOpenEditModal,openEditModal}) => {
+  const EditControls = ({event,listaComponents, setListaComponents, ultimoId, setUltimoId , 
+    ultimoIdRelacion, setUltimoIdRelacion,setTypeExitMessage,editRelationComponent,changeOpenEditModal,openEditModal}) => {
+    
     const [modalityType, setModalityType] = useState(1);
-    console.log("día del evento: "+ event.day)
     const WIDTH = Dimensions.get("window").width - 80;
     const HEIGHT = Dimensions.get("window").height - 150;
+
     const DAYS_OF_WEEK = [
         { id: 1, name: 'LUN', selected: false },
         { id: 2, name: 'MAR', selected: false },
@@ -49,6 +50,7 @@ import EditActivityModal from "./EditActivityModal";
             setUltimoIdRelacion={setUltimoIdRelacion}
             openEditModal = {openEditModal}
             setTypeExitMessage = {setTypeExitMessage}
+            editRelationComponent = {editRelationComponent}
             />
         ): console.log("Course")
     )

@@ -7,6 +7,10 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import moment from "moment";
 import Icon from "react-native-vector-icons/Ionicons";
 
+import { HandlerEditActivity } from "./HandlerEditActivity";
+
+
+
 
 const EditActivityModal = ({
   event,
@@ -19,26 +23,26 @@ const EditActivityModal = ({
   DAYS_OF_WEEK,
   listaComponents,
   setListaComponents,
-  ultimoId, 
-  setUltimoId, 
-  ultimoIdRelacion, 
-  setUltimoIdRelacion,
   openEditModal,
-  setTypeExitMessage
+  setTypeExitMessage,
+  editRelationComponent,
+
 }) => {
+
   // Define state variables with their initial values
   const [activityName, setActivityName] = useState(event.title);
   const [description, setDescription] = useState(event.description);
   // state for TimePicker component
-  const [initialHour, setInitialHour] = useState(new Date());
-  const [finalHour, setFinalHour] = useState(new Date());
-  const [initialDate, setInitialDate] = useState(new Date());
-  const [finalDate, setFinalDate] = useState(new Date());
+  const [initialHour, setInitialHour] = useState(new Date(event.start));
+  const [finalHour, setFinalHour] = useState(new Date(event.end));
+  const [initialDate, setInitialDate] = useState(new Date(event.start));
+  const [finalDate, setFinalDate] = useState(new Date(event.end));
+
   const [initialHourText, setInitialHourText] = useState(moment(event.start).format("hh:mm a"));
   const [finalHourText, setFinalHourText] = useState(moment(event.end).format("hh:mm a"));
   //fechas
   const [initialDateText, setInitialDateText] = useState(moment(event.start).format("YYYY-MM-DD"));
-  const [finalDateText, setFinalDateText] = useState(moment(event.end).format( "YYYY-MM-DD"));
+  const [finalDateText, setFinalDateText] = useState(moment(event.end).format("YYYY-MM-DD"));
   const [showInitialHour, setShowInitialHour] = useState(false);
   const [showFinalHour, setShowFinalHour] = useState(false);
   //fechas
@@ -48,6 +52,29 @@ const EditActivityModal = ({
   const [selectedDays, setSelectedDays] = useState([]);
   const [Days, setDays] = useState([event.day]);
   const selectDays = [];
+
+
+
+  const dayColor = (day) => {
+
+    if (editRelationComponent == false) {
+
+      var dayC = initialDate.getDay();
+      if (dayC == 6) {
+        dayC = 0;
+      } else {
+        dayC = dayC + 1;
+      }
+      // Create a copy of the days of week array
+      const updatedDays = [...DAYS_OF_WEEK];
+      return (dayC == day.id) ? day.selected = true : "";
+
+    }
+    else {
+      return day.selected ? "#8FC1A9" : "#000000"
+    }
+  };
+
   // Function that handles the change of the initial hour
   const onInitialHourChange = (event, selectedHour) => {
     setShowInitialHour(false);
@@ -72,8 +99,8 @@ const EditActivityModal = ({
     setFinalHourText(formattedHour);
   };
 
-// handler to show the initial datepicker
-const showInitialHourpicker = () => {
+  // handler to show the initial datepicker
+  const showInitialHourpicker = () => {
     setShowInitialHour(true);
   };
 
@@ -91,8 +118,8 @@ const showInitialHourpicker = () => {
   const showFinalDatepicker = () => {
     setShowFinalDate(true);
   };
-// handler for initial Date change
-const onInitialDateChange = (event, selectedDate) => {
+  // handler for initial Date change
+  const onInitialDateChange = (event, selectedDate) => {
     setShowInitialDate(false);
     const currentDate = selectedDate || initialDate;
     const formatedDate = moment(selectedDate || initialDate).format(
@@ -116,53 +143,55 @@ const onInitialDateChange = (event, selectedDate) => {
   const OnCreateActivity = () => { //cambiar por onCreateActivity
     changeOpenEditModal();
     setTypeExitMessage(false);
-    
-    if(
-        [   activityName,
-            description,
-            initialHour,
-            finalHour,
-            initialDate,
-            finalDate].includes("")||
-            Days.length === 0 
-    ){
-        alert("Por favor llena todos los espacios");
+
+    if (
+      [activityName,
+        description,
+        initialHour,
+        finalHour,
+        initialDate,
+        finalDate].includes("") ||
+      Days.length === 0
+    ) {
+      alert("Por favor llena todos los espacios");
       return;
-    }else if(finalDate<initialDate ){
-        alert("La fecha final  inicia antes que la fecha inicial");
-        return;
-        
-      } else if(finalHour<initialHour){
-        alert("La hora final  inicia antes que la hora inicial");
-        return; 
-      }else{
-        /* HandlerActivity({ initialDate, finalDate, activityName, modalityType, description,
-          initialHour, finalHour, Days, listaComponents, setListaComponents , ultimoId, setUltimoId , ultimoIdRelacion, setUltimoIdRelacion });
-        setActivityName("");
-        setDescription("");
-        setInitialDateText("Seleccionar una fecha");
-        setFinalDateText("Seleccionar una fecha");
-        setInitialHourText("Seleccionar hora");
-        setFinalHourText("Seleccionar hora");
-        setSelectedDays([]) */;
-        return;
-      } 
+    } else if (finalDate < initialDate) {
+      alert("La fecha final  inicia antes que la fecha inicial");
+      return;
+
+    } else if (finalHour < initialHour) {
+      alert("La hora final  inicia antes que la hora inicial");
+      return;
+    } else {
+      HandlerEditActivity({
+        event, initialDate, finalDate, activityName, modalityType, description,
+        initialHour, finalHour, Days, listaComponents, setListaComponents
+      });
+      setActivityName("");
+      setDescription("");
+      setInitialDateText("Seleccionar una fecha");
+      setFinalDateText("Seleccionar una fecha");
+      setInitialHourText("Seleccionar hora");
+      setFinalHourText("Seleccionar hora");
+      setSelectedDays([]);
+      return;
+    }
   };
 
   // Function that handles the selection of days
   const handleDaysSelected = (index) => {
     var indexPersonal = index;
-    if(index == 6){
-      indexPersonal =0;
-    }else{
+    if (index == 6) {
+      indexPersonal = 0;
+    } else {
       indexPersonal = index + 1
     }
     if (Days.includes(indexPersonal)) {
       const nuevaLista = Days.filter((item) => item !== indexPersonal);
       setDays(nuevaLista);
-    }else{
-        selectDays.push(indexPersonal);
-        setDays(Days.concat(selectDays))
+    } else {
+      selectDays.push(indexPersonal);
+      setDays(Days.concat(selectDays))
     }
     // Create a copy of the days of week array
     const updatedDays = [...DAYS_OF_WEEK];
@@ -176,13 +205,14 @@ const onInitialDateChange = (event, selectedDate) => {
     setTypeExitMessage(false);
     changeOpenEditModal();
 
-}
+  }
   return (
     // Modal
-    <TouchableOpacity disabled={true} 
-    style={{...styles.container,
-      backgroundColor: openEditModal ? "rgba(0,0,0,0.4)" : "transparent", // Cambia el fondo a oscuro cuando el modal está abierto
-    }}>
+    <TouchableOpacity disabled={true}
+      style={{
+        ...styles.container,
+        backgroundColor: openEditModal ? "rgba(0,0,0,0.4)" : "transparent", // Cambia el fondo a oscuro cuando el modal está abierto
+      }}>
       {/* Modal content */}
       <View style={{ ...styles.modal, height: HEIGHT, width: WIDTH }}>
         {/* Modal header */}
@@ -207,8 +237,8 @@ const onInitialDateChange = (event, selectedDate) => {
 
         {/* Modal body */}
         <ScrollView style={styles.modalBody}>
-            {/* Description Input*/}
-        <Text style={styles.text}>Descripción</Text>
+          {/* Description Input*/}
+          <Text style={styles.text}>Descripción</Text>
           <Input
             value={description}
             onChange={(event) => setDescription(event.nativeEvent.text)}
@@ -243,7 +273,7 @@ const onInitialDateChange = (event, selectedDate) => {
             defaultOption={{ key: 1, value: "Presencial" }}
             maxHeight={150}
           />
-            {/* Start and end date */}
+          {/* Start and end date */}
           <View style={{ flexDirection: "row", marginTop: 10 }}>
             <View style={{ flex: 1 }}>
               {/* Start date */}
@@ -347,9 +377,8 @@ const onInitialDateChange = (event, selectedDate) => {
                 onPress={() => handleDaysSelected(index)}
                 style={{
                   ...styles.selectDay,
-                  borderColor: (Days.includes(day.id)) ? day.selected = true : "",
                   borderColor: day.selected ? "#8FC1A9" : "#000000",
-                  
+
                 }}
               >
                 <Text style={{ padding: 2 }}>{day.name}</Text>

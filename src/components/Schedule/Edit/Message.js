@@ -22,6 +22,7 @@ const Messages = ({
       positiveButton={{
         title: "SÍ",
         onPress: () => {
+          
           setEditRelationComponent(true), changeModalVisible(), setTypeExitMessage(true) 
         },
       }}

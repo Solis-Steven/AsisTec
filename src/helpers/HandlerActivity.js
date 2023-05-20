@@ -9,8 +9,7 @@ const obtenerFechas = (startDate, lastDate, horaInicio, horaFin, Days) => {
     if (Days.includes(fechaActual.getDay())) {
       var fechas = []; // Array para almacenar las fechas
       var formato = format(fechaActual, "yyyy-MM-dd");
-      var dateTimeI =
-        formato + " " + moment(horaInicio, "HH:mm").format("HH:mm");
+      var dateTimeI = formato + " " + moment(horaInicio, "HH:mm").format("HH:mm");
       var dateTimeF = formato + " " + moment(horaFin, "HH:mm").format("HH:mm");
 
       var dateObject1 = new Date(dateTimeI).toISOString();
@@ -200,7 +199,6 @@ const HandlerActivity = ({
   ultimoIdRelacion,
   setUltimoIdRelacion,
 }) => {
-  console.log("DAYS SELECTED: " + Days);
   // Variables para obtener las fechas
   ListaFechas = obtenerFechas(
     initialDate,
