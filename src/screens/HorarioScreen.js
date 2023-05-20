@@ -1,5 +1,5 @@
 import { View, Text, TouchableOpacity, Modal, StyleSheet } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { TimelineCalendar, MomentConfig } from "@howljs/calendar-kit";
 import Icon from "react-native-vector-icons/FontAwesome";
@@ -9,6 +9,7 @@ import DayView from "../components/Schedule/DayView";
 import ModalControls from "../components/Schedule/ModalControls";
 import  MessageEdit  from "../components/Schedule/Edit/Message";
 import  MessageDelete  from "../components/Schedule/Delete/Message";
+import EditControls from "../components/Schedule/Edit/EditModalControls";
 
 MomentConfig.updateLocale("es", {
   // setting moment.js locale to Spanish
@@ -24,12 +25,12 @@ const HorarioScreen = () => {
   const [EditMessageVisible, setEditMessageVisible] = useState(false); //Al ser TRUE muestra el componente Message de editar
   const [editRelationComponent, setEditRelationComponent] = useState(false); // Al SER TRUE Cambia todos los eventos relacionados al editar
   const [typeExitMessage, setTypeExitMessage] = useState(false); //Tipo de salida del Message de editar
-  
+  const [openEditModal, setOpenEditModal] = useState(false); //Abrir el modal de EDICIÓN
   // Variable para mostrar el componente Message de eliminar
   const [DeleteMessageVisible, setDeleteMessageVisible] = useState(false); //Al ser TRUE muestra el componente Message de eliminar
   const [deleteRelationComponent, setDeleteRelationComponent] = useState(false); // Al SER TRUE Cambia todos los eventos relacionados al eliminar
   const [typeExitMessageDelete, setTypeExitMessageDelete] = useState(false); //Tipo de salida del Message de eliminar
-  
+  const [objectEvento, setObjectEvento] = useState({});
   const events = [
     {
       id: 1,
@@ -42,6 +43,7 @@ const HorarioScreen = () => {
       modalityType: "Presencial",
       color: "#F44336",
       type: "Clase",
+      day: 3,
     },
     {
       id: 2,
@@ -53,6 +55,7 @@ const HorarioScreen = () => {
       modalityType: "Presencial",
       color: "#64B149",
       type: "Actividad",
+      day: 1,
     },
   ];
   // Define state variables with their initial values
@@ -72,7 +75,6 @@ const HorarioScreen = () => {
 
   // Funciones para mostrar el componente Message de editar
   const changeEditMessageVisible = () => {
-    
     setEditMessageVisible(!EditMessageVisible);
   };
 
@@ -80,15 +82,30 @@ const HorarioScreen = () => {
   const changeDeleteMessageVisible = () => {
     setDeleteMessageVisible(!DeleteMessageVisible);
   };
+  const changeOpenEditModal = () => {
+    setOpenEditModal(!openEditModal);
+  };
 
+  useEffect(() => {
+    if(EditMessageVisible==false && typeExitMessage == true){
+      setOpenEditModal(true);
+      
+    }else{
+      setOpenEditModal(false);
+    }
+    
+    return () => {
+      // Código para limpiar el efecto secundario (opcional)
+    };
+  }, [EditMessageVisible, typeExitMessage]);
 
 
   return (
     //listaComponents.forEach(objeto => console.log(JSON.stringify(objeto))),
-    /* console.log("---------------------START-----------"),
-    console.log("editRelationComponent: " + editRelationComponent),
-    console.log("--------------------------------"),
+   /*  console.log("---------------------START-----------"),
     console.log("EditMessageVisible: " + EditMessageVisible),
+    console.log("--------------------------------"),
+    console.log("editRelationComponent: " + editRelationComponent),
     console.log("--------------------------------"),
     console.log("typeExitMessage:  " + typeExitMessage), */
 
@@ -96,7 +113,6 @@ const HorarioScreen = () => {
     //console.log("deleteRelationComponent: " + deleteRelationComponent),
     //console.log("DeleteMessageVisible: " + DeleteMessageVisible),
     //console.log("typeExitMessageDelete:  " + typeExitMessageDelete),
-
 
     <View style={styles.container}>
       {/* Header */}
@@ -127,6 +143,7 @@ const HorarioScreen = () => {
         onPressEvent={(event) => {
           // se debe recibir el id del evento
           console.log("Evento presionado: " + event.id);
+          setObjectEvento(event);
           //console.log("Evento presionado: " + JSON.stringify(event));
           // se debe abrir el modal con los datos del evento
           // se debe identificar si es un curso o una actividad
@@ -139,13 +156,14 @@ const HorarioScreen = () => {
         onLongPressEvent={(event) => {
           // se debe recibir el id del evento
           console.log("Evento presionado constantemente:  " + event.id);
+          setObjectEvento(event);
           //console.log("Evento presionadoconstantemente: " + JSON.stringify(event));
           // Se debe buscar el evento en la lista de componentes
           // Se deben eliminar los eventos relacionados con el evento
           // se debe eliminar el evento de la lista de componentes
           // se debe actualizar la lista de componentes
           changeDeleteMessageVisible();
-
+          
         }}
         events={listaComponents}
         renderEventContent={(event) => {
@@ -233,6 +251,27 @@ const HorarioScreen = () => {
           EditMessageVisible={DeleteMessageVisible}
           setEditRelationComponent={setDeleteRelationComponent}
           setTypeExitMessage={setTypeExitMessageDelete}
+        />
+      </Modal>
+      {/* SHOW EDIT MODAL */}
+      <Modal
+        transparent={true}
+        animationType="fade"
+        visible={openEditModal}
+        onRequestClose={changeOpenEditModal}
+      >
+        <EditControls
+        event = {objectEvento}
+        setTypeExitMessage = {setTypeExitMessage}
+        editRelationComponent = {editRelationComponent}
+        listaComponents={listaComponents}
+        setListaComponents={setListaComponents}
+        ultimoId={ultimoId}
+        setUltimoId={setUltimoId}
+        ultimoIdRelacion={ultimoIdRelacion}
+        setUltimoIdRelacion={setUltimoIdRelacion}
+        changeOpenEditModal={changeOpenEditModal}
+        openEditModal = {openEditModal}
         />
       </Modal>
     </View>

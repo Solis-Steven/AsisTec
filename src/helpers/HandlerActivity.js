@@ -123,7 +123,7 @@ const agregarComponente = (ListaFechas, listaComponents, setListaComponents, act
     // Agregar el componente
     for (let index = 0; index < ListaFechas.length; index++) {
         const element = ListaFechas[index]; // [fechaInicio, fechaFinal] [fechaInicio, fechaFinal] 
-
+        var daySpecific = new Date(element[0]).getDay()
         // de tipo clase 
         var componente = {
             id: ultimoIdTemp + 1,
@@ -135,6 +135,7 @@ const agregarComponente = (ListaFechas, listaComponents, setListaComponents, act
             modalityType: modalityType,
             color: "#F44336",
             type: "Actividad",
+            day : daySpecific,
         }
         ultimoIdTemp = ultimoIdTemp + 1;
         lista.push(componente);
@@ -149,7 +150,7 @@ const agregarComponente = (ListaFechas, listaComponents, setListaComponents, act
 
 const HandlerActivity = ({ initialDate, finalDate, activityName, modalityType, description,
     initialHour, finalHour, Days, listaComponents, setListaComponents, ultimoId, setUltimoId, ultimoIdRelacion, setUltimoIdRelacion }) => {
-
+        console.log("DAYS SELECTED: "+ Days)
     // Variables para obtener las fechas
     ListaFechas = obtenerFechas(initialDate, finalDate, initialHour, finalHour, Days);
 

@@ -6,14 +6,11 @@ import { SelectList } from "react-native-dropdown-select-list";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import moment from "moment";
 import Icon from "react-native-vector-icons/Ionicons";
-import HandlerActivity from "../../helpers/HandlerActivity";
 
 
-const ActivityModal = ({
-  changeModalVisible,
-  setActivityType,
-  activityTypeValues,
-  activityType,
+const EditActivityModal = ({
+  event,
+  changeOpenEditModal,
   modalityValues,
   modalityType,
   setModalityType,
@@ -26,7 +23,8 @@ const ActivityModal = ({
   setUltimoId, 
   ultimoIdRelacion, 
   setUltimoIdRelacion,
-  isModalVisible
+  openEditModal,
+  setTypeExitMessage
 }) => {
   // Define state variables with their initial values
   const [activityName, setActivityName] = useState("");
@@ -36,11 +34,11 @@ const ActivityModal = ({
   const [finalHour, setFinalHour] = useState(new Date());
   const [initialDate, setInitialDate] = useState(new Date());
   const [finalDate, setFinalDate] = useState(new Date());
-  const [initialHourText, setInitialHourText] = useState("Seleccionar hora");
-  const [finalHourText, setFinalHourText] = useState("Seleccionar hora");
+  const [initialHourText, setInitialHourText] = useState(moment(event.start).format("hh:mm a"));
+  const [finalHourText, setFinalHourText] = useState(moment(event.end).format("hh:mm a"));
   //fechas
-  const [initialDateText, setInitialDateText] = useState("Seleccionar fecha");
-  const [finalDateText, setFinalDateText] = useState("Seleccionar fecha");
+  const [initialDateText, setInitialDateText] = useState(moment(event.start).format("YYYY-MM-DD"));
+  const [finalDateText, setFinalDateText] = useState(moment(event.end).format( "YYYY-MM-DD"));
   const [showInitialHour, setShowInitialHour] = useState(false);
   const [showFinalHour, setShowFinalHour] = useState(false);
   //fechas
@@ -48,7 +46,7 @@ const ActivityModal = ({
   const [showFinalDate, setShowFinalDate] = useState(false);
 
   const [selectedDays, setSelectedDays] = useState([]);
-  const [Days, setDays] = useState([]);
+  const [Days, setDays] = useState([event.day]);
   const selectDays = [];
   // Function that handles the change of the initial hour
   const onInitialHourChange = (event, selectedHour) => {
@@ -116,7 +114,8 @@ const onInitialDateChange = (event, selectedDate) => {
   };
   // Function that closes the modal
   const OnCreateActivity = () => { //cambiar por onCreateActivity
-    changeModalVisible();
+    changeOpenEditModal();
+    setTypeExitMessage(false);
     
     if(
         [   activityName,
@@ -137,7 +136,8 @@ const onInitialDateChange = (event, selectedDate) => {
         alert("La hora final  inicia antes que la hora inicial");
         return; 
       }else{
-        HandlerActivity({ initialDate, finalDate, activityName, modalityType, description,
+
+        /* HandlerActivity({ initialDate, finalDate, activityName, modalityType, description,
           initialHour, finalHour, Days, listaComponents, setListaComponents , ultimoId, setUltimoId , ultimoIdRelacion, setUltimoIdRelacion });
         setActivityName("");
         setDescription("");
@@ -145,8 +145,7 @@ const onInitialDateChange = (event, selectedDate) => {
         setFinalDateText("Seleccionar una fecha");
         setInitialHourText("Seleccionar hora");
         setFinalHourText("Seleccionar hora");
-        setSelectedDays([]);
-        changeModalVisible();
+        setSelectedDays([]) */;
         return;
       } 
   };
@@ -166,17 +165,19 @@ const onInitialDateChange = (event, selectedDate) => {
     updatedDays[index].selected = !updatedDays[index].selected;
     // Update the selected days state variable with the selected days only
     setSelectedDays(updatedDays.filter((day) => day.selected));
-    
+    console.log("SelectedDAYS: " + selectedDays)
   };
 
   const closeModal = () => {
-    changeModalVisible()
+    setTypeExitMessage(false);
+    changeOpenEditModal();
+
 }
   return (
     // Modal
     <TouchableOpacity disabled={true} 
     style={{...styles.container,
-      backgroundColor: isModalVisible ? "rgba(0,0,0,0.4)" : "transparent", // Cambia el fondo a oscuro cuando el modal está abierto
+      backgroundColor: openEditModal ? "rgba(0,0,0,0.4)" : "transparent", // Cambia el fondo a oscuro cuando el modal está abierto
     }}>
       {/* Modal content */}
       <View style={{ ...styles.modal, height: HEIGHT, width: WIDTH }}>
@@ -187,38 +188,13 @@ const onInitialDateChange = (event, selectedDate) => {
             <Icon name="close" size={30} color="white" style={{}} />
           </TouchableOpacity>
 
-          {/* Activity type select */}
-          <SelectList
-            data={activityTypeValues}
-            setSelected={setActivityType}
-            dropdownStyles={{
-              width: "100%",
-              backgroundColor: "#F6F6F6",
-              borderWidth: 0,
-            }}
-            inputStyles={{
-              fontSize: 22,
-              textAlign: "left",
-              color: "#FFFFFF",
-            }}
-            placeholder={activityType}
-            search={false}
-            boxStyles={{
-              borderWidth: 0,
-              width: "80%",
-              fontSize: 26,
-            }}
-            defaultOption={{ key: 2, value: "Agregar Actividad" }}
-            maxHeight={150}
-          />
-
           {/* Activity name input */}
           <Text style={styles.text}>Nombre</Text>
           <Input
             value={activityName}
             onChange={(event) => setActivityName(event.nativeEvent.text)}
             type="text"
-            placeholder="Nombre de la actividad"
+            placeholder={event.title}
             placeholderTextColor={"white"}
             inputContainerStyle={{ borderBottomWidth: 0 }}
             style={styles.input}
@@ -233,7 +209,7 @@ const onInitialDateChange = (event, selectedDate) => {
             value={description}
             onChange={(event) => setDescription(event.nativeEvent.text)}
             type="text"
-            placeholder="Descripción de la actividad"
+            placeholder={event.description}
             placeholderTextColor={"black"}
             inputContainerStyle={{ borderBottomWidth: 0 }}
             style={styles.bodyInputs}
@@ -253,7 +229,7 @@ const onInitialDateChange = (event, selectedDate) => {
               textAlign: "left",
               color: "#000000",
             }}
-            placeholder={modalityType}
+            placeholder={event.modalityType}
             search={false}
             boxStyles={{
               borderWidth: 0,
@@ -367,7 +343,9 @@ const onInitialDateChange = (event, selectedDate) => {
                 onPress={() => handleDaysSelected(index)}
                 style={{
                   ...styles.selectDay,
+                  borderColor: (day.id == event.day) ? day.selected = true : "",
                   borderColor: day.selected ? "#8FC1A9" : "#000000",
+                  
                 }}
               >
                 <Text style={{ padding: 2 }}>{day.name}</Text>
@@ -494,4 +472,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ActivityModal;
+export default EditActivityModal;
