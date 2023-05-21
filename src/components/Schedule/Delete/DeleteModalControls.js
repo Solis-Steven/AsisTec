@@ -1,11 +1,18 @@
 import { set } from "date-fns";
 import React, { useEffect } from "react";
-import { StyleSheet, Text, TouchableOpacity } from "react-native";
+import { Dimensions } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  ScrollView,
+} from "react-native";
 const Delete = (
   event,
   editRelationComponent,
   listaComponents,
-  setListaComponents,
+  setListaComponents
 ) => {
   if (!editRelationComponent) {
     const newListaComponents = listaComponents.filter(
@@ -15,13 +22,13 @@ const Delete = (
     setListaComponents(newListaComponents);
     return true;
   } else {
-    //obtener los componentes que no estan relacionados con el evento
-    const newListaComponents = listaComponents.filter(
-      (component) =>
-        component.id !== event.id && component.id !== event.idRelation
+    //obtener los elementos no relacionados con el event.idRelation
+    var listaComponentsTemp = listaComponents.filter(
+      (item) => item.idRelacion != event.idRelacion
     );
+    //valiar lista de componentes
     setListaComponents([]);
-    setListaComponents(newListaComponents);
+    setListaComponents(listaComponentsTemp);
     return true;
   }
 };
@@ -35,48 +42,118 @@ export const DeleteModalControls = ({
   changeOpenDeletetModal,
   openDeleteModal,
 }) => {
+  const [valid, setValid] = React.useState(false);
   const OnDeleteActivityorCourse = () => {
     setTypeExitMessageDelete(false);
     changeOpenDeletetModal();
-   
+    setValid(false);
   };
-
-  const[valid, setValid] = React.useState(false);
+  console.log("editRelationComponent", editRelationComponent);
   useEffect(() => {
-      if(Delete(event, editRelationComponent, listaComponents, setListaComponents)){
-        setValid(true);
-      }
-
-  }, [,valid]);
-if(valid){
+    if (openDeleteModal) {
+      setValid(
+        Delete(
+          event,
+          editRelationComponent,
+          listaComponents,
+          setListaComponents
+        )
+      );
+    }
+  }, []);
+  const WIDTH = Dimensions.get("window").width - 80;
+  const HEIGHT = Dimensions.get("window").height - 620;
+  if (valid) {
     return (
-
-        <TouchableOpacity
-        onPress={OnDeleteActivityorCourse}
-        style={styles.createButton }
+      <TouchableOpacity
+        disabled={true}
+        style={{
+          ...styles.container,
+          backgroundColor: openDeleteModal ? "rgba(0,0,0,0.4)" : "transparent", // Cambia el fondo a oscuro cuando el modal está abierto
+        }}
       >
-        <Text
-          style={{
-            color: "white",
-            fontSize: 22,
-            fontWeight: "bold",
-          }}
-        >
-          Eliminado
-        </Text>
+        {/* Modal content */}
+        <View style={{ ...styles.modal, height: HEIGHT, width: WIDTH }}>
+          {/* Modal header */}
+          <View style={styles.modalHeader}>
+            {/* Close modal button */}
+
+            {/* Activity name input */}
+            <Text style={styles.text}>
+              {editRelationComponent == true
+                ? "Todos los elementos relacionados se han eliminado con éxito"
+                : "El elemento fue eliminado con éxito"}
+            </Text>
+          </View>
+
+          {/* Modal body */}
+          <ScrollView style={styles.modalBody}>
+            {/* Create button */}
+            <TouchableOpacity
+              onPress={OnDeleteActivityorCourse}
+              style={styles.createButton}
+            >
+              <Text
+                style={{
+                  color: "white",
+                  fontSize: 15,
+                  fontWeight: "bold",
+                }}
+              >
+                OK
+              </Text>
+            </TouchableOpacity>
+          </ScrollView>
+        </View>
       </TouchableOpacity>
-    )
+    );
   }
-}
+};
+export default DeleteModalControls;
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+
+  modal: {
+    paddingTop: 0,
+    backgroundColor: "white",
+    borderRadius: 24,
+  },
+
+  modalHeader: {
+    alignItems: "flex-start",
+    paddingHorizontal: 18,
+    paddingTop: 10,
+    height: 50,
+    backgroundColor: "#769ECB",
+    borderTopLeftRadius: 24,
+    borderTopRightRadius: 24,
+  },
+
+  text: {
+    marginStart: 20,
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+  modalBody: {
+    width: "100%",
+    flexDirection: "column",
+    padding: 15,
+    flex: 1,
+  },
+
   createButton: {
     backgroundColor: "#769ECB",
-    margin: 5,
+    marginBottom: 10,
     padding: 15,
     borderRadius: 20,
     width: "40%",
     alignItems: "center",
-    alignSelf: "center",
-    position: "absolute",
+    //position: "absolute",
+    bottom: -10,
+    right: -160,
   },
 });

@@ -11,6 +11,7 @@ import MessageEdit from "../components/Schedule/Edit/Message";
 import MessageDelete from "../components/Schedule/Delete/Message";
 import EditControls from "../components/Schedule/Edit/EditModalControls";
 import { DeleteModalControls } from "../components/Schedule/Delete/DeleteModalControls";
+import { de } from "date-fns/locale";
 
 MomentConfig.updateLocale("es", {
   // setting moment.js locale to Spanish
@@ -115,9 +116,9 @@ const HorarioScreen = () => {
   }, [DeleteMessageVisible, typeExitMessageDelete]);
 
   return (
-    console.log("--LISTA COMPONENTES--"),
-    //listaComponents.forEach((objeto) => console.log(JSON.stringify(objeto))),
-    console.log("---------------------"),
+   /*  console.log("--LISTA COMPONENTES--"),
+    listaComponents.forEach((objeto) => console.log(JSON.stringify(objeto))),
+    console.log("---------------------"), */
     (
       /*  console.log("---------------------START-----------"),
     console.log("EditMessageVisible: " + EditMessageVisible),
@@ -296,7 +297,7 @@ const HorarioScreen = () => {
           <DeleteModalControls
             event={objectEvento}
             setTypeExitMessageDelete={setTypeExitMessageDelete}
-            editRelationComponent={editRelationComponent}
+            editRelationComponent={deleteRelationComponent}
             listaComponents={listaComponents}
             setListaComponents={setListaComponents}
             changeOpenDeletetModal={changeOpenDeletetModal}
