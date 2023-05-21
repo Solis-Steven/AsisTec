@@ -129,8 +129,6 @@ const agregarComponente = (initialDate, finalDate, activityName, modalityType, d
     //si viene modificar 1 = 1
     //si viene modificar muchos [1]
     var dayC = Day[0];
-    console.log("dayC: ", dayC)
-    console.log("Day: ", Day)
     //editar el componente
     componente.title = activityName;
     componente.start = dateObject1;

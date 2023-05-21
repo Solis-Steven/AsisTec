@@ -413,7 +413,6 @@ const EditActivityModal = ({
                       borderColor: Days.includes(day.id)
                         ? (day.selected = true)
                         : "",
-                        borderColor: (Days.include(0) && day.id == 6) ?(day.selected = true) : "",
                       borderColor: day.selected ? "#8FC1A9" : "#000000",
                     }}
                   >

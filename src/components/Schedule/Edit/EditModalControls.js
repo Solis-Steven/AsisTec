@@ -35,7 +35,7 @@ const EditControls = ({
     { id: 4, name: "JUE", selected: false },
     { id: 5, name: "VIE", selected: false },
     { id: 6, name: "SÁB", selected: false },
-    { id: 7, name: "DOM", selected: false },
+    { id: 0, name: "DOM", selected: false },
   ];
 
   // Possible values for the modality type

@@ -13,6 +13,7 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import moment from "moment";
 import Icon from "react-native-vector-icons/Ionicons";
 import { HandlerEditOneCourse } from "./HandlerEditOneCourse";
+import { set } from "date-fns";
 
 const EditCourseModal = ({
     event,
@@ -61,7 +62,7 @@ const EditCourseModal = ({
     const [showFinalDate, setShowFinalDate] = useState(false);
 
     const [selectedDays, setSelectedDays] = useState([]);
-    const [Days, setDays] = useState([event.day]);
+    const [Days, setDays] = useState(editRelationComponent ? [...event.day] : [event.day]);
     const selectDays = [];
 
     // handler for initial hour change
@@ -109,6 +110,11 @@ const EditCourseModal = ({
             "YYYY-MM-DD"
         );
         if (!editRelationComponent) {
+            var day = currentDate.getDay();
+            if (day == 6) {
+                day = 0;
+            }
+            setDays([day]);
             setFinalDate(currentDate);
             setFinalDateText(formatedDate);
         }
@@ -124,6 +130,11 @@ const EditCourseModal = ({
             "YYYY-MM-DD"
         );
         if (!editRelationComponent) {
+            var day = currentDate.getDay();
+            if (day == 6) {
+                day = 0;
+            }
+            setDays([day]);
             setInitialDate(currentDate);
             setInitialDateText(formatedDate);
         }
