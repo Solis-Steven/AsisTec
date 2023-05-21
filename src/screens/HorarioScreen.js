@@ -7,9 +7,10 @@ import Icon from "react-native-vector-icons/FontAwesome";
 import WeekView from "../components/Schedule/WeekView";
 import DayView from "../components/Schedule/DayView";
 import ModalControls from "../components/Schedule/ModalControls";
-import  MessageEdit  from "../components/Schedule/Edit/Message";
-import  MessageDelete  from "../components/Schedule/Delete/Message";
+import MessageEdit from "../components/Schedule/Edit/Message";
+import MessageDelete from "../components/Schedule/Delete/Message";
 import EditControls from "../components/Schedule/Edit/EditModalControls";
+import { DeleteModalControls } from "../components/Schedule/Delete/DeleteModalControls";
 
 MomentConfig.updateLocale("es", {
   // setting moment.js locale to Spanish
@@ -20,7 +21,7 @@ const HorarioScreen = () => {
   const [ultimoId, setUltimoId] = useState(2); // Ultimo id de la lista de componentes
   const [ultimoIdRelacion, setUltimoIdRelacion] = useState(2); // Ultimo id de la lista de componentes
   const [isModalVisible, setIsModalVisible] = useState(false); //Al ser TRUE muestra el modal de agregar
-  
+
   // Variables para mostrar el componente Message de editar
   const [EditMessageVisible, setEditMessageVisible] = useState(false); //Al ser TRUE muestra el componente Message de editar
   const [editRelationComponent, setEditRelationComponent] = useState(false); // Al SER TRUE Cambia todos los eventos relacionados al editar
@@ -31,7 +32,8 @@ const HorarioScreen = () => {
   const [deleteRelationComponent, setDeleteRelationComponent] = useState(false); // Al SER TRUE Cambia todos los eventos relacionados al eliminar
   const [typeExitMessageDelete, setTypeExitMessageDelete] = useState(false); //Tipo de salida del Message de eliminar
   const [objectEvento, setObjectEvento] = useState({}); //Objeto del evento seleccionado
-  
+  const [openDeleteModal, setOpenDeleteModal] = useState(false); //Abrir el modal de EDICIÓN
+
   const events = [
     {
       id: 1,
@@ -68,7 +70,6 @@ const HorarioScreen = () => {
   // Variable para actualizar la lista de componentes
   const [estado, setEstado] = useState(false); // Estado para actualizar la lista de componentes
 
-
   // Funciones para mostrar modals de: Agregar, Editar y Eliminar
   const changeModalVisible = () => {
     setIsModalVisible(!isModalVisible);
@@ -86,199 +87,224 @@ const HorarioScreen = () => {
   const changeOpenEditModal = () => {
     setOpenEditModal(!openEditModal);
   };
+  const changeOpenDeletetModal = () => {
+    setOpenDeleteModal(!openDeleteModal);
+  };
 
   useEffect(() => {
-    if(EditMessageVisible==false && typeExitMessage == true){
+    if (EditMessageVisible == false && typeExitMessage == true) {
       setOpenEditModal(true);
-      
-    }else{
+    } else {
       setOpenEditModal(false);
     }
-    
+
     return () => {
       // Código para limpiar el efecto secundario (opcional)
     };
   }, [EditMessageVisible, typeExitMessage]);
+  useEffect(() => {
+    if (DeleteMessageVisible == false && typeExitMessageDelete == true) {
+      setOpenDeleteModal(true);
+    } else {
+      setOpenDeleteModal(false);
+    }
 
+    return () => {
+      // Código para limpiar el efecto secundario (opcional)
+    };
+  }, [DeleteMessageVisible, typeExitMessageDelete]);
 
   return (
-    console.log('--LISTA COMPONENTES--'),
-    listaComponents.forEach(objeto => console.log(JSON.stringify(objeto))),
-    console.log('---------------------'),
-   /*  console.log("---------------------START-----------"),
+    console.log("--LISTA COMPONENTES--"),
+    //listaComponents.forEach((objeto) => console.log(JSON.stringify(objeto))),
+    console.log("---------------------"),
+    (
+      /*  console.log("---------------------START-----------"),
     console.log("EditMessageVisible: " + EditMessageVisible),
     console.log("--------------------------------"),
     console.log("editRelationComponent: " + editRelationComponent),
     console.log("--------------------------------"),
     console.log("typeExitMessage:  " + typeExitMessage), */
 
-    //console.log("---------------------START-----------"),
-    //console.log("deleteRelationComponent: " + deleteRelationComponent),
-    //console.log("DeleteMessageVisible: " + DeleteMessageVisible),
-    //console.log("typeExitMessageDelete:  " + typeExitMessageDelete),
+      //console.log("---------------------START-----------"),
+      //console.log("deleteRelationComponent: " + deleteRelationComponent),
+      //console.log("DeleteMessageVisible: " + DeleteMessageVisible),
+      //console.log("typeExitMessageDelete:  " + typeExitMessageDelete),
 
-    <View style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
-        {/* Week view button */}
-        <TouchableOpacity
-          onPress={() => {
-            setViewMode("week");
+      <View style={styles.container}>
+        {/* Header */}
+        <View style={styles.header}>
+          {/* Week view button */}
+          <TouchableOpacity
+            onPress={() => {
+              setViewMode("week");
+            }}
+            style={{ ...styles.viewModeHeader, backgroundColor: "#C8D6B9" }}
+          >
+            <Text style={styles.viewModeText}>Semana</Text>
+          </TouchableOpacity>
+
+          {/* Day view button */}
+          <TouchableOpacity
+            onPress={() => {
+              setViewMode("day");
+            }}
+            style={{ ...styles.viewModeHeader, backgroundColor: "#FAF3DD" }}
+          >
+            <Text style={styles.viewModeText}>Día</Text>
+          </TouchableOpacity>
+        </View>
+
+        {/* Calendar */}
+        <TimelineCalendar
+          onPressEvent={(event) => {
+            // se debe recibir el id del evento
+            console.log("Evento presionado: " + event.id);
+
+            setObjectEvento(event);
+            //console.log("Evento presionado: " + JSON.stringify(event));
+            // se debe abrir el modal con los datos del evento
+            // se debe identificar si es un curso o una actividad
+            // se debe actualizar el evento
+            // se debe actualizar la lista de componentes
+            changeEditMessageVisible();
           }}
-          style={{ ...styles.viewModeHeader, backgroundColor: "#C8D6B9" }}
-        >
-          <Text style={styles.viewModeText}>Semana</Text>
+          // Para eliminar un evento
+          onLongPressEvent={(event) => {
+            // se debe recibir el id del evento
+            console.log("Evento presionado constantemente:  " + event.id);
+            setObjectEvento(event);
+            //console.log("Evento presionadoconstantemente: " + JSON.stringify(event));
+            // Se debe buscar el evento en la lista de componentes
+            // Se deben eliminar los eventos relacionados con el evento
+            // se debe eliminar el evento de la lista de componentes
+            // se debe actualizar la lista de componentes
+            changeDeleteMessageVisible();
+          }}
+          events={listaComponents}
+          renderEventContent={(event) => {
+            return viewMode === "week" ? (
+              <WeekView key={event.id} event={event} />
+            ) : (
+              <DayView key={event.id} event={event} />
+            );
+          }}
+          viewMode={viewMode}
+          allowPinchToZoom={true}
+          allowDragToCreate={true}
+          locale="es"
+          theme={{
+            cellBorderColor: "transparent",
+            dayName: {
+              color: "#8FC1A9",
+            },
+            todayName: {
+              color: "#8FC1A9",
+            },
+            todayNumberContainer: {
+              backgroundColor: "#8FC1A9",
+              borderRadius: 8,
+            },
+            saturdayName: {
+              color: "#8FC1A9",
+            },
+            sundayName: {
+              color: "#8FC1A9",
+            },
+            dragHourContainer: {
+              backgroundColor: "#000000",
+            },
+          }}
+        />
+
+        {/* Add button */}
+        <TouchableOpacity onPress={changeModalVisible} style={styles.addCA}>
+          <Icon name="plus" type="font-awesome" color="#ffffff" size={24} />
         </TouchableOpacity>
 
-        {/* Day view button */}
-        <TouchableOpacity
-          onPress={() => {
-            setViewMode("day");
-          }}
-          style={{ ...styles.viewModeHeader, backgroundColor: "#FAF3DD" }}
+        {/* Add event modal */}
+        <Modal
+          transparent={true}
+          animationType="fade"
+          visible={isModalVisible}
+          onRequestClose={changeModalVisible}
         >
-          <Text style={styles.viewModeText}>Día</Text>
-        </TouchableOpacity>
+          <ModalControls
+            changeModalVisible={changeModalVisible}
+            listaComponents={listaComponents}
+            setListaComponents={setListaComponents}
+            ultimoId={ultimoId}
+            setUltimoId={setUltimoId}
+            ultimoIdRelacion={ultimoIdRelacion}
+            setUltimoIdRelacion={setUltimoIdRelacion}
+            isModalVisible={isModalVisible}
+          />
+        </Modal>
+        {/* SHOW EDIT MESSAGE */}
+        <Modal
+          transparent={true}
+          animationType="fade"
+          visible={EditMessageVisible}
+          onRequestClose={changeEditMessageVisible}
+        >
+          <MessageEdit
+            changeModalVisible={changeEditMessageVisible}
+            EditMessageVisible={EditMessageVisible}
+            setEditRelationComponent={setEditRelationComponent}
+            setTypeExitMessage={setTypeExitMessage}
+          />
+        </Modal>
+
+        {/* SHOW DELETE MESSAGE */}
+        <Modal
+          transparent={true}
+          animationType="fade"
+          visible={DeleteMessageVisible}
+          onRequestClose={changeDeleteMessageVisible}
+        >
+          <MessageDelete
+            changeModalVisible={changeDeleteMessageVisible}
+            EditMessageVisible={DeleteMessageVisible}
+            setEditRelationComponent={setDeleteRelationComponent}
+            setTypeExitMessage={setTypeExitMessageDelete}
+          />
+        </Modal>
+        {/* SHOW EDIT MODAL */}
+        <Modal
+          transparent={true}
+          animationType="fade"
+          visible={openEditModal}
+          onRequestClose={changeOpenEditModal}
+        >
+          <EditControls
+            event={objectEvento}
+            setTypeExitMessage={setTypeExitMessage}
+            editRelationComponent={editRelationComponent}
+            listaComponents={listaComponents}
+            setListaComponents={setListaComponents}
+            changeOpenEditModal={changeOpenEditModal}
+            openEditModal={openEditModal}
+          />
+        </Modal>
+        {/* Handler DELETE  */}
+        <Modal
+          transparent={true}
+          animationType="fade"
+          visible={openDeleteModal}
+          onRequestClose={changeOpenDeletetModal}
+        >
+          <DeleteModalControls
+            event={objectEvento}
+            setTypeExitMessageDelete={setTypeExitMessageDelete}
+            editRelationComponent={editRelationComponent}
+            listaComponents={listaComponents}
+            setListaComponents={setListaComponents}
+            changeOpenDeletetModal={changeOpenDeletetModal}
+            openDeleteModal={openDeleteModal}
+          />
+        </Modal>
       </View>
-
-      {/* Calendar */}
-      <TimelineCalendar
-        onPressEvent={(event) => {
-          // se debe recibir el id del evento
-          console.log("Evento presionado: " + event.id);
-
-          setObjectEvento(event);
-          //console.log("Evento presionado: " + JSON.stringify(event));
-          // se debe abrir el modal con los datos del evento
-          // se debe identificar si es un curso o una actividad
-          // se debe actualizar el evento
-          // se debe actualizar la lista de componentes
-          changeEditMessageVisible();
-          
-        }}
-        // Para eliminar un evento
-        onLongPressEvent={(event) => {
-          // se debe recibir el id del evento
-          console.log("Evento presionado constantemente:  " + event.id);
-          setObjectEvento(event);
-          //console.log("Evento presionadoconstantemente: " + JSON.stringify(event));
-          // Se debe buscar el evento en la lista de componentes
-          // Se deben eliminar los eventos relacionados con el evento
-          // se debe eliminar el evento de la lista de componentes
-          // se debe actualizar la lista de componentes
-          changeDeleteMessageVisible();
-          
-        }}
-        events={listaComponents}
-        renderEventContent={(event) => {
-          return viewMode === "week" ? (
-            <WeekView key={event.id} event={event} />
-          ) : (
-            <DayView key={event.id} event={event} />
-          );
-        }}
-        viewMode={viewMode}
-        allowPinchToZoom={true}
-        allowDragToCreate={true}
-        locale="es"
-        theme={{
-          cellBorderColor: "transparent",
-          dayName: {
-            color: "#8FC1A9",
-          },
-          todayName: {
-            color: "#8FC1A9",
-          },
-          todayNumberContainer: {
-            backgroundColor: "#8FC1A9",
-            borderRadius: 8,
-          },
-          saturdayName: {
-            color: "#8FC1A9",
-          },
-          sundayName: {
-            color: "#8FC1A9",
-          },
-          dragHourContainer: {
-            backgroundColor: "#000000",
-          },
-        }}
-      />
-
-      {/* Add button */}
-      <TouchableOpacity onPress={changeModalVisible} style={styles.addCA}>
-        <Icon name="plus" type="font-awesome" color="#ffffff" size={24} />
-      </TouchableOpacity>
-
-      {/* Add event modal */}
-      <Modal
-        transparent={true}
-        animationType="fade"
-        visible={isModalVisible}
-        onRequestClose={changeModalVisible}
-      >
-        <ModalControls
-          changeModalVisible={changeModalVisible}
-          listaComponents={listaComponents}
-          setListaComponents={setListaComponents}
-          ultimoId={ultimoId}
-          setUltimoId={setUltimoId}
-          ultimoIdRelacion={ultimoIdRelacion}
-          setUltimoIdRelacion={setUltimoIdRelacion}
-          isModalVisible={isModalVisible}
-        />
-      </Modal>
-      {/* SHOW EDIT MESSAGE */}
-      <Modal
-        transparent={true}
-        animationType="fade"
-        visible={EditMessageVisible}
-        onRequestClose={changeEditMessageVisible}
-      >
-        <MessageEdit 
-        changeModalVisible={changeEditMessageVisible} 
-        EditMessageVisible = {EditMessageVisible}
-        setEditRelationComponent = {setEditRelationComponent}
-        setTypeExitMessage ={setTypeExitMessage}
-        />
-      </Modal>
-
-      {/* SHOW DELETE MESSAGE */}
-      <Modal
-        transparent={true}
-        animationType="fade"
-        visible={DeleteMessageVisible}
-        onRequestClose={changeDeleteMessageVisible}
-      >
-        <MessageDelete
-          changeModalVisible={changeDeleteMessageVisible}
-          EditMessageVisible={DeleteMessageVisible}
-          setEditRelationComponent={setDeleteRelationComponent}
-          setTypeExitMessage={setTypeExitMessageDelete}
-        />
-      </Modal>
-      {/* SHOW EDIT MODAL */}
-      <Modal
-        transparent={true}
-        animationType="fade"
-        visible={openEditModal}
-        onRequestClose={changeOpenEditModal}
-      >
-        <EditControls
-        event = {objectEvento}
-        setTypeExitMessage = {setTypeExitMessage}
-        editRelationComponent = {editRelationComponent}
-        listaComponents={listaComponents}
-        setListaComponents={setListaComponents}
-        ultimoId={ultimoId}
-        setUltimoId={setUltimoId}
-        ultimoIdRelacion={ultimoIdRelacion}
-        setUltimoIdRelacion={setUltimoIdRelacion}
-        changeOpenEditModal={changeOpenEditModal}
-        openEditModal = {openEditModal}
-        />
-      </Modal>
-    </View>
+    )
   );
 };
 

@@ -9,8 +9,7 @@ import { Dimensions } from "react-native";
 import React, { useState } from "react";
 import EditActivityModal from "./EditActivityModal";
 import EditCourseModal from "./EditCourseModal";
-const EditControls = ({ event, listaComponents, setListaComponents, ultimoId, setUltimoId,
-  ultimoIdRelacion, setUltimoIdRelacion, setTypeExitMessage, editRelationComponent, changeOpenEditModal, openEditModal }) => {
+const EditControls = ({ event, listaComponents, setListaComponents, setTypeExitMessage, editRelationComponent, changeOpenEditModal, openEditModal }) => {
 
   const [modalityType, setModalityType] = useState(1);
   const WIDTH = Dimensions.get("window").width - 80;
