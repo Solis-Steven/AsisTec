@@ -21,6 +21,8 @@ const EditControls = ({
   editRelationComponent,
   changeOpenEditModal,
   openEditModal,
+  ultimoId,
+  setUltimoId,
 }) => {
   const [modalityType, setModalityType] = useState(1);
   const WIDTH = Dimensions.get("window").width - 80;
@@ -35,7 +37,7 @@ const EditControls = ({
     { id: 4, name: "JUE", selected: false },
     { id: 5, name: "VIE", selected: false },
     { id: 6, name: "SÁB", selected: false },
-    { id: 0, name: "DOM", selected: false },
+    { id: 7, name: "DOM", selected: false },
   ];
 
   // Possible values for the modality type
@@ -44,8 +46,8 @@ const EditControls = ({
     { key: 2, value: "Virtual" },
     { key: 3, value: "Semipresencial" },
   ];
-  const fechasrelacionadas = () =>{
-    if(editRelationComponent){
+  const fechasrelacionadas = () => {
+    if (editRelationComponent) {
       const lista = listaComponents.filter(
         (item) => item.idRelacion == event.idRelacion
       );
@@ -53,7 +55,7 @@ const EditControls = ({
       const fechaMenor = Math.min(...listaFechas);
       const listaFechas2 = lista.map((item) => new Date(item.end));
       const fechaMayor = Math.max(...listaFechas2);
-      
+
       //obtener una lista de todos los event.day de los componentes con el mismo event.IdRelacion
       const listaDias = lista.map((item) => item.day);
       //eliminar los repetidos de la lista
@@ -64,7 +66,7 @@ const EditControls = ({
       event.day = listaDiasSinRepetir;
     }
   }
-    
+
 
   return (
     fechasrelacionadas(),
@@ -83,6 +85,8 @@ const EditControls = ({
         openEditModal={openEditModal}
         setTypeExitMessage={setTypeExitMessage}
         editRelationComponent={editRelationComponent}
+        ultimoId={ultimoId}
+        setUltimoId={setUltimoId}
       />
     ) : (
       <EditCourseModal
@@ -99,6 +103,8 @@ const EditControls = ({
         openEditModal={openEditModal}
         setTypeExitMessage={setTypeExitMessage}
         editRelationComponent={editRelationComponent}
+        ultimoId={ultimoId}
+        setUltimoId={setUltimoId}
       />
     )
   );

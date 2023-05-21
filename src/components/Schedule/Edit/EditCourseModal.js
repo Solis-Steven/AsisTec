@@ -14,6 +14,7 @@ import moment from "moment";
 import Icon from "react-native-vector-icons/Ionicons";
 import { HandlerEditOneCourse } from "./HandlerEditOneCourse";
 import { set } from "date-fns";
+import { HandlerEditManyCourses } from "./HandlerEditManyCourses";
 
 const EditCourseModal = ({
     event,
@@ -29,6 +30,8 @@ const EditCourseModal = ({
     openEditModal,
     setTypeExitMessage,
     editRelationComponent,
+    ultimoId,
+    setUltimoId,
 }) => {
     // Define state variables with their initial values
     const [courseName, setCourseName] = useState(event.title);
@@ -190,20 +193,37 @@ const EditCourseModal = ({
         } else if (finalHour < initialHour) {
             alert("La hora final  inicia antes que la hora inicial");
             return;
-        } else {
-            if (editRelationComponent == false) {
-                setDays([]);
-                var day = initialDate.getDay();
-                if (day == 0) {
-                    day = 6;
-                } else {
-                    day = day + 1;
-                }
-                setDays([day]);
-            }
+        } else if (editRelationComponent) {
             HandlerEditOneCourse({
                 event, initialDate, finalDate, courseName, professorName, classroom, modalityType,
                 initialHour, finalHour, Days, listaComponents, setListaComponents
+            });
+            setCourseName("");
+            setProfessorName("");
+            setClassroom("");
+            setInitialDateText("Seleccionar una fecha");
+            setFinalDateText("Seleccionar una fecha");
+            setInitialHourText("Seleccionar hora");
+            setFinalHourText("Seleccionar hora");
+            setSelectedDays([]);
+            changeOpenEditModal();
+            return;
+        }else {
+            HandlerEditManyCourses({ 
+                event, 
+                initialDate, 
+                finalDate, 
+                courseName, 
+                professorName, 
+                classroom, 
+                modalityType,
+                initialHour, 
+                finalHour, 
+                Days, 
+                listaComponents, 
+                setListaComponents, 
+                ultimoId, 
+                setUltimoId 
             });
             setCourseName("");
             setProfessorName("");
@@ -316,7 +336,7 @@ const EditCourseModal = ({
                         }}
                         // obtener el key del valor seleccionado
 
-                        defaultOption={{ key: returnKey(), value: event.modalityType }}
+                        defaultOption={{ key: returnKey, value: event.modalityType }}
                         maxHeight={150}
                     />
                     {/* Start and end date */}

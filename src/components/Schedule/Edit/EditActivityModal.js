@@ -16,6 +16,7 @@ import Icon from "react-native-vector-icons/Ionicons";
 import { HandlerEditOneActivity } from "./HandlerEditOneActivity";
 import { useEffect } from "react";
 import { set } from "date-fns";
+import { HandlerEditManyActivities } from "./HandlerEditManyActivities";
 
 const EditActivityModal = ({
   event,
@@ -31,6 +32,8 @@ const EditActivityModal = ({
   openEditModal,
   setTypeExitMessage,
   editRelationComponent,
+  ultimoId,
+  setUltimoId,
 }) => {
   // Define state variables with their initial values
   const [activityName, setActivityName] = useState(event.title);
@@ -174,7 +177,7 @@ const EditActivityModal = ({
     } else if (finalHour < initialHour) {
       alert("La hora final  inicia antes que la hora inicial");
       return;
-    } else {
+    } else if (editRelationComponent == false) {
       HandlerEditOneActivity({
         event,
         initialDate,
@@ -187,6 +190,30 @@ const EditActivityModal = ({
         Days,
         listaComponents,
         setListaComponents,
+      });
+      setActivityName("");
+      setDescription("");
+      setInitialDateText("Seleccionar una fecha");
+      setFinalDateText("Seleccionar una fecha");
+      setInitialHourText("Seleccionar hora");
+      setFinalHourText("Seleccionar hora");
+      setSelectedDays([]);
+      return;
+    }else {
+      HandlerEditManyActivities({
+        event,
+        initialDate,
+        finalDate,
+        activityName,
+        modalityType,
+        description,
+        initialHour,
+        finalHour,
+        Days,
+        listaComponents,
+        setListaComponents,
+        ultimoId,
+        setUltimoId,
       });
       setActivityName("");
       setDescription("");

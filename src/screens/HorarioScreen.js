@@ -285,6 +285,8 @@ const HorarioScreen = () => {
             setListaComponents={setListaComponents}
             changeOpenEditModal={changeOpenEditModal}
             openEditModal={openEditModal}
+            ultimoId={ultimoId}
+            setUltimoId={setUltimoId}
           />
         </Modal>
         {/* Handler DELETE  */}

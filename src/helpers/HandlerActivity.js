@@ -225,6 +225,7 @@ const HandlerActivity = ({
     }
     // Variable para obtener un color aleatorio
     const warmColor = color;
+    
     agregarComponente(
       ListaFechas,
       listaComponents,
