@@ -128,7 +128,7 @@ const agregarComponente = (initialDate, finalDate, courseName, professorName, cl
     // Buscar el componente a editar en la lista de componentes
     var componente = listaComponents.find((item) => item.id == id);
 
-    var dayC = Day[0];
+    var dayC = Day;
     //editar el componente
     componente.title = courseName;
     componente.professor = professorName;

@@ -61,7 +61,9 @@ const EditActivityModal = ({
   const [showFinalDate, setShowFinalDate] = useState(false);
 
   const [selectedDays, setSelectedDays] = useState([]);
-  const [Days, setDays] = useState([event.day]);
+  const [Days, setDays] = useState(
+    editRelationComponent ? [...event.day] : [event.day]
+  );
   const selectDays = [];
 
   // Function that handles the change of the initial hour
@@ -115,6 +117,11 @@ const EditActivityModal = ({
       "YYYY-MM-DD"
     );
     if (editRelationComponent == false) {
+      var day = currentDate.getDay();
+      if (day == 6) {
+        day = 0;
+      }
+      setDays([day]);
       setFinalDate(currentDate);
       setFinalDateText(formatedDate);
     }
@@ -128,12 +135,20 @@ const EditActivityModal = ({
     const currentDate = selectedDate || finalDate;
     const formatedDate = moment(selectedDate || finalDate).format("YYYY-MM-DD");
     if (editRelationComponent == false) {
-      setInitialDate(currentDate)
+      var day = currentDate.getDay();
+      console.log("InitialDate: "+currentDate);
+      console.log("día: "+day);
+      if (day == 6) {
+        day = 0;
+      }
+      setDays([day]);
+      setInitialDate(currentDate);
       setInitialDateText(formatedDate);
     }
     setFinalDate(currentDate);
     setFinalDateText(formatedDate);
   };
+
   // Function that closes the modal
   const OnCreateActivity = () => {
     //cambiar por onCreateActivity
@@ -160,16 +175,6 @@ const EditActivityModal = ({
       alert("La hora final  inicia antes que la hora inicial");
       return;
     } else {
-      if (editRelationComponent == false) {
-        setDays([]);
-        var day = initialDate.getDay();
-        if (day == 0) {
-          day = 6;
-        } else {
-          day = day + 1;
-        }
-        setDays([day]);
-      }
       HandlerEditOneActivity({
         event,
         initialDate,
@@ -223,7 +228,6 @@ const EditActivityModal = ({
   };
 
   const returnKey = () => {
-
     if (event.modalityType == "Presencial") {
       return 1;
     } else if (event.modalityType == "Virtual") {
@@ -231,8 +235,7 @@ const EditActivityModal = ({
     } else if (event.modalityType == "Semipresencial") {
       return 3;
     }
-
-  }
+  };
   return (
     // Modal
     <TouchableOpacity
@@ -407,7 +410,10 @@ const EditActivityModal = ({
                     onPress={() => handleDaysSelected(index)}
                     style={{
                       ...styles.selectDay,
-                      borderColor: (Days.includes(day.id)) ? day.selected = true : "",
+                      borderColor: Days.includes(day.id)
+                        ? (day.selected = true)
+                        : "",
+                        borderColor: (Days.include(0) && day.id == 6) ?(day.selected = true) : "",
                       borderColor: day.selected ? "#8FC1A9" : "#000000",
                     }}
                   >
@@ -416,10 +422,7 @@ const EditActivityModal = ({
                 ))}
               </View>
             </View>
-          ) : (
-            null
-          )}
-
+          ) : null}
 
           {/* Create button */}
           <TouchableOpacity

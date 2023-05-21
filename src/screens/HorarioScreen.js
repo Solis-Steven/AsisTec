@@ -116,9 +116,9 @@ const HorarioScreen = () => {
   }, [DeleteMessageVisible, typeExitMessageDelete]);
 
   return (
-   /*  console.log("--LISTA COMPONENTES--"),
+    console.log("--LISTA COMPONENTES--"),
     listaComponents.forEach((objeto) => console.log(JSON.stringify(objeto))),
-    console.log("---------------------"), */
+    console.log("---------------------"), 
     (
       /*  console.log("---------------------START-----------"),
     console.log("EditMessageVisible: " + EditMessageVisible),

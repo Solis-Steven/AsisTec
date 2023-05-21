@@ -126,8 +126,11 @@ const agregarComponente = (initialDate, finalDate, activityName, modalityType, d
     console.log("dateObject2: ", dateObject2)
     // Buscar el componente a editar en la lista de componentes
     var componente = listaComponents.find((item) => item.id == id);
-
+    //si viene modificar 1 = 1
+    //si viene modificar muchos [1]
     var dayC = Day[0];
+    console.log("dayC: ", dayC)
+    console.log("Day: ", Day)
     //editar el componente
     componente.title = activityName;
     componente.start = dateObject1;
@@ -152,13 +155,8 @@ const agregarComponente = (initialDate, finalDate, activityName, modalityType, d
 
 export const HandlerEditOneActivity = ({ event, initialDate, finalDate, activityName, modalityType, description,
     initialHour, finalHour, Days, listaComponents, setListaComponents }) => {
-
-
     // Obtener lista de componentes sin el componente a editar
     var listaComponentsTemp = listaComponents.filter((item) => item.id != event.id);
-
-
-
     // Validar coche de horarios
     var validacion = verificarFechas(initialDate, finalDate, listaComponentsTemp);
     if (validacion) {
