@@ -1,11 +1,5 @@
-import {
-  Text,
-  View,
-  TouchableOpacity,
-  StyleSheet,
-  ScrollView,
-} from "react-native";
-import React, { useState } from "react";
+
+import React from "react";
 import { ConfirmDialog } from "react-native-simple-dialogs/dist";
 const Messages = ({
   changeModalVisible,

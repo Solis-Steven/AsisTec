@@ -114,8 +114,19 @@ const verificarFechas = (initialDate, finalDate, listaComponents) => {
     }
 };
 
-const agregarComponente = (initialDate, finalDate, courseName, professorName, classroom, modalityType,
-    initialHour, finalHour, Day, listaComponents, setListaComponents, id) => {
+const agregarComponente = (
+    initialDate, 
+    courseName, 
+    professorName, 
+    classroom, 
+    modalityType,
+    initialHour, 
+    finalHour, 
+    Day, 
+    listaComponents, 
+    setListaComponents,
+    id
+    ) => {
 
     var formato = format(initialDate, "yyyy-MM-dd");
     var dateTimeI = formato + " " + moment(initialHour, "HH:mm").format("HH:mm");
@@ -137,6 +148,8 @@ const agregarComponente = (initialDate, finalDate, courseName, professorName, cl
     componente.start = dateObject1;
     componente.end = dateObject2;
     componente.day = dayC;
+    
+    
 
     // Obtenemos la lista de componentes sin el componente a editar
     var listaComponentsTemp = listaComponents.filter((item) => item.id != id);
@@ -153,8 +166,20 @@ const agregarComponente = (initialDate, finalDate, courseName, professorName, cl
 }
 
 
-export const HandlerEditOneCourse = ({event, initialDate, finalDate, courseName, professorName, classroom, modalityType,
-    initialHour, finalHour, Days, listaComponents, setListaComponents}) => {
+export const HandlerEditOneCourse = ({
+    event, 
+    initialDate, 
+    finalDate, 
+    courseName, 
+    professorName, 
+    classroom, 
+    modalityType,
+    initialHour, 
+    finalHour, 
+    Days, 
+    listaComponents, 
+    setListaComponents
+}) => {
 
     // Obtener lista de componentes sin el componente a editar
     var listaComponentsTemp = listaComponents.filter((item) => item.id != event.id);
@@ -163,8 +188,19 @@ export const HandlerEditOneCourse = ({event, initialDate, finalDate, courseName,
     // Validar coche de horarios
     var validacion = verificarFechas(initialDate, finalDate, listaComponentsTemp);
     if (validacion) {
-        agregarComponente(initialDate, finalDate, courseName, professorName, classroom, modalityType,
-            initialHour, finalHour, Days, listaComponents, setListaComponents, event.id);
+        agregarComponente(
+            initialDate, 
+            courseName, 
+            professorName, 
+            classroom, 
+            modalityType,
+            initialHour, 
+            finalHour, 
+            Days, 
+            listaComponents, 
+            setListaComponents, 
+            event.id
+            );
     }
     else {
         alert("El horario ingresado se cruza con otro evento");

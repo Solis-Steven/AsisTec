@@ -13,7 +13,6 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import moment from "moment";
 import Icon from "react-native-vector-icons/Ionicons";
 import { HandlerEditOneCourse } from "./HandlerEditOneCourse";
-import { set } from "date-fns";
 import { HandlerEditManyCourses } from "./HandlerEditManyCourses";
 
 const EditCourseModal = ({
@@ -112,7 +111,7 @@ const EditCourseModal = ({
         const formatedDate = moment(selectedDate || initialDate).format(
             "YYYY-MM-DD"
         );
-        if (!editRelationComponent) {
+        if (editRelationComponent == false) {
             var day = currentDate.getDay();
             if (day == 6) {
                 day = 0;
@@ -132,7 +131,7 @@ const EditCourseModal = ({
         const formatedDate = moment(selectedDate || finalDate).format(
             "YYYY-MM-DD"
         );
-        if (!editRelationComponent) {
+        if (editRelationComponent == false) {
             var day = currentDate.getDay();
             if (day == 6) {
                 day = 0;
@@ -143,29 +142,6 @@ const EditCourseModal = ({
         }
         setFinalDate(currentDate);
         setFinalDateText(formatedDate);
-    };
-
-    // handler for selected days
-    const handleDaysSelected = (index) => {
-        var indexPersonal = index;
-        if (index == 6) {
-            indexPersonal = 0;
-        } else {
-            indexPersonal = index + 1
-        }
-        if (Days.includes(indexPersonal)) {
-            const nuevaLista = Days.filter((item) => item !== indexPersonal);
-            setDays(nuevaLista);
-        } else {
-            selectDays.push(indexPersonal);
-            setDays(Days.concat(selectDays))
-        }
-        // Create a copy of the days of week array
-        const updatedDays = [...DAYS_OF_WEEK];
-        // Toggle the selected state of the selected day
-        updatedDays[index].selected = !updatedDays[index].selected;
-        // Update the selected days state variable with the selected days only
-        setSelectedDays(updatedDays.filter((day) => day.selected));
     };
 
     const onCreateCourse = () => {
@@ -193,23 +169,8 @@ const EditCourseModal = ({
         } else if (finalHour < initialHour) {
             alert("La hora final  inicia antes que la hora inicial");
             return;
-        } else if (editRelationComponent) {
+        } else if (editRelationComponent == false) {
             HandlerEditOneCourse({
-                event, initialDate, finalDate, courseName, professorName, classroom, modalityType,
-                initialHour, finalHour, Days, listaComponents, setListaComponents
-            });
-            setCourseName("");
-            setProfessorName("");
-            setClassroom("");
-            setInitialDateText("Seleccionar una fecha");
-            setFinalDateText("Seleccionar una fecha");
-            setInitialHourText("Seleccionar hora");
-            setFinalHourText("Seleccionar hora");
-            setSelectedDays([]);
-            changeOpenEditModal();
-            return;
-        }else {
-            HandlerEditManyCourses({ 
                 event, 
                 initialDate, 
                 finalDate, 
@@ -221,9 +182,34 @@ const EditCourseModal = ({
                 finalHour, 
                 Days, 
                 listaComponents, 
-                setListaComponents, 
-                ultimoId, 
-                setUltimoId 
+                setListaComponents
+            });
+            setCourseName("");
+            setProfessorName("");
+            setClassroom("");
+            setInitialDateText("Seleccionar una fecha");
+            setFinalDateText("Seleccionar una fecha");
+            setInitialHourText("Seleccionar hora");
+            setFinalHourText("Seleccionar hora");
+            setSelectedDays([]);
+            changeOpenEditModal();
+            return;
+        } else {
+            HandlerEditManyCourses({
+                event,
+                initialDate,
+                finalDate,
+                courseName,
+                professorName,
+                classroom,
+                modalityType,
+                initialHour,
+                finalHour,
+                Days,
+                listaComponents,
+                setListaComponents,
+                ultimoId,
+                setUltimoId
             });
             setCourseName("");
             setProfessorName("");
@@ -236,8 +222,31 @@ const EditCourseModal = ({
             changeOpenEditModal();
             return;
         }
-
     };
+
+    // handler for selected days
+    const handleDaysSelected = (index) => {
+        var indexPersonal = index;
+        if (index == 6) {
+            indexPersonal = 0;
+        } else {
+            indexPersonal = index + 1
+        }
+        if (Days.includes(indexPersonal)) {
+            const nuevaLista = Days.filter((item) => item !== indexPersonal);
+            setDays(nuevaLista);
+        } else {
+            selectDays.push(indexPersonal);
+            setDays(Days.concat(selectDays))
+        }
+        // Create a copy of the days of week array
+        const updatedDays = [...DAYS_OF_WEEK];
+        // Toggle the selected state of the selected day
+        updatedDays[index].selected = !updatedDays[index].selected;
+        // Update the selected days state variable with the selected days only
+        setSelectedDays(updatedDays.filter((day) => day.selected));
+    };
+
     const closeModal = () => {
         setTypeExitMessage(false);
         changeOpenEditModal();
@@ -257,7 +266,9 @@ const EditCourseModal = ({
     return (
         // Modal
 
-        <TouchableOpacity disabled={true} style={{
+        <TouchableOpacity 
+        disabled={true} 
+        style={{
             ...styles.container,
             backgroundColor: openEditModal ? "rgba(0,0,0,0.4)" : "transparent", // Cambia el fondo a oscuro cuando el modal está abierto
         }}>
@@ -336,7 +347,7 @@ const EditCourseModal = ({
                         }}
                         // obtener el key del valor seleccionado
 
-                        defaultOption={{ key: returnKey, value: event.modalityType }}
+                        defaultOption={{ key: returnKey(), value: event.modalityType }}
                         maxHeight={150}
                     />
                     {/* Start and end date */}

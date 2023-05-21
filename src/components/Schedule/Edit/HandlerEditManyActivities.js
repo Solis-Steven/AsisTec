@@ -1,6 +1,7 @@
 import moment from "moment";
 import { addDays, format } from "date-fns";
 import tinycolor from 'tinycolor2';
+import { event } from "react-native-reanimated";
 
 const obtenerFechas = (startDate, lastDate, horaInicio, horaFin, Days) => {
     var ListaFechas = []; // Array para almacenar la lista fechas
@@ -150,7 +151,7 @@ const agregarComponente = (
     ultimoId,
     setUltimoId,
     IdRelacion,
-    warmColor
+    color
 ) => {
 
     var listaComponentsCopia = listaComponents.filter(
@@ -178,7 +179,7 @@ const agregarComponente = (
             title: activityName,
             description: description,
             modalityType: modalityType,
-            color: warmColor,
+            color: color,
             type: "Actividad",
             day: daySpecific,
         };
@@ -228,19 +229,6 @@ export const HandlerEditManyActivities = ({
     var validacion = verificarFechas(ListaFechas, listaComponentsCopia);
 
     if (validacion) {
-        var listaColores = [];
-        listaComponents.forEach((componente) => {
-            listaColores.push(componente.color);
-        });
-        //Genenar un color aleatorio que no se encuentre en la lista de colores
-        var color = tinycolor.random().saturate(100).brighten(20).toHexString();
-        while (listaColores.includes(color) || color == "#ffffff") {
-            color = tinycolor.random().saturate(100).brighten(20).toHexString();
-        }
-        // Variable para obtener un color aleatorio
-        const warmColor = color;
-
-        // agregar el componente a editar
 
         agregarComponente(
             ListaFechas,
@@ -252,7 +240,7 @@ export const HandlerEditManyActivities = ({
             ultimoId,
             setUltimoId,
             event.idRelacion,
-            warmColor
+            event.color
         );
 
     } else {

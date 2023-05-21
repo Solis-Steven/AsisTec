@@ -171,7 +171,8 @@ const agregarComponente = (
 
     // Dates
     //console.log("firstDate: " + element[0] + " lastDate: " + element[1]);
-
+    var daySpecific = new Date(element[0]).getDay();
+    
     // de tipo clase
     var componente = {
       id: ultimoIdTemp + 1,
@@ -183,6 +184,7 @@ const agregarComponente = (
       location: classroom,
       modalityType: modalityType,
       type: "Clase",
+      day: daySpecific,
       color: warmColor, // Color por defecto se debe cambiar a un color aleatorio de una lista de colores
     };
     ultimoIdTemp = ultimoIdTemp + 1;

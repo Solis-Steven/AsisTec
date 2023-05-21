@@ -11,7 +11,7 @@ import MessageEdit from "../components/Schedule/Edit/Message";
 import MessageDelete from "../components/Schedule/Delete/Message";
 import EditControls from "../components/Schedule/Edit/EditModalControls";
 import { DeleteModalControls } from "../components/Schedule/Delete/DeleteModalControls";
-import { de } from "date-fns/locale";
+
 
 MomentConfig.updateLocale("es", {
   // setting moment.js locale to Spanish
@@ -118,22 +118,12 @@ const HorarioScreen = () => {
   return (
     console.log("--LISTA COMPONENTES--"),
     listaComponents.forEach((objeto) => console.log(JSON.stringify(objeto))),
-    console.log("---------------------"), 
+    console.log("---------------------"),
     (
-      /*  console.log("---------------------START-----------"),
-    console.log("EditMessageVisible: " + EditMessageVisible),
-    console.log("--------------------------------"),
-    console.log("editRelationComponent: " + editRelationComponent),
-    console.log("--------------------------------"),
-    console.log("typeExitMessage:  " + typeExitMessage), */
-
-      //console.log("---------------------START-----------"),
-      //console.log("deleteRelationComponent: " + deleteRelationComponent),
-      //console.log("DeleteMessageVisible: " + DeleteMessageVisible),
-      //console.log("typeExitMessageDelete:  " + typeExitMessageDelete),
 
       <View style={styles.container}>
         {/* Header */}
+
         <View style={styles.header}>
           {/* Week view button */}
           <TouchableOpacity
@@ -154,33 +144,23 @@ const HorarioScreen = () => {
           >
             <Text style={styles.viewModeText}>Día</Text>
           </TouchableOpacity>
+
         </View>
 
         {/* Calendar */}
         <TimelineCalendar
           onPressEvent={(event) => {
-            // se debe recibir el id del evento
-            console.log("Evento presionado: " + event.id);
 
             setObjectEvento(event);
-            //console.log("Evento presionado: " + JSON.stringify(event));
-            // se debe abrir el modal con los datos del evento
-            // se debe identificar si es un curso o una actividad
-            // se debe actualizar el evento
-            // se debe actualizar la lista de componentes
             changeEditMessageVisible();
+
           }}
           // Para eliminar un evento
           onLongPressEvent={(event) => {
-            // se debe recibir el id del evento
-            console.log("Evento presionado constantemente:  " + event.id);
+
             setObjectEvento(event);
-            //console.log("Evento presionadoconstantemente: " + JSON.stringify(event));
-            // Se debe buscar el evento en la lista de componentes
-            // Se deben eliminar los eventos relacionados con el evento
-            // se debe eliminar el evento de la lista de componentes
-            // se debe actualizar la lista de componentes
             changeDeleteMessageVisible();
+
           }}
           events={listaComponents}
           renderEventContent={(event) => {
@@ -241,6 +221,7 @@ const HorarioScreen = () => {
             isModalVisible={isModalVisible}
           />
         </Modal>
+
         {/* SHOW EDIT MESSAGE */}
         <Modal
           transparent={true}
@@ -270,6 +251,7 @@ const HorarioScreen = () => {
             setTypeExitMessage={setTypeExitMessageDelete}
           />
         </Modal>
+
         {/* SHOW EDIT MODAL */}
         <Modal
           transparent={true}
@@ -289,6 +271,7 @@ const HorarioScreen = () => {
             setUltimoId={setUltimoId}
           />
         </Modal>
+
         {/* Handler DELETE  */}
         <Modal
           transparent={true}
@@ -338,6 +321,16 @@ const styles = StyleSheet.create({
     alignItems: "center",
     bottom: 15,
     right: 15,
+  },
+  information: {
+    backgroundColor: "#5B83B0",
+    borderRadius: 30,
+    width: 25,
+    height: 25,
+    justifyContent: "center",
+    alignItems: "center",
+    left: 65,
+    top: 4,
   },
 });
 

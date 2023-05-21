@@ -64,6 +64,7 @@ export const DeleteModalControls = ({
   const HEIGHT = Dimensions.get("window").height - 620;
   if (valid) {
     return (
+
       <TouchableOpacity
         disabled={true}
         style={{
@@ -95,7 +96,7 @@ export const DeleteModalControls = ({
               <Text
                 style={{
                   color: "white",
-                  fontSize: 15,
+                  fontSize: 20,
                   fontWeight: "bold",
                 }}
               >
@@ -109,6 +110,7 @@ export const DeleteModalControls = ({
   }
 };
 export default DeleteModalControls;
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -126,7 +128,7 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
     paddingHorizontal: 18,
     paddingTop: 10,
-    height: 50,
+    height: 70,
     backgroundColor: "#769ECB",
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
@@ -136,6 +138,10 @@ const styles = StyleSheet.create({
     marginStart: 20,
     fontSize: 16,
     fontWeight: "bold",
+    alignContent: "center",
+    textAlign: "center",
+    color: "white",
+    top: 5,
   },
   modalBody: {
     width: "100%",
@@ -149,10 +155,9 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     padding: 15,
     borderRadius: 20,
-    width: "40%",
+    width: "50%",
     alignItems: "center",
-    //position: "absolute",
-    bottom: -10,
-    right: -160,
+    alignSelf: "center",
+    top: 4,
   },
 });

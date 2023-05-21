@@ -1,17 +1,8 @@
-import {
-  Text,
-  View,
-  TouchableOpacity,
-  StyleSheet,
-  ScrollView,
-} from "react-native";
+
 import { Dimensions } from "react-native";
 import React, { useState } from "react";
 import EditActivityModal from "./EditActivityModal";
 import EditCourseModal from "./EditCourseModal";
-//import el Math
-import { min } from "react-native-reanimated";
-import { useEffect } from "react";
 
 const EditControls = ({
   event,
@@ -37,7 +28,7 @@ const EditControls = ({
     { id: 4, name: "JUE", selected: false },
     { id: 5, name: "VIE", selected: false },
     { id: 6, name: "SÁB", selected: false },
-    { id: 7, name: "DOM", selected: false },
+    { id: 0, name: "DOM", selected: false },
   ];
 
   // Possible values for the modality type
@@ -66,8 +57,6 @@ const EditControls = ({
       event.day = listaDiasSinRepetir;
     }
   }
-
-
   return (
     fechasrelacionadas(),
     event.type == "Actividad" ? (

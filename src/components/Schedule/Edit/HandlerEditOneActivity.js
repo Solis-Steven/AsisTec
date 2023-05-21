@@ -113,8 +113,18 @@ const verificarFechas = (initialDate, finalDate, listaComponents) => {
     }
 };
 
-const agregarComponente = (initialDate, finalDate, activityName, modalityType, description,
-    initialHour, finalHour, Day, listaComponents, setListaComponents, id) => {
+const agregarComponente = (
+    initialDate, 
+    activityName, 
+    modalityType, 
+    description,
+    initialHour, 
+    finalHour, 
+    Day, 
+    listaComponents, 
+    setListaComponents, 
+    id
+    ) => {
 
     var formato = format(initialDate, "yyyy-MM-dd");
     var dateTimeI = formato + " " + moment(initialHour, "HH:mm").format("HH:mm");
@@ -151,15 +161,35 @@ const agregarComponente = (initialDate, finalDate, activityName, modalityType, d
 
 }
 
-export const HandlerEditOneActivity = ({ event, initialDate, finalDate, activityName, modalityType, description,
-    initialHour, finalHour, Days, listaComponents, setListaComponents }) => {
+export const HandlerEditOneActivity = ({ 
+    event, 
+    initialDate, 
+    finalDate, 
+    activityName, 
+    modalityType, 
+    description,
+    initialHour, 
+    finalHour, 
+    Days, 
+    listaComponents, 
+    setListaComponents 
+}) => {
     // Obtener lista de componentes sin el componente a editar
     var listaComponentsTemp = listaComponents.filter((item) => item.id != event.id);
     // Validar coche de horarios
     var validacion = verificarFechas(initialDate, finalDate, listaComponentsTemp);
     if (validacion) {
-        agregarComponente(initialDate, finalDate, activityName, modalityType, description,
-            initialHour, finalHour, Days, listaComponents, setListaComponents, event.id);
+        agregarComponente(
+            initialDate, 
+            activityName, 
+            modalityType, 
+            description,
+            initialHour, 
+            finalHour, 
+            Days, 
+            listaComponents, 
+            setListaComponents, 
+            event.id);
     }
     else {
         alert("El horario ingresado se cruza con otro evento");

@@ -14,8 +14,6 @@ import moment from "moment";
 import Icon from "react-native-vector-icons/Ionicons";
 
 import { HandlerEditOneActivity } from "./HandlerEditOneActivity";
-import { useEffect } from "react";
-import { set } from "date-fns";
 import { HandlerEditManyActivities } from "./HandlerEditManyActivities";
 
 const EditActivityModal = ({
@@ -139,8 +137,6 @@ const EditActivityModal = ({
     const formatedDate = moment(selectedDate || finalDate).format("YYYY-MM-DD");
     if (editRelationComponent == false) {
       var day = currentDate.getDay();
-      console.log("InitialDate: "+currentDate);
-      console.log("día: "+day);
       if (day == 6) {
         day = 0;
       }
