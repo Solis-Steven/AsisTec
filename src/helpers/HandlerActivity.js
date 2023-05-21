@@ -1,6 +1,6 @@
 import moment from "moment";
 import { addDays, format } from "date-fns";
-
+import tinycolor from 'tinycolor2';
 const obtenerFechas = (startDate, lastDate, horaInicio, horaFin, Days) => {
   var ListaFechas = []; // Array para almacenar la lista fechas
 
@@ -148,7 +148,8 @@ const agregarComponente = (
   ultimoId,
   setUltimoId,
   ultimoIdRelacion,
-  setUltimoIdRelacion
+  setUltimoIdRelacion,
+  warmColor
 ) => {
   // Obtener el ultimo id de la lista de componentes
   var ultimoIdTemp = ultimoId;
@@ -169,7 +170,7 @@ const agregarComponente = (
       title: activityName,
       description: description,
       modalityType: modalityType,
-      color: "#F44336",
+      color: warmColor,
       type: "Actividad",
       day: daySpecific,
     };
@@ -212,6 +213,18 @@ const HandlerActivity = ({
   var validacion = verificarFechas(ListaFechas, listaComponents);
 
   if (validacion) {
+    //recorrer la listaComponentes filtrando todos los colores que poseen para generar un color aleatorio que no se repita
+    var listaColores = [];
+    listaComponents.forEach((componente) => {
+      listaColores.push(componente.color);
+    });
+    //Genenar un color aleatorio que no se encuentre en la lista de colores
+    var color = tinycolor.random().saturate(100).brighten(20).toHexString();
+    while (listaColores.includes(color)|| color == "#ffffff") {
+      color = tinycolor.random().saturate(100).brighten(20).toHexString();
+    }
+    // Variable para obtener un color aleatorio
+    const warmColor = color;
     agregarComponente(
       ListaFechas,
       listaComponents,
@@ -222,7 +235,8 @@ const HandlerActivity = ({
       ultimoId,
       setUltimoId,
       ultimoIdRelacion,
-      setUltimoIdRelacion
+      setUltimoIdRelacion,
+      warmColor
     );
   } else {
     alert("Choque de horarios");

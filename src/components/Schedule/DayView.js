@@ -17,17 +17,21 @@ const DayView = ({event}) => {
           maxWidth: "50%", 
           textAlign: "center",
           color: "#5B83B0",
-          alignSelf: "flex-end"
+          alignSelf: "flex-end",
+            fontWeight: "bold"
       }}>
           {event.title}
       </Text>
 
       <View style={{alignItems: "center", justifyContent: "center"}}>
-          <Text style={{opacity:0.5, textAlign: "center"}}>
-              {event.description}
+          <Text style={{ textAlign: "center"}}>
+              {event.type == "Actividad" ? event.description: event.professorName}
           </Text>
           <Text style={{textAlign: "center"}}>
-              {event.location}
+              {event.modalityType}
+          </Text>
+          <Text style={{textAlign: "center"}}>
+              {event.type == "Actividad" ? null: event.location}
           </Text>
       </View>
   </View>

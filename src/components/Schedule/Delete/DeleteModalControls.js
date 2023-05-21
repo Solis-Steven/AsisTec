@@ -48,7 +48,6 @@ export const DeleteModalControls = ({
     changeOpenDeletetModal();
     setValid(false);
   };
-  console.log("editRelationComponent", editRelationComponent);
   useEffect(() => {
     if (openDeleteModal) {
       setValid(
