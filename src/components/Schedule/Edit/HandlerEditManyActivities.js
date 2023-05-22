@@ -157,10 +157,6 @@ const agregarComponente = (
     var listaComponentsCopia = listaComponents.filter(
         (component) => component.idRelacion != IdRelacion
     );
-    console.log("----------------------------------------");
-    console.log("listaComponentsCopia");
-    listaComponentsCopia.forEach((objeto) => console.log(JSON.stringify(objeto)));
-    console.log("----------------------------------------");
     // Obtener el ultimo id de la lista de componentes
     var ultimoIdTemp = ultimoId;
 

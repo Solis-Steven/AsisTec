@@ -157,10 +157,7 @@ const agregarComponente = (
     var listaComponentsCopia = listaComponents.filter(
         (component) => component.idRelacion != IdRelacion
     );
-    console.log("----------------------------------------");
-    console.log("listaComponentsCopia");
-    listaComponentsCopia.forEach((objeto) => console.log(JSON.stringify(objeto)));
-    console.log("----------------------------------------");
+  
     // Obtener el ultimo id de la lista de componentes
     var ultimoIdTemp = ultimoId;
 
@@ -177,9 +174,9 @@ const agregarComponente = (
             start: element[0],
             end: element[1],
             title: courseName,
-            professor: professorName,
-            classroom: classroom,
-            modality: modalityType,
+            professorName: professorName,
+            location: classroom,
+            modalityType: modalityType,
             color: color,
             type: "Clase",
             day: daySpecific,

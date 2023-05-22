@@ -134,17 +134,15 @@ const agregarComponente = (
 
     var dateObject1 = new Date(dateTimeI).toISOString();
     var dateObject2 = new Date(dateTimeF).toISOString();
-    console.log("dateObject1: ", dateObject1)
-    console.log("dateObject2: ", dateObject2)
     // Buscar el componente a editar en la lista de componentes
     var componente = listaComponents.find((item) => item.id == id);
 
     var dayC = Day[0];
     //editar el componente
     componente.title = courseName;
-    componente.professor = professorName;
-    componente.classroom = classroom;
-    componente.modality = modalityType;
+    componente.professorName = professorName;
+    componente.location = classroom;
+    componente.modalityType = modalityType;
     componente.start = dateObject1;
     componente.end = dateObject2;
     componente.day = dayC;

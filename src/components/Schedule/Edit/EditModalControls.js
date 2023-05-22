@@ -15,7 +15,7 @@ const EditControls = ({
   ultimoId,
   setUltimoId,
 }) => {
-  const [modalityType, setModalityType] = useState(1);
+  const [modalityType, setModalityType] = useState(event.modalityType);
   const WIDTH = Dimensions.get("window").width - 80;
   const HEIGHT = !editRelationComponent
     ? Dimensions.get("window").height - 300
@@ -51,7 +51,6 @@ const EditControls = ({
       const listaDias = lista.map((item) => item.day);
       //eliminar los repetidos de la lista
       const listaDiasSinRepetir = [...new Set(listaDias)];
-      console.log("listaDiasSinRepetir: ", listaDiasSinRepetir);
       event.start = fechaMenor;
       event.end = fechaMayor;
       event.day = listaDiasSinRepetir;

@@ -268,6 +268,7 @@ const CourseModal = ({
           <SelectList
             data={modalityValues}
             setSelected={setModalityType}
+            save="value"
             dropdownStyles={{
               width: "100%",
               backgroundColor: "#F6F6F6",
@@ -285,7 +286,6 @@ const CourseModal = ({
               width: "90%",
               fontSize: 26,
             }}
-            defaultOption={{ key: 1, value: "Presencial" }}
             maxHeight={150}
           />
           {/* Start and end date */}

@@ -251,18 +251,6 @@ const EditCourseModal = ({
         setTypeExitMessage(false);
         changeOpenEditModal();
     };
-
-    const returnKey = () => {
-
-        if (event.modalityType == "Presencial") {
-            return 1;
-        } else if (event.modalityType == "Virtual") {
-            return 2;
-        } else if (event.modalityType == "Semipresencial") {
-            return 3;
-        }
-
-    }
     return (
         // Modal
 
@@ -328,6 +316,7 @@ const EditCourseModal = ({
                     <SelectList
                         data={modalityValues}
                         setSelected={setModalityType}
+                        save="value"
                         dropdownStyles={{
                             width: "100%",
                             backgroundColor: "#F6F6F6",
@@ -346,8 +335,6 @@ const EditCourseModal = ({
                             fontSize: 26,
                         }}
                         // obtener el key del valor seleccionado
-
-                        defaultOption={{ key: returnKey(), value: event.modalityType }}
                         maxHeight={150}
                     />
                     {/* Start and end date */}

@@ -8,7 +8,7 @@ import ActivityModal from "../Schedule/ActivityModal";
 const ModalControls = ({ changeModalVisible, listaComponents, setListaComponents, ultimoId, setUltimoId , ultimoIdRelacion, setUltimoIdRelacion, isModalVisible }) => {
     // Define state variables with their initial values
     const [activityType, setActivityType] = useState(1);
-    const [modalityType, setModalityType] = useState(1);
+    const [modalityType, setModalityType] = useState("Presencial");
 
     const WIDTH = Dimensions.get("window").width - 80;
     const HEIGHT = Dimensions.get("window").height - 150;
