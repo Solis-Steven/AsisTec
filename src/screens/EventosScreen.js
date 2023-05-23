@@ -28,7 +28,6 @@ const EventosScreen = () => {
 
     // Si ya hay un evento en la fecha seleccionada, se agrega el nuevo evento
     if(eventsDates.includes(eventDate) && selectedEvent === null) {
-
       setEventItems({...eventItems, [eventDate] : [...eventItems[eventDate], event[eventDate][0]]});
     }
 
@@ -40,17 +39,15 @@ const EventosScreen = () => {
         if(item.name === selectedEvent.name) {
           return event[eventDate][0];
         }
+
         return item;
-  
       });
       setEventItems({...eventItems, [eventDate] : newEventItems});
-      setItemInfo(newEventItems[0]);
+      setItemInfo(event[Object.keys(event)][0]);
 
     } else {
       setEventItems({...eventItems, [eventDate] : event[eventDate]});
     }
-
-   
   }
 
   const changeModalVisible = () => {

@@ -5,7 +5,7 @@ import {
     TouchableOpacity ,
     StyleSheet
 } from 'react-native';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import moment from 'moment';
 import { ProgressBar } from 'react-native-paper';
@@ -13,28 +13,9 @@ import { ProgressBar } from 'react-native-paper';
 import PushNotification from '../components/Notification/PushNotification';
 import { calculatePercentage } from '../helpers/CalculatePercentage';
 
-// Map of abbreviated weekday names in English to their Spanish equivalents
-const spanishWeekDays = {
-    "Sun": "Dom",
-    "Mon": "Lun",
-    "Tue": "Mar",
-    "Wed": "Mié",
-    "Thu": "Jue",
-    "Fri": "Vie",
-    "Sat": "Sáb"
-}
 
 const NotificationScreen = () => {
-    // Initial state for the list of events
-    const [items, setItems] = useState({
-        "2023-04-06": [
-        { name: "Admin Meeting", initialHour: "10:00 AM", finalHour: "11:00 AM", date: "2023-04-06" },
-        { name: "Hospital Appointment", initialHour: "1:00 PM", finalHour: "5:00 PM", date: "2023-04-06" }
-        ],
-        "2023-04-07": [{ name: "Work on Design", initialHour: "9:00 AM", finalHour: "6:00 PM", date: "2023-04-07" }],
-        "2023-04-15": [{ name: "Compilers Progress", initialHour: "1:00 PM", finalHour: "2:00 PM", date: "2023-04-15" }],
-        "2023-04-28": [{ name: "Admin Progress", initialHour: "7:00 PM", finalHour: "8:00 PM", date: "2023-04-28" }]
-    });
+    const [items, setItems] = useState({});
 
     // Convert the object of events into an array of {date, events} objects
     const events = Object.entries(items).map(([date, events]) => ({
@@ -52,7 +33,7 @@ const NotificationScreen = () => {
                         <View>
                             {/* Display the abbreviated weekday name in Spanish */}
                             <Text style={styles.dayText}>
-                                {spanishWeekDays[moment(item.date).format('ddd')]}
+                                {moment(item.date).format('ddd')}
                             </Text>
 
                             {/* Display the day of the month */}
@@ -71,7 +52,7 @@ const NotificationScreen = () => {
                             {
                                 item.events.map((event, index) => {
                                     // Calculate the percentage of the day that has elapsed since the start of the event
-                                    const info = calculatePercentage(event.date);
+                                    const {percentage, color, notification} = calculatePercentage(event.date);
 
                                     return (
                                         <TouchableOpacity 
@@ -83,8 +64,8 @@ const NotificationScreen = () => {
                                         >
                                             {/* Display a progress bar showing the percentage of the day that has elapsed */}
                                             <ProgressBar 
-                                                progress={info.percentage} 
-                                                color={info.color}
+                                                progress={percentage} 
+                                                color={color}
                                                 style={styles.progressBar}
                                             />
 
