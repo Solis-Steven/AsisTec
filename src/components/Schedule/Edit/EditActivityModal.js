@@ -12,13 +12,13 @@ import { SelectList } from "react-native-dropdown-select-list";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import moment from "moment";
 import Icon from "react-native-vector-icons/Ionicons";
-import HandlerCourse from "../../helpers/HandlerCourse";
 
-const CourseModal = ({
-  changeModalVisible,
-  setActivityType,
-  activityTypeValues,
-  activityType,
+import { HandlerEditOneActivity } from "./HandlerEditOneActivity";
+import { HandlerEditManyActivities } from "./HandlerEditManyActivities";
+
+const EditActivityModal = ({
+  event,
+  changeOpenEditModal,
   modalityValues,
   modalityType,
   setModalityType,
@@ -27,53 +27,68 @@ const CourseModal = ({
   DAYS_OF_WEEK,
   listaComponents,
   setListaComponents,
-  ultimoId, 
-  setUltimoId, 
-  ultimoIdRelacion, 
-  setUltimoIdRelacion,
-  isModalVisible
+  openEditModal,
+  setTypeExitMessage,
+  editRelationComponent,
+  ultimoId,
+  setUltimoId,
 }) => {
   // Define state variables with their initial values
-  const [courseName, setCourseName] = useState("");
-  const [professorName, setProfessorName] = useState("");
-  const [classroom, setClassroom] = useState("");
-
+  const [activityName, setActivityName] = useState(event.title);
+  const [description, setDescription] = useState(event.description);
   // state for TimePicker component
-  const [initialHour, setInitialHour] = useState(new Date());
-  const [finalHour, setFinalHour] = useState(new Date());
-  const [initialDate, setInitialDate] = useState(new Date());
-  const [finalDate, setFinalDate] = useState(new Date());
-  const [initialHourText, setInitialHourText] = useState("Seleccionar hora");
-  const [finalHourText, setFinalHourText] = useState("Seleccionar hora");
+  const [initialHour, setInitialHour] = useState(new Date(event.start));
+  const [finalHour, setFinalHour] = useState(new Date(event.end));
+  const [initialDate, setInitialDate] = useState(new Date(event.start));
+  const [finalDate, setFinalDate] = useState(new Date(event.end));
+
+  const [initialHourText, setInitialHourText] = useState(
+    moment(event.start).format("hh:mm a")
+  );
+  const [finalHourText, setFinalHourText] = useState(
+    moment(event.end).format("hh:mm a")
+  );
   //fechas
-  const [initialDateText, setInitialDateText] = useState("Seleccionar fecha");
-  const [finalDateText, setFinalDateText] = useState("Seleccionar fecha");
+  const [initialDateText, setInitialDateText] = useState(
+    moment(event.start).format("YYYY-MM-DD")
+  );
+  const [finalDateText, setFinalDateText] = useState(
+    moment(event.end).format("YYYY-MM-DD")
+  );
   const [showInitialHour, setShowInitialHour] = useState(false);
   const [showFinalHour, setShowFinalHour] = useState(false);
-  //Fechas
+  //fechas
   const [showInitialDate, setShowInitialDate] = useState(false);
   const [showFinalDate, setShowFinalDate] = useState(false);
 
   const [selectedDays, setSelectedDays] = useState([]);
-  const [Days, setDays] = useState([]);
+  const [Days, setDays] = useState(
+    editRelationComponent ? [...event.day] : [event.day]
+  );
   const selectDays = [];
 
-  // handler for initial hour change
+  // Function that handles the change of the initial hour
   const onInitialHourChange = (event, selectedHour) => {
     setShowInitialHour(false);
+    // Get the current selected hour or the initial hour if none is selected
     const currentHour = selectedHour || initialHour;
-    const formatedHour = moment(selectedHour || initialHour).format("hh:mm a");
+    // Format the selected hour to a string
+    const formattedHour = moment(selectedHour || initialHour).format("hh:mm a");
+    // Update the initial hour state variable and the initial hour text variable
     setInitialHour(currentHour);
-    setInitialHourText(formatedHour);
+    setInitialHourText(formattedHour);
   };
 
-  // handler for final hour change
+  // Function that handles the change of the final hour
   const onFinalHourChange = (event, selectedHour) => {
     setShowFinalHour(false);
+    // Get the current selected hour or the final hour if none is selected
     const currentHour = selectedHour || finalHour;
-    const formatedHour = moment(selectedHour || finalHour).format("hh:mm a");
+    // Format the selected hour to a string
+    const formattedHour = moment(selectedHour || finalHour).format("hh:mm a");
+    // Update the final hour state variable and the final hour text variable
     setFinalHour(currentHour);
-    setFinalHourText(formatedHour);
+    setFinalHourText(formattedHour);
   };
 
   // handler to show the initial datepicker
@@ -102,6 +117,15 @@ const CourseModal = ({
     const formatedDate = moment(selectedDate || initialDate).format(
       "YYYY-MM-DD"
     );
+    if (editRelationComponent == false) {
+      var day = currentDate.getDay();
+      if (day == 6) {
+        day = 0;
+      }
+      setDays([day]);
+      setFinalDate(currentDate);
+      setFinalDateText(formatedDate);
+    }
     setInitialDate(currentDate);
     setInitialDateText(formatedDate);
   };
@@ -110,28 +134,108 @@ const CourseModal = ({
   const onFinalDateChange = (event, selectedDate) => {
     setShowFinalDate(false);
     const currentDate = selectedDate || finalDate;
-    const formatedDate = moment(selectedDate || finalDate).format(
-      "YYYY-MM-DD"
-    );
+    const formatedDate = moment(selectedDate || finalDate).format("YYYY-MM-DD");
+    if (editRelationComponent == false) {
+      var day = currentDate.getDay();
+      if (day == 6) {
+        day = 0;
+      }
+      setDays([day]);
+      setInitialDate(currentDate);
+      setInitialDateText(formatedDate);
+    }
     setFinalDate(currentDate);
     setFinalDateText(formatedDate);
   };
-  
 
-  // handler for selected days
+  // Function that closes the modal
+  const OnCreateActivity = () => {
+    //cambiar por onCreateActivity
+    changeOpenEditModal();
+    setTypeExitMessage(false);
+
+    if (
+      [
+        activityName,
+        description,
+        initialHour,
+        finalHour,
+        initialDate,
+        finalDate,
+      ].includes("") ||
+      Days.length === 0
+    ) {
+      alert("Por favor llena todos los espacios");
+      return;
+    } else if (finalDate < initialDate) {
+      alert("La fecha final  inicia antes que la fecha inicial");
+      return;
+    } else if (finalHour < initialHour) {
+      alert("La hora final  inicia antes que la hora inicial");
+      return;
+    } else if (editRelationComponent == false) {
+      HandlerEditOneActivity({
+        event,
+        initialDate,
+        finalDate,
+        activityName,
+        modalityType,
+        description,
+        initialHour,
+        finalHour,
+        Days,
+        listaComponents,
+        setListaComponents,
+      });
+      setActivityName("");
+      setDescription("");
+      setInitialDateText("Seleccionar una fecha");
+      setFinalDateText("Seleccionar una fecha");
+      setInitialHourText("Seleccionar hora");
+      setFinalHourText("Seleccionar hora");
+      setSelectedDays([]);
+      return;
+    }else {
+      HandlerEditManyActivities({
+        event,
+        initialDate,
+        finalDate,
+        activityName,
+        modalityType,
+        description,
+        initialHour,
+        finalHour,
+        Days,
+        listaComponents,
+        setListaComponents,
+        ultimoId,
+        setUltimoId,
+      });
+      setActivityName("");
+      setDescription("");
+      setInitialDateText("Seleccionar una fecha");
+      setFinalDateText("Seleccionar una fecha");
+      setInitialHourText("Seleccionar hora");
+      setFinalHourText("Seleccionar hora");
+      setSelectedDays([]);
+      return;
+    }
+  };
+
+  // Function that handles the selection of days
   const handleDaysSelected = (index) => {
     var indexPersonal = index;
-    if(index == 6){
-      indexPersonal =0;
-    }else{
-      indexPersonal = index + 1
+    if (index == 6) {
+      indexPersonal = 0;
+    } else {
+      indexPersonal = index + 1;
     }
     if (Days.includes(indexPersonal)) {
       const nuevaLista = Days.filter((item) => item !== indexPersonal);
       setDays(nuevaLista);
-    }else{
-        selectDays.push(indexPersonal);
-        setDays(Days.concat(selectDays))
+    } else {
+      selectDays.push(indexPersonal);
+      setDays(Days.concat(selectDays));
     }
     // Create a copy of the days of week array
     const updatedDays = [...DAYS_OF_WEEK];
@@ -140,131 +244,58 @@ const CourseModal = ({
     // Update the selected days state variable with the selected days only
     setSelectedDays(updatedDays.filter((day) => day.selected));
   };
-  
-  const onCreateCourse = () => {
-    changeModalVisible();
-    if (
-      [
-        courseName,
-        professorName,
-        classroom,
-        initialHour,
-        finalHour,
-        initialDate,
-        finalDate,
-      ].includes("") ||
-      selectedDays.length === 0
-    ) {
-      alert("Por favor llena todos los espacios");
-      return;
-    }
-    else if(finalDate<initialDate ){
-      alert("La fecha final  inicia antes que la fecha inicial");
-      return;
-      
-    } else if(finalHour<initialHour){
-      alert("La hora final  inicia antes que la hora inicial");
-      return; 
-    } else {
-      HandlerCourse({ initialDate, finalDate, courseName, professorName, classroom, modalityType, 
-        initialHour, finalHour, Days, listaComponents, setListaComponents , ultimoId, setUltimoId , ultimoIdRelacion, setUltimoIdRelacion });
-      setCourseName("");
-      setProfessorName("");
-      setClassroom("");
-      setInitialDateText("Seleccionar una fecha");
-      setFinalDateText("Seleccionar una fecha");
-      setInitialHourText("Seleccionar hora");
-      setFinalHourText("Seleccionar hora");
-      setSelectedDays([]);
-      changeModalVisible();
-      return;
-    }
 
+  const closeModal = () => {
+    setTypeExitMessage(false);
+    changeOpenEditModal();
   };
 
   return (
     // Modal
-
-    <TouchableOpacity disabled={true}     style={{...styles.container,
-      backgroundColor: isModalVisible ? "rgba(0,0,0,0.4)" : "transparent", // Cambia el fondo a oscuro cuando el modal está abierto
-    }}>
+    <TouchableOpacity
+      disabled={true}
+      style={{
+        ...styles.container,
+        backgroundColor: openEditModal ? "rgba(0,0,0,0.4)" : "transparent", // Cambia el fondo a oscuro cuando el modal está abierto
+      }}
+    >
       {/* Modal content */}
       <View style={{ ...styles.modal, height: HEIGHT, width: WIDTH }}>
         {/* Modal header */}
         <View style={styles.modalHeader}>
           {/* Close modal button */}
-          <TouchableOpacity
-            onPress={changeModalVisible}
-            style={styles.closeModal}
-          >
+          <TouchableOpacity onPress={closeModal} style={styles.closeModal}>
             <Icon name="close" size={30} color="white" style={{}} />
           </TouchableOpacity>
 
-          {/* Activity type select */}
-          <SelectList
-            data={activityTypeValues}
-            setSelected={setActivityType}
-            dropdownStyles={{
-              width: "90%",
-              backgroundColor: "#F6F6F6",
-              borderWidth: 0,
-            }}
-            inputStyles={{
-              fontSize: 22,
-              textAlign: "left",
-              color: "#FFFFFF",
-            }}
-            placeholder={activityType}
-            search={false}
-            boxStyles={{
-              borderWidth: 0,
-              width: "80%",
-            }}
-            defaultOption={{ key: 1, value: "Agregar Curso" }}
-            maxHeight={150}
-          />
-
-          {/* Course name input */}
+          {/* Activity name input */}
           <Text style={styles.text}>Nombre</Text>
           <Input
-            value={courseName}
-            onChange={(event) => setCourseName(event.nativeEvent.text)}
+            value={activityName}
+            onChange={(event) => setActivityName(event.nativeEvent.text)}
             type="text"
-            placeholder="Nombre del curso"
+            placeholder={event.title}
             placeholderTextColor={"white"}
             inputContainerStyle={{ borderBottomWidth: 0 }}
-            style={styles.courseNameInput}
+            style={styles.input}
           />
         </View>
 
         {/* Modal body */}
         <ScrollView style={styles.modalBody}>
-          {/* Teacher name input */}
-          <Text style={styles.text}>Profesor/a</Text>
+          {/* Description Input*/}
+          <Text style={styles.text}>Descripción</Text>
           <Input
-            value={professorName}
-            onChange={(event) => setProfessorName(event.nativeEvent.text)}
+            value={description}
+            onChange={(event) => setDescription(event.nativeEvent.text)}
             type="text"
-            placeholder="Nombre del profesor/a"
+            placeholder={event.description}
             placeholderTextColor={"black"}
             inputContainerStyle={{ borderBottomWidth: 0 }}
             style={styles.bodyInputs}
           />
-
-          {/* Classroom input */}
-          <Text style={styles.text}>Aula</Text>
-          <Input
-            value={classroom}
-            onChange={(event) => setClassroom(event.nativeEvent.text)}
-            type="text"
-            placeholder="Numero del aula"
-            placeholderTextColor={"black"}
-            inputContainerStyle={{ borderBottomWidth: 0 }}
-            style={styles.bodyInputs}
-          />
-
           {/* Modality select */}
-          <Text style={styles.text}>Modalidad</Text>
+          <Text style={styles.bodyText}>Modalidad</Text>
           <SelectList
             data={modalityValues}
             setSelected={setModalityType}
@@ -279,7 +310,7 @@ const CourseModal = ({
               textAlign: "left",
               color: "#000000",
             }}
-            placeholder={modalityType}
+            placeholder={event.modalityType}
             search={false}
             boxStyles={{
               borderWidth: 0,
@@ -335,12 +366,11 @@ const CourseModal = ({
               )}
             </View>
           </View>
-
           {/* Start and end times */}
           <View style={{ flexDirection: "row", marginTop: 10 }}>
             <View style={{ flex: 1 }}>
               {/* Start time */}
-              <Text style={styles.selectHourText}>Hora inicio</Text>
+              <Text style={styles.bodyText}>Hora Inicial</Text>
               <TouchableOpacity
                 onPress={showInitialHourpicker}
                 style={styles.selectHour}
@@ -362,7 +392,7 @@ const CourseModal = ({
             </View>
             <View style={{ flex: 1 }}>
               {/* End time */}
-              <Text style={styles.selectHourText}> Hora final</Text>
+              <Text style={styles.bodyText}>Hora Final</Text>
               <TouchableOpacity
                 onPress={showFinalHourpicker}
                 style={styles.selectHour}
@@ -383,27 +413,33 @@ const CourseModal = ({
               )}
             </View>
           </View>
-
           {/* Select days */}
-          <Text style={{ ...styles.text, marginTop: 20 }}>Día/s</Text>
-          <View style={styles.selectDaysContainer}>
-            {DAYS_OF_WEEK.map((day, index) => (
-              <TouchableOpacity
-                key={index}
-                onPress={() => handleDaysSelected(index)}
-                style={{
-                  ...styles.selectDay,
-                  borderColor: day.selected ? "#8FC1A9" : "#000000",
-                }}
-              >
-                <Text style={{ padding: 2 }}>{day.name}</Text>
-              </TouchableOpacity>
-            ))}
-          </View>
+          {editRelationComponent == true ? (
+            <View>
+              <Text style={{ ...styles.bodyText, marginTop: 20 }}>Día/s</Text>
+              <View style={styles.selectDaysContainer}>
+                {DAYS_OF_WEEK.map((day, index) => (
+                  <TouchableOpacity
+                    key={index}
+                    onPress={() => handleDaysSelected(index)}
+                    style={{
+                      ...styles.selectDay,
+                      borderColor: Days.includes(day.id)
+                        ? (day.selected = true)
+                        : "",
+                      borderColor: day.selected ? "#8FC1A9" : "#000000",
+                    }}
+                  >
+                    <Text style={{ padding: 2 }}>{day.name}</Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+            </View>
+          ) : null}
 
           {/* Create button */}
           <TouchableOpacity
-            onPress={onCreateCourse}
+            onPress={OnCreateActivity}
             style={styles.createButton}
           >
             <Text
@@ -457,8 +493,8 @@ const styles = StyleSheet.create({
     opacity: 0.4,
   },
 
-  courseNameInput: {
-    color: "black",
+  input: {
+    color: "white",
     borderBottomWidth: 2,
     borderBottomColor: "#00000066",
   },
@@ -469,25 +505,22 @@ const styles = StyleSheet.create({
     padding: 15,
     flex: 1,
   },
-
   bodyInputs: {
     color: "black",
     borderBottomWidth: 2,
     borderBottomColor: "#00000066",
   },
-
+  bodyText: {
+    marginStart: 9,
+    fontSize: 12,
+    fontWeight: "bold",
+    opacity: 0.4,
+  },
   selectHourText: {
     margin: 5,
     fontSize: 12,
     fontWeight: "bold",
     opacity: 0.4,
-  },
-
-  selectHour: {
-    width: "90%",
-    borderBottomWidth: 1,
-    borderColor: "#00000066",
-    marginLeft: 5,
   },
 
   selectDaysContainer: {
@@ -506,6 +539,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 
+  selectHour: {
+    width: "90%",
+    borderBottomWidth: 1,
+    borderColor: "#00000066",
+    marginLeft: 5,
+  },
+
   createButton: {
     backgroundColor: "#769ECB",
     margin: 5,
@@ -520,4 +560,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CourseModal;
+export default EditActivityModal;

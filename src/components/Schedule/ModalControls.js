@@ -5,10 +5,10 @@ import CourseModal from "../Schedule/CourseModal";
 import ActivityModal from "../Schedule/ActivityModal";
 
 
-const ModalControls = ({changeModalVisible}) => {
+const ModalControls = ({ changeModalVisible, listaComponents, setListaComponents, ultimoId, setUltimoId , ultimoIdRelacion, setUltimoIdRelacion, isModalVisible }) => {
     // Define state variables with their initial values
     const [activityType, setActivityType] = useState(1);
-    const [modalityType, setModalityType] = useState(1);
+    const [modalityType, setModalityType] = useState("Presencial");
 
     const WIDTH = Dimensions.get("window").width - 80;
     const HEIGHT = Dimensions.get("window").height - 150;
@@ -38,32 +38,48 @@ const ModalControls = ({changeModalVisible}) => {
     return (
         // Renders a CourseModal if activityType is 1, otherwise an ActivityModal
         activityType === 1
-        ? (
-            <CourseModal 
-                changeModalVisible={changeModalVisible}
-                setActivityType={setActivityType}
-                activityTypeValues={activityTypeValues}
-                activityType={activityType}
-                modalityValues={modalityValues}
-                modalityType={modalityType}
-                setModalityType={setModalityType}
-                WIDTH={WIDTH}
-                HEIGHT={HEIGHT}
-                DAYS_OF_WEEK={DAYS_OF_WEEK} />
-        )
-        : (
-            <ActivityModal 
-                changeModalVisible={changeModalVisible}
-                setActivityType={setActivityType}
-                activityTypeValues={activityTypeValues}
-                activityType={activityType}
-                modalityValues={modalityValues}
-                modalityType={modalityType}
-                setModalityType={setModalityType}
-                WIDTH={WIDTH}
-                HEIGHT={HEIGHT}
-                DAYS_OF_WEEK={DAYS_OF_WEEK} />
-        )  
+            ? (
+                <CourseModal
+                    changeModalVisible={changeModalVisible}
+                    setActivityType={setActivityType}
+                    activityTypeValues={activityTypeValues}
+                    activityType={activityType}
+                    modalityValues={modalityValues}
+                    modalityType={modalityType}
+                    setModalityType={setModalityType}
+                    WIDTH={WIDTH}
+                    HEIGHT={HEIGHT}
+                    DAYS_OF_WEEK={DAYS_OF_WEEK}
+                    listaComponents={listaComponents}
+                    setListaComponents={setListaComponents}
+                    ultimoId={ultimoId}
+                    setUltimoId={setUltimoId}
+                    ultimoIdRelacion={ultimoIdRelacion}
+                    setUltimoIdRelacion={setUltimoIdRelacion}
+                    isModalVisible={isModalVisible}
+                    />
+            )
+            : (
+                <ActivityModal
+                    changeModalVisible={changeModalVisible}
+                    setActivityType={setActivityType}
+                    activityTypeValues={activityTypeValues}
+                    activityType={activityType}
+                    modalityValues={modalityValues}
+                    modalityType={modalityType}
+                    setModalityType={setModalityType}
+                    WIDTH={WIDTH}
+                    HEIGHT={HEIGHT}
+                    DAYS_OF_WEEK={DAYS_OF_WEEK}
+                    listaComponents={listaComponents} 
+                    setListaComponents={setListaComponents}
+                    ultimoId={ultimoId}
+                    setUltimoId={setUltimoId}
+                    ultimoIdRelacion={ultimoIdRelacion}
+                    setUltimoIdRelacion={setUltimoIdRelacion}
+                    isModalVisible={isModalVisible}
+                    />
+            )
     );
 }
 
