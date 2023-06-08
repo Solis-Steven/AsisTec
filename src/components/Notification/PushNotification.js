@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from 'react';
 
 import * as Device from 'expo-device';
 import * as Notifications from 'expo-notifications';
+import { formatTime } from '../../helpers/formatTime';
 
 // Set default notification behavior
 Notifications.setNotificationHandler({
@@ -13,7 +14,7 @@ Notifications.setNotificationHandler({
   }),
 });
 
-const PushNotification = ({body}) => {
+const PushNotification = ({body, item}) => {
   const [expoPushToken, setExpoPushToken] = useState('');
   const [notification, setNotification] = useState(false);
 
@@ -21,13 +22,16 @@ const PushNotification = ({body}) => {
   const responseListener = useRef();
 
   // Define function to send a notification
-  const sendNotification = async (body) => {
+  const sendNotification = async (body, item) => {
+    const hour = formatTime(item).trim()
+    const desiredNotificationTime = new Date(`${item.date}T${hour}:00`);
+
     await Notifications.scheduleNotificationAsync({
       content: {
         title: "Asistec",
         body: "Tienes un evento cercano: ", body, // Include the provided body in the notification
       },
-      trigger: null,
+      trigger: desiredNotificationTime,
     });
   };
 
@@ -41,7 +45,7 @@ const PushNotification = ({body}) => {
     });
 
     // Send a notification using the provided body
-    sendNotification(body);
+    sendNotification(body, item);
 
     // Cleanup listeners when component unmounts
     return () => {

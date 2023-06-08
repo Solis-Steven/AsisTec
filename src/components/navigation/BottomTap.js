@@ -8,6 +8,8 @@ const Tab = createBottomTabNavigator();
 
 export const BottomTab = () => {
   return (
+
+   
     <Tab.Navigator
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused, color, size }) => {
@@ -30,5 +32,6 @@ export const BottomTab = () => {
       <Tab.Screen name="Horario" component={HorarioScreen} />
       <Tab.Screen name="Notificaciones" component={NotificationScreen} />
     </Tab.Navigator>
+  
   );
 };
