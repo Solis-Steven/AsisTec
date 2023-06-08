@@ -5,6 +5,7 @@ import { FlatList, View, Text, StyleSheet } from 'react-native';
 import EventItem from "./EventItem";
 import Agenda from "./Agenda";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { da } from "date-fns/locale";
 
 LocaleConfig.locales['es'] = {
   monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
@@ -24,6 +25,18 @@ const EventCalendar = ({
   const [selectedDayEvents, setSelectedDayEvents] = useState(new Date());
   const [unselectedEvent, setUnselectedEvent] = useState(true);
   const [isDeleting, setIsDeleting] = useState(false);
+
+  const sortData = (data) => {
+    try {
+      if (data && data[daySelected] && Array.isArray(data[daySelected])) {
+        return data[daySelected].sort((a, b) =>
+          new Date(a.initialHour).getTime() - new Date(b.initialHour).getTime()
+        );
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
 
   return (
@@ -102,7 +115,7 @@ const EventCalendar = ({
                 <View style={{height: "80%", flex: 1, flexDirection: "column", marginTop:1 }}>
                   <FlatList
                     style={{ height: "80%", flexDirection: "column" }}
-                    data={eventCalendarItems[daySelected].sort((a, b) => a.initialHour.toISOString().localeCompare(b.initialHour.toISOString()))}
+                    data={ sortData(eventCalendarItems)}
                     renderItem={({ item }) => {
                       return (
                         <Agenda

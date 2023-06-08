@@ -8,13 +8,16 @@ import Icon from "react-native-vector-icons/FontAwesome";
 import EventModal from "../components/Events/EventModal";
 import EventCalendar from "../components/Events/EventCalendar";
 import moment from "moment";
+import useData from "../hooks/useData";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const EventosScreen = () => {
   const [daySelected, setDaySelected] = useState(moment().format("YYYY-MM-DD"));
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [itemInfo, setItemInfo] = useState({});
   
-  const [eventItems, setEventItems] = useState({"init": "init"});
+  
+  const {eventItems, setEventItems} = useData();
 
   const [selectedEvent, setSelectedEvent] = useState(null);
 
@@ -29,6 +32,8 @@ const EventosScreen = () => {
     // Si ya hay un evento en la fecha seleccionada, se agrega el nuevo evento
     if(eventsDates.includes(eventDate) && selectedEvent === null) {
       setEventItems({...eventItems, [eventDate] : [...eventItems[eventDate], event[eventDate][0]]});
+      // Se guarda el evento en el AsyncStorage
+      AsyncStorage.setItem("storedEvents", JSON.stringify({...eventItems, [eventDate] : [...eventItems[eventDate], event[eventDate][0]]}));
     }
 
     // Si ya hay un evento en la fecha seleccionada y se esta editando, se actualiza el evento
@@ -43,10 +48,14 @@ const EventosScreen = () => {
         return item;
       });
       setEventItems({...eventItems, [eventDate] : newEventItems});
+      // Se guarda el evento en el AsyncStorage
+      AsyncStorage.setItem("storedEvents", JSON.stringify({...eventItems, [eventDate] : newEventItems}));
       setItemInfo(event[Object.keys(event)][0]);
 
     } else {
       setEventItems({...eventItems, [eventDate] : event[eventDate]});
+      // Se guarda el evento en el AsyncStorage
+      AsyncStorage.setItem("storedEvents", JSON.stringify({...eventItems, [eventDate] : event[eventDate]}));
     }
   }
 
@@ -68,9 +77,13 @@ const EventosScreen = () => {
 
       if(Object.keys(eventItems).length === 0) {
         setEventItems({"init": "init"});
+        // Se guarda el evento en el AsyncStorage
+        AsyncStorage.setItem("storedEvents", JSON.stringify({"init": "init"}));
       }
     } else {
       setEventItems({...eventItems, [item["date"]]: newItemsArray})
+      // Se guarda el evento en el AsyncStorage
+      AsyncStorage.setItem("storedEvents", JSON.stringify({...eventItems, [item["date"]]: newItemsArray}));
     }
   }
 
