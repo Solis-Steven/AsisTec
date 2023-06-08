@@ -125,7 +125,8 @@ const agregarComponente = (
     Day, 
     listaComponents, 
     setListaComponents,
-    id
+    id,
+    color
     ) => {
 
     var formato = format(initialDate, "yyyy-MM-dd");
@@ -146,6 +147,7 @@ const agregarComponente = (
     componente.start = dateObject1;
     componente.end = dateObject2;
     componente.day = dayC;
+    componente.color = color;
     
     
 
@@ -176,7 +178,8 @@ export const HandlerEditOneCourse = ({
     finalHour, 
     Days, 
     listaComponents, 
-    setListaComponents
+    setListaComponents,
+    color,
 }) => {
 
     // Obtener lista de componentes sin el componente a editar
@@ -197,7 +200,8 @@ export const HandlerEditOneCourse = ({
             Days, 
             listaComponents, 
             setListaComponents, 
-            event.id
+            event.id,
+            color
             );
     }
     else {

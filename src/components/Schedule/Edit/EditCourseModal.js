@@ -4,6 +4,7 @@ import {
     TouchableOpacity,
     StyleSheet,
     ScrollView,
+    Modal,
 } from "react-native";
 import React, { useState } from "react";
 
@@ -14,6 +15,7 @@ import moment from "moment";
 import Icon from "react-native-vector-icons/Ionicons";
 import { HandlerEditOneCourse } from "./HandlerEditOneCourse";
 import { HandlerEditManyCourses } from "./HandlerEditManyCourses";
+import { ColorModal } from "../ColorModal";
 
 const EditCourseModal = ({
     event,
@@ -66,6 +68,15 @@ const EditCourseModal = ({
     const [selectedDays, setSelectedDays] = useState([]);
     const [Days, setDays] = useState(editRelationComponent ? [...event.day] : [event.day]);
     const selectDays = [];
+
+
+    // state for color picker  
+    const [color, setColor] = React.useState(event.color);
+    const [modalColorState, setModalColorState] = useState(false);
+
+    const changeModalColorVisible = () => {
+        setModalColorState(!modalColorState);
+    };
 
     // handler for initial hour change
     const onInitialHourChange = (event, selectedHour) => {
@@ -171,18 +182,19 @@ const EditCourseModal = ({
             return;
         } else if (editRelationComponent == false) {
             HandlerEditOneCourse({
-                event, 
-                initialDate, 
-                finalDate, 
-                courseName, 
-                professorName, 
-                classroom, 
+                event,
+                initialDate,
+                finalDate,
+                courseName,
+                professorName,
+                classroom,
                 modalityType,
-                initialHour, 
-                finalHour, 
-                Days, 
-                listaComponents, 
-                setListaComponents
+                initialHour,
+                finalHour,
+                Days,
+                listaComponents,
+                setListaComponents,
+                color,
             });
             setCourseName("");
             setProfessorName("");
@@ -209,7 +221,8 @@ const EditCourseModal = ({
                 listaComponents,
                 setListaComponents,
                 ultimoId,
-                setUltimoId
+                setUltimoId,
+                color,
             });
             setCourseName("");
             setProfessorName("");
@@ -254,12 +267,12 @@ const EditCourseModal = ({
     return (
         // Modal
 
-        <TouchableOpacity 
-        disabled={true} 
-        style={{
-            ...styles.container,
-            backgroundColor: openEditModal ? "rgba(0,0,0,0.4)" : "transparent", // Cambia el fondo a oscuro cuando el modal está abierto
-        }}>
+        <TouchableOpacity
+            disabled={true}
+            style={{
+                ...styles.container,
+                backgroundColor: openEditModal ? "rgba(0,0,0,0.4)" : "transparent", // Cambia el fondo a oscuro cuando el modal está abierto
+            }}>
             {/* Modal content */}
             <View style={{ ...styles.modal, height: HEIGHT, width: WIDTH }}>
                 {/* Modal header */}
@@ -456,7 +469,20 @@ const EditCourseModal = ({
                     ) : (
                         null
                     )}
+                    {/* Color button */}
+                    <TouchableOpacity
 
+                        onPress={changeModalColorVisible} style={styles.colorButton}>
+                        <Text
+                            style={{
+                                color: "white",
+                                fontSize: 22,
+                                fontWeight: "bold",
+                            }}
+                        >
+                            Color
+                        </Text>
+                    </TouchableOpacity>
                     {/* Create button */}
                     <TouchableOpacity
                         onPress={onCreateCourse}
@@ -473,6 +499,23 @@ const EditCourseModal = ({
                         </Text>
                     </TouchableOpacity>
                 </ScrollView>
+                {/* Modal to select color */}
+                <Modal
+                    animationType="fade"
+                    transparent={true}
+                    visible={modalColorState}
+                    onRequestClose={() => {
+                        changeModalColorVisible();
+                    }}
+                >
+                    <ColorModal
+                        color={color}
+                        setColor={setColor}
+                        modalColorState={modalColorState}
+                        changeModalColorVisible={changeModalColorVisible}
+                    />
+                </Modal>
+
             </View>
         </TouchableOpacity>
     );
@@ -573,6 +616,16 @@ const styles = StyleSheet.create({
         //position: "absolute",
         bottom: -5,
         right: -160,
+    },
+    colorButton: {
+        backgroundColor: "#769ECB",
+        padding: 15,
+        borderRadius: 20,
+        width: "40%",
+        alignItems: "center",
+        bottom: -10,
+        right: 0,
+        top: 70,
     },
 });
 

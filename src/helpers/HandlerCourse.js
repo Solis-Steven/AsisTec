@@ -1,6 +1,5 @@
 import moment from "moment";
 import { addDays, format } from "date-fns";
-import tinycolor from "tinycolor2";
 
 // Funcion para obtener las fechas
 const obtenerFechas = (startDate, lastDate, horaInicio, horaFin, Days) => {
@@ -156,7 +155,7 @@ const agregarComponente = (
   setUltimoId,
   ultimoIdRelacion,
   setUltimoIdRelacion,
-  warmColor
+  color
 ) => {
   //console.log("ultimoId: " + ultimoId + " ultimoIdRelacion: " + ultimoIdRelacion);
   // Obtener el ultimo id de la lista de componentes
@@ -172,7 +171,7 @@ const agregarComponente = (
     // Dates
     //console.log("firstDate: " + element[0] + " lastDate: " + element[1]);
     var daySpecific = new Date(element[0]).getDay();
-    
+
     // de tipo clase
     var componente = {
       id: ultimoIdTemp + 1,
@@ -185,7 +184,7 @@ const agregarComponente = (
       modalityType: modalityType,
       type: "Clase",
       day: daySpecific,
-      color: warmColor, // Color por defecto se debe cambiar a un color aleatorio de una lista de colores
+      color: color, // Color por defecto se debe cambiar a un color aleatorio de una lista de colores
     };
     ultimoIdTemp = ultimoIdTemp + 1;
     lista.push(componente);
@@ -213,7 +212,10 @@ const HandlerCourse = ({
   setUltimoId,
   ultimoIdRelacion,
   setUltimoIdRelacion,
+  color,
 }) => {
+
+  console.log("COLOR ELEGIDO: " + color);
   // Variables para obtener las fechas
   ListaFechas = obtenerFechas(
     initialDate,
@@ -233,17 +235,7 @@ const HandlerCourse = ({
   // Si no hay choque de horarios entonces se agrega el componente
   if (validacion) {
     //recorrer la listaComponentes filtrando todos los colores que poseen para generar un color aleatorio que no se repita
-    var listaColores = [];
-    listaComponents.forEach((componente) => {
-      listaColores.push(componente.color);
-    });
-    //Genenar un color aleatorio que no se encuentre en la lista de colores
-    var color = tinycolor.random().desaturate(50).lighten(30).toHexString();
-    while (listaColores.includes(color) || color == "#ffffff") {
-      color = tinycolor.random().desaturate(50).lighten(30).toHexString();
-    }
-    // Variable para obtener un color aleatorio
-    const warmColor = color;
+
     agregarComponente(
       ListaFechas,
       listaComponents,
@@ -256,7 +248,7 @@ const HandlerCourse = ({
       setUltimoId,
       ultimoIdRelacion,
       setUltimoIdRelacion,
-      warmColor
+      color
     );
   } else {
     alert("Choque de horarios");

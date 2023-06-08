@@ -208,7 +208,8 @@ export const HandlerEditManyCourses = ({
     listaComponents,
     setListaComponents,
     ultimoId,
-    setUltimoId 
+    setUltimoId,
+    color,
 }) => {
 
     // Variables para obtener las fechas
@@ -240,7 +241,7 @@ export const HandlerEditManyCourses = ({
             ultimoId,
             setUltimoId,
             event.idRelacion,
-            event.color
+            color
         );
 
     } else {
