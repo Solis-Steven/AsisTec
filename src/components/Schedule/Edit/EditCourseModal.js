@@ -156,8 +156,7 @@ const EditCourseModal = ({
     };
 
     const onCreateCourse = () => {
-        changeOpenEditModal();
-        setTypeExitMessage(false);
+      
         if (
             [
                 courseName,
@@ -205,6 +204,7 @@ const EditCourseModal = ({
             setFinalHourText("Seleccionar hora");
             setSelectedDays([]);
             changeOpenEditModal();
+            setTypeExitMessage(false);
             return;
         } else {
             HandlerEditManyCourses({
@@ -233,6 +233,7 @@ const EditCourseModal = ({
             setFinalHourText("Seleccionar hora");
             setSelectedDays([]);
             changeOpenEditModal();
+            setTypeExitMessage(false);
             return;
         }
     };

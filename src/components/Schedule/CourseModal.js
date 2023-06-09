@@ -61,7 +61,7 @@ const CourseModal = ({
   const selectDays = [];
 
   // state for color picker  
-  const [color, setColor] = useState('#FFFF00');
+  const [color, setColor] = React.useState('#FFFF00');
   const [modalColorState, setModalColorState] = useState(false);
 
   const changeModalColorVisible = () => {
@@ -152,7 +152,6 @@ const CourseModal = ({
   };
 
   const onCreateCourse = () => {
-    changeModalVisible();
     if (
       [
         courseName,
@@ -171,7 +170,6 @@ const CourseModal = ({
     else if (finalDate < initialDate) {
       alert("La fecha final  inicia antes que la fecha inicial");
       return;
-
     } else if (finalHour < initialHour) {
       alert("La hora final  inicia antes que la hora inicial");
       return;

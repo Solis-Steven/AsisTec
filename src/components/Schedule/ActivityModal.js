@@ -1,4 +1,4 @@
-import { Text, View, TouchableOpacity, StyleSheet, ScrollView } from "react-native";
+import { Text, View, TouchableOpacity, StyleSheet, ScrollView, Modal } from "react-native";
 import React, { useState } from "react";
 
 import { Input } from "react-native-elements";
@@ -53,6 +53,10 @@ const ActivityModal = ({
   // state for color picker  
   const [color, setColor] = useState('#FFFF00');
   const [modalColorState, setModalColorState] = useState(false);
+
+  const changeModalColorVisible = () => {
+    setModalColorState(!modalColorState);
+  };
 
   const selectDays = [];
   // Function that handles the change of the initial hour
@@ -122,7 +126,6 @@ const ActivityModal = ({
 
   // Function that closes the modal
   const OnCreateActivity = () => { //cambiar por onCreateActivity
-    changeModalVisible();
 
     if (
       [activityName,

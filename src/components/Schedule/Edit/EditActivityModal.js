@@ -160,9 +160,7 @@ const EditActivityModal = ({
 
   // Function that closes the modal
   const OnCreateActivity = () => {
-    //cambiar por onCreateActivity
-    changeOpenEditModal();
-    setTypeExitMessage(false);
+   
 
     if (
       [
@@ -205,6 +203,8 @@ const EditActivityModal = ({
       setInitialHourText("Seleccionar hora");
       setFinalHourText("Seleccionar hora");
       setSelectedDays([]);
+      changeOpenEditModal();
+      setTypeExitMessage(false);
       return;
     } else {
       HandlerEditManyActivities({
@@ -230,6 +230,8 @@ const EditActivityModal = ({
       setInitialHourText("Seleccionar hora");
       setFinalHourText("Seleccionar hora");
       setSelectedDays([]);
+      changeOpenEditModal();
+      setTypeExitMessage(false);
       return;
     }
   };

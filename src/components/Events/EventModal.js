@@ -120,7 +120,6 @@ const  EventModal = ({ changeModalVisible, daySelected, onEventCreated, isModalV
           setIsAllDay(false);
           setInitialHour(new Date());
           setFinalHour(new Date());
-          
           onEventCreated(newEvent);
           changeModalVisible();
         } else {
