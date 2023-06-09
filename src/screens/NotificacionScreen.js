@@ -82,7 +82,7 @@ const NotificationScreen = () => {
 
                                             <Text style={{fontSize: 12, color: "#5B83B0"}}>Ver mas</Text>
 
-                                            <PushNotification body={event.name} item={event} />
+                                            {/* <PushNotification body={event.name} item={event} /> */}
                                         </TouchableOpacity>
                                     )
                                 })

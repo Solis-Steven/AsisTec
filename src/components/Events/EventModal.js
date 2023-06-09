@@ -15,6 +15,7 @@ import moment from "moment";
 import { SelectList } from "react-native-dropdown-select-list";
 import { useEffect } from "react";
 import { idGenerator } from "../../helpers/IdGenerator";
+import PushNotification from "../Notification/PushNotification";
 
 const WIDTH = Dimensions.get("window").width - 70;
 const HEIGHT = Dimensions.get("window").height - 160;
@@ -37,6 +38,8 @@ const  EventModal = ({ changeModalVisible, daySelected, onEventCreated, isModalV
   //Button
   const [modalTitle, setModalTitle] = useState("Crear evento");
   const [buttonText, setButtonText] = useState("Crear");
+  const [showNotification, setShowNotification] = useState(false);
+  const [newEvent, setNewEvent] = useState({});
 
   //-------------------------------Functions---------------------------------
   const onInitialHourChange = (event, selectedHour) => {
@@ -122,6 +125,8 @@ const  EventModal = ({ changeModalVisible, daySelected, onEventCreated, isModalV
           setFinalHour(new Date());
           
           onEventCreated(newEvent);
+          setNewEvent(newEvent);
+          setShowNotification(false)
           changeModalVisible();
         } else {
           alert("La hora de inicio debe ser menor a la hora final");
@@ -149,6 +154,13 @@ const  EventModal = ({ changeModalVisible, daySelected, onEventCreated, isModalV
         backgroundColor: isModalVisible ? "rgba(0,0,0,0.4)" : "transparent", // Cambia el fondo a oscuro cuando el modal está abierto
       }}
     >
+      {showNotification ? (
+        <>
+          <PushNotification item={newEvent} />
+          {setShowNotification(false)}
+        </>
+      ) : null}
+
       <View
         style={{
           height: HEIGHT,
