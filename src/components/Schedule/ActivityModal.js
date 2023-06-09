@@ -148,7 +148,7 @@ const ActivityModal = ({
     } else {
       HandlerActivity({
         initialDate, finalDate, activityName, modalityType, description,
-        initialHour, finalHour, Days, listaComponents, setListaComponents, 
+        initialHour, finalHour, Days, listaComponents, setListaComponents,
         ultimoId, setUltimoId, ultimoIdRelacion, setUltimoIdRelacion, color
       });
       setActivityName("");
@@ -394,10 +394,13 @@ const ActivityModal = ({
               </TouchableOpacity>
             ))}
           </View>
+          {/* Select color */}
+          <Text style={{ ...styles.text, marginTop: 20 }}>Color elegido</Text>
+          <Text style={{ marginTop: 20, backgroundColor: color, marginBottom: 0, borderRadius: 10 }}></Text>
           {/* Color button */}
-          <TouchableOpacity 
-          onPress={changeModalColorVisible} 
-          style={styles.colorButton}>
+          <TouchableOpacity
+            onPress={changeModalColorVisible}
+            style={styles.colorButton}>
             <Text
               style={{
                 color: "white",

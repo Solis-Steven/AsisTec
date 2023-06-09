@@ -156,7 +156,7 @@ const EditCourseModal = ({
     };
 
     const onCreateCourse = () => {
-      
+
         if (
             [
                 courseName,
@@ -179,7 +179,7 @@ const EditCourseModal = ({
         } else if (finalHour <= initialHour) {
             alert("La hora final inicia o es igual que la hora inicial");
             return;
-          } else if (editRelationComponent == false) {
+        } else if (editRelationComponent == false) {
             HandlerEditOneCourse({
                 event,
                 initialDate,
@@ -470,6 +470,10 @@ const EditCourseModal = ({
                     ) : (
                         null
                     )}
+
+                    {/* Select color */}
+                    <Text style={{ ...styles.text, marginTop: 20 }}>Color elegido</Text>
+                    <Text style={{ marginTop: 20, backgroundColor: color, marginBottom: 0, borderRadius: 10 }}></Text>
                     {/* Color button */}
                     <TouchableOpacity
 
