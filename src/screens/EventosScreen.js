@@ -83,6 +83,7 @@ const EventosScreen = () => {
 
     if(newItemsArray.length === 0) {
       delete eventItems[item["date"]];
+      AsyncStorage.setItem("storedEvents", JSON.stringify(eventItems));
 
       if(Object.keys(eventItems).length === 0) {
         setEventItems({"init": "init"});
