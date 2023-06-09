@@ -1,4 +1,4 @@
-import { Text, View, TouchableOpacity, StyleSheet, ScrollView } from "react-native";
+import { Text, View, TouchableOpacity, StyleSheet, ScrollView, Modal } from "react-native";
 import React, { useState } from "react";
 
 import { Input } from "react-native-elements";
@@ -7,6 +7,7 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import moment from "moment";
 import Icon from "react-native-vector-icons/Ionicons";
 import HandlerActivity from "../../helpers/HandlerActivity";
+import { ColorModal } from "./ColorModal";
 
 
 const ActivityModal = ({
@@ -22,9 +23,9 @@ const ActivityModal = ({
   DAYS_OF_WEEK,
   listaComponents,
   setListaComponents,
-  ultimoId, 
-  setUltimoId, 
-  ultimoIdRelacion, 
+  ultimoId,
+  setUltimoId,
+  ultimoIdRelacion,
   setUltimoIdRelacion,
   isModalVisible
 }) => {
@@ -49,6 +50,14 @@ const ActivityModal = ({
 
   const [selectedDays, setSelectedDays] = useState([]);
   const [Days, setDays] = useState([]);
+  // state for color picker  
+  const [color, setColor] = useState('#FFFF00');
+  const [modalColorState, setModalColorState] = useState(false);
+
+  const changeModalColorVisible = () => {
+    setModalColorState(!modalColorState);
+  };
+
   const selectDays = [];
   // Function that handles the change of the initial hour
   const onInitialHourChange = (event, selectedHour) => {
@@ -74,8 +83,8 @@ const ActivityModal = ({
     setFinalHourText(formattedHour);
   };
 
-// handler to show the initial datepicker
-const showInitialHourpicker = () => {
+  // handler to show the initial datepicker
+  const showInitialHourpicker = () => {
     setShowInitialHour(true);
   };
 
@@ -93,8 +102,8 @@ const showInitialHourpicker = () => {
   const showFinalDatepicker = () => {
     setShowFinalDate(true);
   };
-// handler for initial Date change
-const onInitialDateChange = (event, selectedDate) => {
+  // handler for initial Date change
+  const onInitialDateChange = (event, selectedDate) => {
     setShowInitialDate(false);
     const currentDate = selectedDate || initialDate;
     const formatedDate = moment(selectedDate || initialDate).format(
@@ -117,55 +126,57 @@ const onInitialDateChange = (event, selectedDate) => {
 
   // Function that closes the modal
   const OnCreateActivity = () => { //cambiar por onCreateActivity
-    changeModalVisible();
-    
-    if(
-        [   activityName,
-            description,
-            initialHour,
-            finalHour,
-            initialDate,
-            finalDate].includes("") ||
-            selectedDays.length === 0
-    ){
-        alert("Por favor llena todos los espacios");
+
+    if (
+      [activityName,
+        description,
+        initialHour,
+        finalHour,
+        initialDate,
+        finalDate].includes("") ||
+      selectedDays.length === 0
+    ) {
+      alert("Por favor llena todos los espacios");
       return;
-    }else if(finalDate<initialDate ){
-        alert("La fecha final  inicia antes que la fecha inicial");
-        return;
-        
-      } else if(finalHour<initialHour){
-        alert("La hora final  inicia antes que la hora inicial");
-        return; 
-      }else{
-        HandlerActivity({ initialDate, finalDate, activityName, modalityType, description,
-          initialHour, finalHour, Days, listaComponents, setListaComponents , ultimoId, setUltimoId , ultimoIdRelacion, setUltimoIdRelacion });
-        setActivityName("");
-        setDescription("");
-        setInitialDateText("Seleccionar una fecha");
-        setFinalDateText("Seleccionar una fecha");
-        setInitialHourText("Seleccionar hora");
-        setFinalHourText("Seleccionar hora");
-        setSelectedDays([]);
-        changeModalVisible();
-        return;
-      } 
+    } else if (finalDate < initialDate) {
+      alert("La fecha final  inicia antes que la fecha inicial");
+      return;
+
+    } else if (finalHour < initialHour) {
+      alert("La hora final  inicia antes que la hora inicial");
+      return;
+    } else {
+      HandlerActivity({
+        initialDate, finalDate, activityName, modalityType, description,
+        initialHour, finalHour, Days, listaComponents, setListaComponents, 
+        ultimoId, setUltimoId, ultimoIdRelacion, setUltimoIdRelacion, color
+      });
+      setActivityName("");
+      setDescription("");
+      setInitialDateText("Seleccionar una fecha");
+      setFinalDateText("Seleccionar una fecha");
+      setInitialHourText("Seleccionar hora");
+      setFinalHourText("Seleccionar hora");
+      setSelectedDays([]);
+      changeModalVisible();
+      return;
+    }
   };
 
   // Function that handles the selection of days
   const handleDaysSelected = (index) => {
     var indexPersonal = index;
-    if(index == 6){
-      indexPersonal =0;
-    }else{
+    if (index == 6) {
+      indexPersonal = 0;
+    } else {
       indexPersonal = index + 1
     }
     if (Days.includes(indexPersonal)) {
       const nuevaLista = Days.filter((item) => item !== indexPersonal);
       setDays(nuevaLista);
-    }else{
-        selectDays.push(indexPersonal);
-        setDays(Days.concat(selectDays))
+    } else {
+      selectDays.push(indexPersonal);
+      setDays(Days.concat(selectDays))
     }
     // Create a copy of the days of week array
     const updatedDays = [...DAYS_OF_WEEK];
@@ -173,19 +184,20 @@ const onInitialDateChange = (event, selectedDate) => {
     updatedDays[index].selected = !updatedDays[index].selected;
     // Update the selected days state variable with the selected days only
     setSelectedDays(updatedDays.filter((day) => day.selected));
-    
-    
+
+
   };
 
   const closeModal = () => {
     changeModalVisible()
-}
+  }
   return (
     // Modal
-    <TouchableOpacity disabled={true} 
-    style={{...styles.container,
-      backgroundColor: isModalVisible ? "rgba(0,0,0,0.4)" : "transparent", // Cambia el fondo a oscuro cuando el modal está abierto
-    }}>
+    <TouchableOpacity disabled={true}
+      style={{
+        ...styles.container,
+        backgroundColor: isModalVisible ? "rgba(0,0,0,0.4)" : "transparent", // Cambia el fondo a oscuro cuando el modal está abierto
+      }}>
       {/* Modal content */}
       <View style={{ ...styles.modal, height: HEIGHT, width: WIDTH }}>
         {/* Modal header */}
@@ -235,8 +247,8 @@ const onInitialDateChange = (event, selectedDate) => {
 
         {/* Modal body */}
         <ScrollView style={styles.modalBody}>
-            {/* Description Input*/}
-        <Text style={styles.text}>Descripción</Text>
+          {/* Description Input*/}
+          <Text style={styles.text}>Descripción</Text>
           <Input
             value={description}
             onChange={(event) => setDescription(event.nativeEvent.text)}
@@ -271,7 +283,7 @@ const onInitialDateChange = (event, selectedDate) => {
             }}
             maxHeight={150}
           />
-            {/* Start and end date */}
+          {/* Start and end date */}
           <View style={{ flexDirection: "row", marginTop: 10 }}>
             <View style={{ flex: 1 }}>
               {/* Start date */}
@@ -382,6 +394,20 @@ const onInitialDateChange = (event, selectedDate) => {
               </TouchableOpacity>
             ))}
           </View>
+          {/* Color button */}
+          <TouchableOpacity 
+          onPress={changeModalColorVisible} 
+          style={styles.colorButton}>
+            <Text
+              style={{
+                color: "white",
+                fontSize: 22,
+                fontWeight: "bold",
+              }}
+            >
+              Color
+            </Text>
+          </TouchableOpacity>
           {/* Create button */}
           <TouchableOpacity onPress={OnCreateActivity} style={styles.createButton}>
             <Text
@@ -395,6 +421,23 @@ const onInitialDateChange = (event, selectedDate) => {
             </Text>
           </TouchableOpacity>
         </ScrollView>
+
+        {/* Modal to select color */}
+        <Modal
+          animationType="fade"
+          transparent={true}
+          visible={modalColorState}
+          onRequestClose={() => {
+            changeModalColorVisible();
+          }}
+        >
+          <ColorModal
+            color={color}
+            setColor={setColor}
+            modalColorState={modalColorState}
+            changeModalColorVisible={changeModalColorVisible}
+          />
+        </Modal>
       </View>
     </TouchableOpacity>
   );
@@ -499,6 +542,20 @@ const styles = StyleSheet.create({
     //position: "absolute",
     bottom: -10,
     right: -160,
+
+  },
+  colorButton: {
+    backgroundColor: "#769ECB",
+    //margin: 5,
+    //marginBottom: 30,
+    padding: 15,
+    borderRadius: 20,
+    width: "40%",
+    alignItems: "center",
+    //position: "absolute",
+    bottom: -10,
+    right: 0,
+    top: 73,
 
   },
 });

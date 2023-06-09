@@ -1,12 +1,11 @@
 import {
-  Text,
   View,
-  TouchableOpacity,
-  StyleSheet,
-  ScrollView,
 } from "react-native";
-import React, { useState } from "react";
-import { ConfirmDialog } from "react-native-simple-dialogs/dist";
+
+import React from "react";
+
+import Dialog from "react-native-dialog";
+
 const Messages = ({
   changeModalVisible,
   EditMessageVisible,
@@ -14,25 +13,20 @@ const Messages = ({
   setTypeExitMessage,
 }) => {
   return (
-    <ConfirmDialog
-      title="Confirmación"
-      message="¿Desea eliminar todos los eventos relacionados?"
-      visible={EditMessageVisible}
-      onTouchOutside={() => {changeModalVisible(), setTypeExitMessage(false)}}
-      positiveButton={{
-        title: "SÍ",
-        onPress: () => {
-          setEditRelationComponent(true), changeModalVisible(), setTypeExitMessage(true) 
-        },
-      }}
-      negativeButton={{
-        title: "NO",
-        onPress: () => {
-          setEditRelationComponent(false), 
-          changeModalVisible(), setTypeExitMessage(true)
-        },
-      }}
-    />
+    <View>
+      <Dialog.Container visible={EditMessageVisible}>
+        <Dialog.Title>Confirmación</Dialog.Title>
+        <Dialog.Description>
+          ¿Desea eliminar todos los eventos relacionados?
+        </Dialog.Description>
+        <Dialog.Button label="Cancelar" onPress={() => { changeModalVisible(), setTypeExitMessage(false) }} />
+        <Dialog.Button label="SI" onPress={() => { setEditRelationComponent(true), changeModalVisible(), setTypeExitMessage(true) }} />
+        <Dialog.Button label="NO" onPress={() => {
+          setEditRelationComponent(false),
+            changeModalVisible(), setTypeExitMessage(true)
+        }} />
+      </Dialog.Container>
+    </View>
   );
 };
 

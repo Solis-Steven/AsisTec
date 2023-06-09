@@ -4,6 +4,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   ScrollView,
+  Modal,
 } from "react-native";
 import React, { useState } from "react";
 
@@ -13,6 +14,7 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import moment from "moment";
 import Icon from "react-native-vector-icons/Ionicons";
 import HandlerCourse from "../../helpers/HandlerCourse";
+import { ColorModal } from "./ColorModal";
 
 const CourseModal = ({
   changeModalVisible,
@@ -27,9 +29,9 @@ const CourseModal = ({
   DAYS_OF_WEEK,
   listaComponents,
   setListaComponents,
-  ultimoId, 
-  setUltimoId, 
-  ultimoIdRelacion, 
+  ultimoId,
+  setUltimoId,
+  ultimoIdRelacion,
   setUltimoIdRelacion,
   isModalVisible
 }) => {
@@ -57,6 +59,14 @@ const CourseModal = ({
   const [selectedDays, setSelectedDays] = useState([]);
   const [Days, setDays] = useState([]);
   const selectDays = [];
+
+  // state for color picker  
+  const [color, setColor] = React.useState('#FFFF00');
+  const [modalColorState, setModalColorState] = useState(false);
+
+  const changeModalColorVisible = () => {
+    setModalColorState(!modalColorState);
+  };
 
   // handler for initial hour change
   const onInitialHourChange = (event, selectedHour) => {
@@ -116,22 +126,22 @@ const CourseModal = ({
     setFinalDate(currentDate);
     setFinalDateText(formatedDate);
   };
-  
+
 
   // handler for selected days
   const handleDaysSelected = (index) => {
     var indexPersonal = index;
-    if(index == 6){
-      indexPersonal =0;
-    }else{
+    if (index == 6) {
+      indexPersonal = 0;
+    } else {
       indexPersonal = index + 1
     }
     if (Days.includes(indexPersonal)) {
       const nuevaLista = Days.filter((item) => item !== indexPersonal);
       setDays(nuevaLista);
-    }else{
-        selectDays.push(indexPersonal);
-        setDays(Days.concat(selectDays))
+    } else {
+      selectDays.push(indexPersonal);
+      setDays(Days.concat(selectDays))
     }
     // Create a copy of the days of week array
     const updatedDays = [...DAYS_OF_WEEK];
@@ -140,9 +150,8 @@ const CourseModal = ({
     // Update the selected days state variable with the selected days only
     setSelectedDays(updatedDays.filter((day) => day.selected));
   };
-  
+
   const onCreateCourse = () => {
-    changeModalVisible();
     if (
       [
         courseName,
@@ -158,16 +167,23 @@ const CourseModal = ({
       alert("Por favor llena todos los espacios");
       return;
     }
-    else if(finalDate<initialDate ){
+    else if (finalDate < initialDate) {
       alert("La fecha final  inicia antes que la fecha inicial");
       return;
-      
-    } else if(finalHour<initialHour){
+    } else if (finalHour < initialHour) {
       alert("La hora final  inicia antes que la hora inicial");
-      return; 
+      return;
     } else {
-      HandlerCourse({ initialDate, finalDate, courseName, professorName, classroom, modalityType, 
-        initialHour, finalHour, Days, listaComponents, setListaComponents , ultimoId, setUltimoId , ultimoIdRelacion, setUltimoIdRelacion });
+      HandlerCourse({
+        initialDate, finalDate, 
+        courseName, professorName, 
+        classroom, modalityType,
+        initialHour, finalHour, 
+        Days, listaComponents, 
+        setListaComponents, ultimoId, 
+        setUltimoId, ultimoIdRelacion, 
+        setUltimoIdRelacion, color
+      });
       setCourseName("");
       setProfessorName("");
       setClassroom("");
@@ -185,7 +201,8 @@ const CourseModal = ({
   return (
     // Modal
 
-    <TouchableOpacity disabled={true}     style={{...styles.container,
+    <TouchableOpacity disabled={true} style={{
+      ...styles.container,
       backgroundColor: isModalVisible ? "rgba(0,0,0,0.4)" : "transparent", // Cambia el fondo a oscuro cuando el modal está abierto
     }}>
       {/* Modal content */}
@@ -401,6 +418,20 @@ const CourseModal = ({
             ))}
           </View>
 
+          {/* Color button */}
+          <TouchableOpacity
+
+            onPress={changeModalColorVisible} style={styles.colorButton}>
+            <Text
+              style={{
+                color: "white",
+                fontSize: 22,
+                fontWeight: "bold",
+              }}
+            >
+              Color
+            </Text>
+          </TouchableOpacity>
           {/* Create button */}
           <TouchableOpacity
             onPress={onCreateCourse}
@@ -417,8 +448,26 @@ const CourseModal = ({
             </Text>
           </TouchableOpacity>
         </ScrollView>
-      </View>
-    </TouchableOpacity>
+
+        {/* Modal to select color */}
+        <Modal
+          animationType="fade"
+          transparent={true}
+          visible={modalColorState}
+          onRequestClose={() => {
+            changeModalColorVisible();
+          }}
+        >
+          <ColorModal
+            color={color}
+            setColor={setColor}
+            modalColorState={modalColorState}
+            changeModalColorVisible={changeModalColorVisible}
+          />
+        </Modal>
+
+      </View >
+    </TouchableOpacity >
   );
 };
 
@@ -514,10 +563,20 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     width: "40%",
     alignItems: "center",
-    //position: "absolute",
     bottom: -5,
     right: -160,
   },
+  colorButton: {
+    backgroundColor: "#769ECB",
+    padding: 15,
+    borderRadius: 20,
+    width: "40%",
+    alignItems: "center",
+    bottom: -10,
+    right: 0,
+    top: 70,
+  },
+
 });
 
 export default CourseModal;

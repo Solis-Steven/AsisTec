@@ -204,7 +204,7 @@ export const HandlerEditManyActivities = ({
     setListaComponents,
     ultimoId,
     setUltimoId,
-
+    color
 }) => {
 
 
@@ -236,7 +236,7 @@ export const HandlerEditManyActivities = ({
             ultimoId,
             setUltimoId,
             event.idRelacion,
-            event.color
+            color
         );
 
     } else {

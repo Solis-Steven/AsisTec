@@ -16,7 +16,6 @@ const EventosScreen = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [itemInfo, setItemInfo] = useState({});
   
-  
   const {eventItems, setEventItems} = useData();
 
   const [selectedEvent, setSelectedEvent] = useState(null);

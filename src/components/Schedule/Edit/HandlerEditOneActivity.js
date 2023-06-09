@@ -123,7 +123,8 @@ const agregarComponente = (
     Day, 
     listaComponents, 
     setListaComponents, 
-    id
+    id,
+    color
     ) => {
 
     var formato = format(initialDate, "yyyy-MM-dd");
@@ -144,6 +145,7 @@ const agregarComponente = (
     componente.modalityType = modalityType;
     componente.description = description;
     componente.day = dayC;
+    componente.color = color;
 
     // Obtenemos la lista de componentes sin el componente a editar
     var listaComponentsTemp = listaComponents.filter((item) => item.id != id);
@@ -170,7 +172,8 @@ export const HandlerEditOneActivity = ({
     finalHour, 
     Days, 
     listaComponents, 
-    setListaComponents 
+    setListaComponents,
+    color,
 }) => {
     // Obtener lista de componentes sin el componente a editar
     var listaComponentsTemp = listaComponents.filter((item) => item.id != event.id);
@@ -187,7 +190,9 @@ export const HandlerEditOneActivity = ({
             Days, 
             listaComponents, 
             setListaComponents, 
-            event.id);
+            event.id,
+            color
+            );
     }
     else {
         alert("El horario ingresado se cruza con otro evento");

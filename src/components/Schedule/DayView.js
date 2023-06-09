@@ -1,6 +1,7 @@
 import React from 'react'
 import { View, Text } from 'react-native'
 import { StyleSheet } from 'react-native'
+import { event } from 'react-native-reanimated'
 
 const DayView = ({ event }) => {
     return (
@@ -8,7 +9,7 @@ const DayView = ({ event }) => {
             <View style={styles.container}>
 
                 {/* Titulo */}
-                <Text style={styles.tittle}> {event.title}</Text>
+                <Text style={{...styles.tittle, color:event.color}}> {event.title}</Text>
 
                 {/* Descripcion */}
                 <Text style={styles.datos}>{event.description}</Text>
@@ -20,7 +21,7 @@ const DayView = ({ event }) => {
             <View style={styles.container}>
 
                 {/* Titulo */}
-                <Text style={styles.tittle}> {event.title}</Text>
+                <Text style={{...styles.tittle, color:event.color}}> {event.title}</Text>
 
                 {/* Profesor */}
                 <Text style={styles.datos}> {event.professorName}</Text>
@@ -44,13 +45,17 @@ styles = StyleSheet.create({
         justifyContent: "center",
         flexDirection: "column",
         alignItems: "center",
+        backgroundColor: "#FFFFFF",
+        borderColor: event.color,
+        borderWidth: 2,
+
     },
     tittle: {
         fontSize: 30,
         textAlign: "center",
-        color: "#5B83B0",
         fontWeight: "bold",
         top: -40,
+        textDecorationColor: event.color,
     },
     datos: {
         fontSize: 20,

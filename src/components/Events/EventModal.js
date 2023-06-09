@@ -123,7 +123,6 @@ const  EventModal = ({ changeModalVisible, daySelected, onEventCreated, isModalV
           setIsAllDay(false);
           setInitialHour(new Date());
           setFinalHour(new Date());
-          
           onEventCreated(newEvent);
           setNewEvent(newEvent);
           setShowNotification(false)

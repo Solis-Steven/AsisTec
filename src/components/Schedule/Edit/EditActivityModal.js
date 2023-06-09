@@ -4,6 +4,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   ScrollView,
+  Modal,
 } from "react-native";
 import React, { useState } from "react";
 
@@ -15,6 +16,7 @@ import Icon from "react-native-vector-icons/Ionicons";
 
 import { HandlerEditOneActivity } from "./HandlerEditOneActivity";
 import { HandlerEditManyActivities } from "./HandlerEditManyActivities";
+import { ColorModal } from "../ColorModal";
 
 const EditActivityModal = ({
   event,
@@ -66,6 +68,14 @@ const EditActivityModal = ({
     editRelationComponent ? [...event.day] : [event.day]
   );
   const selectDays = [];
+
+  // state for color picker  
+  const [color, setColor] = useState(event.color);
+  const [modalColorState, setModalColorState] = useState(false);
+
+  const changeModalColorVisible = () => {
+    setModalColorState(!modalColorState);
+  };
 
   // Function that handles the change of the initial hour
   const onInitialHourChange = (event, selectedHour) => {
@@ -150,9 +160,7 @@ const EditActivityModal = ({
 
   // Function that closes the modal
   const OnCreateActivity = () => {
-    //cambiar por onCreateActivity
-    changeOpenEditModal();
-    setTypeExitMessage(false);
+   
 
     if (
       [
@@ -186,6 +194,7 @@ const EditActivityModal = ({
         Days,
         listaComponents,
         setListaComponents,
+        color,
       });
       setActivityName("");
       setDescription("");
@@ -194,8 +203,10 @@ const EditActivityModal = ({
       setInitialHourText("Seleccionar hora");
       setFinalHourText("Seleccionar hora");
       setSelectedDays([]);
+      changeOpenEditModal();
+      setTypeExitMessage(false);
       return;
-    }else {
+    } else {
       HandlerEditManyActivities({
         event,
         initialDate,
@@ -210,6 +221,7 @@ const EditActivityModal = ({
         setListaComponents,
         ultimoId,
         setUltimoId,
+        color,
       });
       setActivityName("");
       setDescription("");
@@ -218,6 +230,8 @@ const EditActivityModal = ({
       setInitialHourText("Seleccionar hora");
       setFinalHourText("Seleccionar hora");
       setSelectedDays([]);
+      changeOpenEditModal();
+      setTypeExitMessage(false);
       return;
     }
   };
@@ -437,7 +451,22 @@ const EditActivityModal = ({
             </View>
           ) : null}
 
+          {/* Color button */}
+          <TouchableOpacity
+
+            onPress={changeModalColorVisible} style={styles.colorButton}>
+            <Text
+              style={{
+                color: "white",
+                fontSize: 22,
+                fontWeight: "bold",
+              }}
+            >
+              Color
+            </Text>
+          </TouchableOpacity>
           {/* Create button */}
+
           <TouchableOpacity
             onPress={OnCreateActivity}
             style={styles.createButton}
@@ -453,6 +482,24 @@ const EditActivityModal = ({
             </Text>
           </TouchableOpacity>
         </ScrollView>
+
+        {/* Modal to select color */}
+        <Modal
+          animationType="fade"
+          transparent={true}
+          visible={modalColorState}
+          onRequestClose={() => {
+            changeModalColorVisible();
+          }}
+        >
+          <ColorModal
+            color={color}
+            setColor={setColor}
+            modalColorState={modalColorState}
+            changeModalColorVisible={changeModalColorVisible}
+          />
+        </Modal>
+
       </View>
     </TouchableOpacity>
   );
@@ -557,6 +604,16 @@ const styles = StyleSheet.create({
     //position: "absolute",
     bottom: -5,
     right: -160,
+  },
+  colorButton: {
+    backgroundColor: "#769ECB",
+    padding: 15,
+    borderRadius: 20,
+    width: "40%",
+    alignItems: "center",
+    bottom: -10,
+    right: 0,
+    top: 70,
   },
 });
 
