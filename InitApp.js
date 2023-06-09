@@ -30,12 +30,12 @@ const InitApp = () => {
     }
     );
 
-    await AsyncStorage.getItem("ListaComponentes").then(value => {
+    await AsyncStorage.getItem("listaComponentes").then(value => {
 
       if (value !== null) {
 
         setListaComponents(JSON.parse(value));
-        console.log("ListaComponentes: " + value);
+        console.log("listaComponentes: " + value);
   
       }
     }).catch((error) => {
