@@ -450,7 +450,9 @@ const EditActivityModal = ({
               </View>
             </View>
           ) : null}
-
+          {/* Select color */}
+          <Text style={{ ...styles.text, marginTop: 20 }}>Color elegido</Text>
+          <Text style={{ marginTop: 20 ,backgroundColor: color, marginBottom: 0, borderRadius:10 }}></Text>
           {/* Color button */}
           <TouchableOpacity
 

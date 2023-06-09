@@ -29,7 +29,7 @@ const InitApp = () => {
     }
     );
 
-    await AsyncStorage.getItem("ListaComponentes").then(value => {
+    await AsyncStorage.getItem("listaComponentes").then(value => {
 
       if (value !== null) {
 
