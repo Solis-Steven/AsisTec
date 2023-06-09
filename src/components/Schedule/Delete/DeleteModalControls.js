@@ -1,4 +1,4 @@
-import { set } from "date-fns";
+
 import React, { useEffect } from "react";
 import { Dimensions } from "react-native";
 import {
@@ -8,6 +8,10 @@ import {
   View,
   ScrollView,
 } from "react-native";
+
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+
 const Delete = (
   event,
   editRelationComponent,
@@ -29,6 +33,7 @@ const Delete = (
     //valiar lista de componentes
     setListaComponents([]);
     setListaComponents(listaComponentsTemp);
+    AsyncStorage.setItem("ListaComponentes", JSON.stringify(listaComponentsTemp))
     return true;
   }
 };

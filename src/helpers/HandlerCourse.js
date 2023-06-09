@@ -1,5 +1,6 @@
 import moment from "moment";
 import { addDays, format } from "date-fns";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Funcion para obtener las fechas
 const obtenerFechas = (startDate, lastDate, horaInicio, horaFin, Days) => {
@@ -193,7 +194,11 @@ const agregarComponente = (
   // Actualizar el ultimo id de la lista de componentes
   setUltimoId(ultimoIdTemp);
   setUltimoIdRelacion(ultimoIdRelacionTemp);
+
   setListaComponents(listaComponents.concat(lista));
+
+  AsyncStorage.setItem("listaComponents", JSON.stringify(listaComponents));
+
 };
 
 const HandlerCourse = ({

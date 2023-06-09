@@ -1,6 +1,6 @@
 import moment from "moment";
 import { addDays, format } from "date-fns";
-import tinycolor from 'tinycolor2';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const obtenerFechas = (startDate, lastDate, horaInicio, horaFin, Days) => {
     var ListaFechas = []; // Array para almacenar la lista fechas
@@ -189,6 +189,7 @@ const agregarComponente = (
     setListaComponents([]);
     setUltimoId(ultimoIdTemp);
     setListaComponents(listaComponentsCopia.concat(lista));
+    AsyncStorage.setItem("ListaComponentes", JSON.stringify(listaComponentsCopia.concat(lista)));
 };
 
 

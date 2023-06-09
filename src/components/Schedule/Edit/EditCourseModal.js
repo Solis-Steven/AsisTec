@@ -176,10 +176,10 @@ const EditCourseModal = ({
             alert("La fecha final  inicia antes que la fecha inicial");
             return;
 
-        } else if (finalHour < initialHour) {
-            alert("La hora final  inicia antes que la hora inicial");
+        } else if (finalHour <= initialHour) {
+            alert("La hora final inicia o es igual que la hora inicial");
             return;
-        } else if (editRelationComponent == false) {
+          } else if (editRelationComponent == false) {
             HandlerEditOneCourse({
                 event,
                 initialDate,
