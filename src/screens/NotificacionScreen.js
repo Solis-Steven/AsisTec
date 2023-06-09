@@ -10,24 +10,19 @@ import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import { ProgressBar } from 'react-native-paper';
 
-import PushNotification from '../components/Notification/PushNotification';
 import { calculatePercentage } from '../helpers/CalculatePercentage';
+import useData from '../hooks/useData';
 
 
 const NotificationScreen = () => {
     // TODO traer los items
-
-    // Convert the object of events into an array of {date, events} objects
-    const events = Object.entries(items).map(([date, events]) => ({
-        date,
-        events
-    }));
+    const { notifications } = useData();
 
     return (
         <View style={{backgroundColor: "#FFFFFF", height: "100%"}}>
 
             <FlatList
-                data={events}
+                data={notifications}
                 renderItem={({ item }) => (
                     <View style={styles.listContainer}>
 
@@ -51,7 +46,7 @@ const NotificationScreen = () => {
 
                         <View style={styles.NotificationContainer}>
                             {
-                                item.events.map((event, index) => {
+                                item["events"].map((event, index) => {
                                     // Calculate the percentage of the day that has elapsed since the start of the event
                                     const {percentage, color, notification} = calculatePercentage(event.date);
 

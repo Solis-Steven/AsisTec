@@ -38,6 +38,7 @@ const EventosScreen = () => {
       setEventItems({...eventItems, [eventDate] : [...eventItems[eventDate], event[eventDate][0]]});
       // Se guarda el evento en el AsyncStorage
       AsyncStorage.setItem("storedEvents", JSON.stringify({...eventItems, [eventDate] : [...eventItems[eventDate], event[eventDate][0]]}));
+      console.log("Mismo dia");
       setShowNotification(true);
       setNewEvent(event[eventDate][0]);
     }
@@ -106,12 +107,7 @@ const EventosScreen = () => {
     >
       {
         showNotification ? (
-          // <>
-          //   {console.log("Hola")}
             <PushNotification item={newEvent} />
-          //   {setShowNotification(false)}
-          //   {console.log("Adios")}
-          // </>
         ) : null
       }
 
