@@ -33,11 +33,10 @@ const PushNotification = ({item}) => {
       },
       trigger: desiredNotificationTime,
     });
-    console.log("Item", item);
-    console.log("Notification", desiredNotificationTime);
   };
 
   useEffect(() => {
+
     // Register for push notifications
     registerForPushNotificationsAsync().then(token => setExpoPushToken(token));
 

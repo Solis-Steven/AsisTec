@@ -2,14 +2,14 @@
 converts it to 24-hour format. */
 export const formatTime = (item) => {
     // Event hour
-    const {initialHour} = item;
-    const [hours, minutes] = initialHour.split(":")
+    const {initialHourText} = item;
+    const [hours, minutes] = initialHourText.split(":")
     let adjustedHours = parseInt(hours);
-    const AMPM = initialHour.slice(-2);
+    const AMPM = initialHourText.slice(-2);
 
-    if(AMPM === "PM" && adjustedHours !== 12) {
+    if(AMPM === "pm" && adjustedHours !== 12) {
       adjustedHours += 12;
-    } else if(AMPM === "AM" && adjustedHours === 12) {
+    } else if(AMPM === "am" && adjustedHours === 12) {
       adjustedHours = 0;
     }
 

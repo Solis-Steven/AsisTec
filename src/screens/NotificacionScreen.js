@@ -15,15 +15,7 @@ import { calculatePercentage } from '../helpers/CalculatePercentage';
 
 
 const NotificationScreen = () => {
-    const [items, setItems] = useState({
-        "2023-04-06": [
-        { name: "Admin Meeting", initialHour: "10:00 AM", finalHour: "11:00 AM", date: "2023-04-06" },
-        { name: "Hospital Appointment", initialHour: "1:00 PM", finalHour: "5:00 PM", date: "2023-04-06" }
-        ],
-        "2023-04-07": [{ name: "Work on Design", initialHour: "9:00 AM", finalHour: "6:00 PM", date: "2023-04-07" }],
-        "2023-04-15": [{ name: "Compilers Progress", initialHour: "1:00 PM", finalHour: "2:00 PM", date: "2023-04-15" }],
-        "2023-06-07": [{ name: "Admin Progress", initialHour: "12:53 PM", finalHour: "8:00 PM", date: "2023-06-07" }]
-    });
+    // TODO traer los items
 
     // Convert the object of events into an array of {date, events} objects
     const events = Object.entries(items).map(([date, events]) => ({
@@ -33,6 +25,7 @@ const NotificationScreen = () => {
 
     return (
         <View style={{backgroundColor: "#FFFFFF", height: "100%"}}>
+
             <FlatList
                 data={events}
                 renderItem={({ item }) => (
@@ -82,7 +75,6 @@ const NotificationScreen = () => {
 
                                             <Text style={{fontSize: 12, color: "#5B83B0"}}>Ver mas</Text>
 
-                                            {/* <PushNotification body={event.name} item={event} /> */}
                                         </TouchableOpacity>
                                     )
                                 })
