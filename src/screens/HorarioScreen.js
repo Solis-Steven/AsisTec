@@ -12,6 +12,8 @@ import MessageDelete from "../components/Schedule/Delete/Message";
 import EditControls from "../components/Schedule/Edit/EditModalControls";
 import { DeleteModalControls } from "../components/Schedule/Delete/DeleteModalControls";
 
+import useData from "../hooks/useData";
+
 
 MomentConfig.updateLocale("es", {
   // setting moment.js locale to Spanish
@@ -35,41 +37,12 @@ const HorarioScreen = () => {
   const [objectEvento, setObjectEvento] = useState({}); //Objeto del evento seleccionado
   const [openDeleteModal, setOpenDeleteModal] = useState(false); //Abrir el modal de EDICIÓN
 
-  const events = [
-    {
-      id: 1,
-      idRelacion: 1,
-      start: new Date(2023, 4, 17, 8, 30),
-      end: new Date(2023, 4, 17, 11, 30),
-      title: "Diseño de Software",
-      professorName: "Juan Carlos Cubero",
-      location: "Oficina principal",
-      modalityType: "Virtual",
-      color: "#F44336",
-      type: "Clase",
-      day: 3,
-    },
-    {
-      id: 2,
-      idRelacion: 2,
-      start: new Date(2023, 4, 15, 7, 30),
-      end: new Date(2023, 4, 15, 12, 30),
-      title: "Salir a correr",
-      description: "Cada dia a las 7:00 AM",
-      modalityType: "Semipresencial",
-      color: "#64B149",
-      type: "Actividad",
-      day: 1,
-    },
-  ];
+
   // Define state variables with their initial values
   const [viewMode, setViewMode] = useState("week");
 
   // Variables para obtener las fechas
-  const [listaComponents, setListaComponents] = useState(events); // Array para almacenar la lista de componentes
-
-  // Variable para actualizar la lista de componentes
-  const [estado, setEstado] = useState(false); // Estado para actualizar la lista de componentes
+  const {listaComponents, setListaComponents} = useData([]); // Array para almacenar la lista de componentes
 
   // Funciones para mostrar modals de: Agregar, Editar y Eliminar
   const changeModalVisible = () => {

@@ -5,17 +5,14 @@ const DataContext = createContext();
 
 const DataProvider = ({ children }) => {
 
-    const [eventItems, setEventItems] = useState({});
-
-    
+    const [eventItems, setEventItems] = useState({"init": "init"});
+    const [listaComponents, setListaComponents] = useState([]);
 
     return (
 
-        <DataContext.Provider value={{eventItems,setEventItems}}>
+        <DataContext.Provider value={{ eventItems, setEventItems, listaComponents, setListaComponents }}>
             {children}
         </DataContext.Provider>
-
-
     );
 
 };

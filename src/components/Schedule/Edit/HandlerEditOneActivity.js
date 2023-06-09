@@ -1,6 +1,7 @@
 
 import moment from "moment";
 import { format, set } from "date-fns";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 function convertirFechas(
     fechaIncio,
@@ -157,6 +158,7 @@ const agregarComponente = (
     //
     setListaComponents([]);
     setListaComponents(listaComponentsTemp);
+    AsyncStorage.setItem("listaComponents", JSON.stringify(listaComponentsTemp));
     return;
 
 }

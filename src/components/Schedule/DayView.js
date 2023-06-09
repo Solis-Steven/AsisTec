@@ -4,6 +4,7 @@ import { StyleSheet } from 'react-native'
 import { event } from 'react-native-reanimated'
 
 const DayView = ({ event }) => {
+    console.log("color del evento: " + event.color)
     return (
         event.type == "Actividad" ? (
             <View style={styles.container}>
