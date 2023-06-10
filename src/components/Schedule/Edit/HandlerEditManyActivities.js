@@ -186,7 +186,7 @@ const agregarComponente = (
     setListaComponents([]);
     setUltimoId(ultimoIdTemp);
     setListaComponents(listaComponentsCopia.concat(lista));
-    AsyncStorage.setItem("ListaComponentes", JSON.stringify(listaComponentsCopia.concat(lista)));
+    AsyncStorage.setItem("listaComponents", JSON.stringify(listaComponentsCopia.concat(lista)));
 };
 
 

@@ -29,11 +29,14 @@ const InitApp = () => {
     }
     );
 
-    await AsyncStorage.getItem("listaComponentes").then(value => {
+    await AsyncStorage.getItem("listaComponents").then(value => {
+
+      console.log("cargando ListaComponentes");
 
       if (value !== null) {
 
         setListaComponents(JSON.parse(value));
+        console.log("ListaComponents", value);
 
       }
     }).catch((error) => {

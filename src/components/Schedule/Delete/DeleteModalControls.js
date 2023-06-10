@@ -33,7 +33,7 @@ const Delete = (
     //valiar lista de componentes
     setListaComponents([]);
     setListaComponents(listaComponentsTemp);
-    AsyncStorage.setItem("ListaComponentes", JSON.stringify(listaComponentsTemp))
+    AsyncStorage.setItem("listaComponents", JSON.stringify(listaComponentsTemp))
     return true;
   }
 };
