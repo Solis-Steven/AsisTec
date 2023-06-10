@@ -39,8 +39,6 @@ const PushNotification = ({item}) => {
   };
 
   useEffect(() => {
-    console.log("item", item);
-
     // Register for push notifications
     registerForPushNotificationsAsync().then(token => setExpoPushToken(token));
 
