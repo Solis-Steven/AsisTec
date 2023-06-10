@@ -12,6 +12,7 @@ import moment from "moment";
 import useData from "../hooks/useData";
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import PushNotification from "../components/Notification/PushNotification";
 
 const EventosScreen = () => {
   const [daySelected, setDaySelected] = useState(moment().format("YYYY-MM-DD"));
@@ -21,6 +22,8 @@ const EventosScreen = () => {
   const {eventItems, setEventItems} = useData();
 
   const [selectedEvent, setSelectedEvent] = useState(null);
+  const [showNotification, setShowNotification] = useState(false);
+  const [newEvent, setNewEvent] = useState({});
 
   const handleEventCreated = (event) => {
     const eventDate = Object.keys(event)[0];
@@ -35,6 +38,9 @@ const EventosScreen = () => {
       setEventItems({...eventItems, [eventDate] : [...eventItems[eventDate], event[eventDate][0]]});
       // Se guarda el evento en el AsyncStorage
       AsyncStorage.setItem("storedEvents", JSON.stringify({...eventItems, [eventDate] : [...eventItems[eventDate], event[eventDate][0]]}));
+      console.log("Mismo dia");
+      setShowNotification(true);
+      setNewEvent(event[eventDate][0]);
     }
 
     // Si ya hay un evento en la fecha seleccionada y se esta editando, se actualiza el evento
@@ -57,6 +63,8 @@ const EventosScreen = () => {
       setEventItems({...eventItems, [eventDate] : event[eventDate]});
       // Se guarda el evento en el AsyncStorage
       AsyncStorage.setItem("storedEvents", JSON.stringify({...eventItems, [eventDate] : event[eventDate]}));
+      setShowNotification(true);
+      setNewEvent(event[eventDate][0]);
     }
   }
 
@@ -75,6 +83,7 @@ const EventosScreen = () => {
 
     if(newItemsArray.length === 0) {
       delete eventItems[item["date"]];
+      AsyncStorage.setItem("storedEvents", JSON.stringify(eventItems));
 
       if(Object.keys(eventItems).length === 0) {
         setEventItems({"init": "init"});
@@ -97,6 +106,12 @@ const EventosScreen = () => {
         backgroundColor: "#FFFFFF"
       }}
     >
+      {
+        showNotification ? (
+            <PushNotification item={newEvent} />
+        ) : null
+      }
+
       <EventCalendar
         daySelected={daySelected}
         setDaySelected={setDaySelected}

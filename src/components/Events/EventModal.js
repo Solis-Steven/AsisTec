@@ -37,6 +37,7 @@ const  EventModal = ({ changeModalVisible, daySelected, onEventCreated, isModalV
   //Button
   const [modalTitle, setModalTitle] = useState("Crear evento");
   const [buttonText, setButtonText] = useState("Crear");
+  
 
   //-------------------------------Functions---------------------------------
   const onInitialHourChange = (event, selectedHour) => {
@@ -148,6 +149,7 @@ const  EventModal = ({ changeModalVisible, daySelected, onEventCreated, isModalV
         backgroundColor: isModalVisible ? "rgba(0,0,0,0.4)" : "transparent", // Cambia el fondo a oscuro cuando el modal está abierto
       }}
     >
+
       <View
         style={{
           height: HEIGHT,

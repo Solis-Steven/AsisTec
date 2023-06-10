@@ -17,7 +17,6 @@ const InitApp = () => {
 
   //funcion para cargar los datos del usuario desde el AsyncStorage
   const LoadData = async () => {
-    console.log("entro a load data")
     //AsyncStorage.clear();
     await AsyncStorage.getItem("storedEvents").then(value => {
 
@@ -35,8 +34,7 @@ const InitApp = () => {
       if (value !== null) {
 
         setListaComponents(JSON.parse(value));
-        console.log("listaComponentes: " + value);
-  
+
       }
     }).catch((error) => {
       console.log(error);

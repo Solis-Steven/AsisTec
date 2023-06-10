@@ -158,7 +158,6 @@ const agregarComponente = (
   setUltimoIdRelacion,
   color
 ) => {
-  //console.log("ultimoId: " + ultimoId + " ultimoIdRelacion: " + ultimoIdRelacion);
   // Obtener el ultimo id de la lista de componentes
   var ultimoIdTemp = ultimoId;
   var ultimoIdRelacionTemp = ultimoIdRelacion + 1;
@@ -170,7 +169,6 @@ const agregarComponente = (
     const element = ListaFechas[index]; // [fechaInicio, fechaFinal] [fechaInicio, fechaFinal]
 
     // Dates
-    //console.log("firstDate: " + element[0] + " lastDate: " + element[1]);
     var daySpecific = new Date(element[0]).getDay();
 
     // de tipo clase
@@ -220,7 +218,6 @@ const HandlerCourse = ({
   color,
 }) => {
 
-  console.log("COLOR ELEGIDO: " + color);
   // Variables para obtener las fechas
   ListaFechas = obtenerFechas(
     initialDate,

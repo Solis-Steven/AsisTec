@@ -14,7 +14,7 @@ Notifications.setNotificationHandler({
   }),
 });
 
-const PushNotification = ({body, item}) => {
+const PushNotification = ({item}) => {
   const [expoPushToken, setExpoPushToken] = useState('');
   const [notification, setNotification] = useState(false);
 
@@ -22,20 +22,21 @@ const PushNotification = ({body, item}) => {
   const responseListener = useRef();
 
   // Define function to send a notification
-  const sendNotification = async (body, item) => {
+  const sendNotification = async (item) => {
     const hour = formatTime(item).trim()
     const desiredNotificationTime = new Date(`${item.date}T${hour}:00`);
 
     await Notifications.scheduleNotificationAsync({
       content: {
         title: "Asistec",
-        body: "Tienes un evento cercano: ", body, // Include the provided body in the notification
+        body: `Tienes un evento cercano ${item.name}`, // Include the provided body in the notification
       },
       trigger: desiredNotificationTime,
     });
   };
 
   useEffect(() => {
+
     // Register for push notifications
     registerForPushNotificationsAsync().then(token => setExpoPushToken(token));
 
@@ -45,7 +46,7 @@ const PushNotification = ({body, item}) => {
     });
 
     // Send a notification using the provided body
-    sendNotification(body, item);
+    sendNotification(item);
 
     // Cleanup listeners when component unmounts
     return () => {
