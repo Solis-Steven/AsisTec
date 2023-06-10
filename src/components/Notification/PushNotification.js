@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import * as Device from 'expo-device';
 import * as Notifications from 'expo-notifications';
 import { formatTime } from '../../helpers/formatTime';
+import { calculateTimingNotification } from '../../helpers/calculateTimingNotification';
 
 // Set default notification behavior
 Notifications.setNotificationHandler({
@@ -23,8 +24,10 @@ const PushNotification = ({item}) => {
 
   // Define function to send a notification
   const sendNotification = async (item) => {
-    const hour = formatTime(item).trim()
-    const desiredNotificationTime = new Date(`${item.date}T${hour}:00`);
+    const hour = formatTime(item).trim();
+    let desiredNotificationTime = new Date(`${item.date}T${hour}:00`);
+    desiredNotificationTime = calculateTimingNotification(desiredNotificationTime, item["reminderText"]);
+    desiredNotificationTime = new Date(desiredNotificationTime);
 
     await Notifications.scheduleNotificationAsync({
       content: {
@@ -36,6 +39,7 @@ const PushNotification = ({item}) => {
   };
 
   useEffect(() => {
+    console.log("item", item);
 
     // Register for push notifications
     registerForPushNotificationsAsync().then(token => setExpoPushToken(token));

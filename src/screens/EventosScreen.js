@@ -13,6 +13,7 @@ import useData from "../hooks/useData";
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import PushNotification from "../components/Notification/PushNotification";
+import { useEffect } from "react";
 
 const EventosScreen = () => {
   const [daySelected, setDaySelected] = useState(moment().format("YYYY-MM-DD"));
@@ -24,6 +25,12 @@ const EventosScreen = () => {
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [showNotification, setShowNotification] = useState(false);
   const [newEvent, setNewEvent] = useState({});
+
+  useEffect(() => {
+    if (showNotification) {
+      setShowNotification(false);
+    }
+  }, [showNotification]);
 
   const handleEventCreated = (event) => {
     const eventDate = Object.keys(event)[0];
@@ -38,9 +45,8 @@ const EventosScreen = () => {
       setEventItems({...eventItems, [eventDate] : [...eventItems[eventDate], event[eventDate][0]]});
       // Se guarda el evento en el AsyncStorage
       AsyncStorage.setItem("storedEvents", JSON.stringify({...eventItems, [eventDate] : [...eventItems[eventDate], event[eventDate][0]]}));
-      console.log("Mismo dia");
-      setShowNotification(true);
       setNewEvent(event[eventDate][0]);
+      setShowNotification(true);
     }
 
     // Si ya hay un evento en la fecha seleccionada y se esta editando, se actualiza el evento
@@ -57,14 +63,16 @@ const EventosScreen = () => {
       setEventItems({...eventItems, [eventDate] : newEventItems});
       // Se guarda el evento en el AsyncStorage
       AsyncStorage.setItem("storedEvents", JSON.stringify({...eventItems, [eventDate] : newEventItems}));
+      setNewEvent(event[eventDate][0]);
+      setShowNotification(true);
       setItemInfo(event[Object.keys(event)][0]);
 
     } else {
       setEventItems({...eventItems, [eventDate] : event[eventDate]});
       // Se guarda el evento en el AsyncStorage
       AsyncStorage.setItem("storedEvents", JSON.stringify({...eventItems, [eventDate] : event[eventDate]}));
-      setShowNotification(true);
       setNewEvent(event[eventDate][0]);
+      setShowNotification(true);
     }
   }
 
@@ -107,7 +115,7 @@ const EventosScreen = () => {
     >
       {
         showNotification ? (
-            <PushNotification item={newEvent} />
+          <PushNotification item={newEvent} />
         ) : null
       }
 
