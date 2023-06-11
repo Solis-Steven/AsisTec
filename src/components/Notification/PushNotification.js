@@ -20,22 +20,25 @@ const PushNotification = ({item}) => {
   const [notification, setNotification] = useState(false);
 
   const notificationListener = useRef();
-  const responseListener = useRef();
 
   // Define function to send a notification
   const sendNotification = async (item) => {
-    const hour = formatTime(item).trim();
-    let desiredNotificationTime = new Date(`${item.date}T${hour}:00`);
-    desiredNotificationTime = calculateTimingNotification(desiredNotificationTime, item["reminderText"]);
-    desiredNotificationTime = new Date(desiredNotificationTime);
-
-    await Notifications.scheduleNotificationAsync({
-      content: {
-        title: "Asistec",
-        body: `Tienes un evento cercano ${item.name}`, // Include the provided body in the notification
-      },
-      trigger: desiredNotificationTime,
-    });
+    try {
+      const hour = formatTime(item).trim();
+      let desiredNotificationTime = new Date(`${item.date}T${hour}:00`);
+      desiredNotificationTime = calculateTimingNotification(desiredNotificationTime, item["reminderText"]);
+      desiredNotificationTime = new Date(desiredNotificationTime);
+  
+      await Notifications.scheduleNotificationAsync({
+        content: {
+          title: "Asistec",
+          body: `Tienes un evento cercano ${item.name}`, // Include the provided body in the notification
+        },
+        trigger: desiredNotificationTime,
+      });
+    } catch (error) {
+      console.log("Error sendNotification: ", error);
+    }
   };
 
   useEffect(() => {
@@ -53,41 +56,45 @@ const PushNotification = ({item}) => {
     // Cleanup listeners when component unmounts
     return () => {
       Notifications.removeNotificationSubscription(notificationListener.current);
-      Notifications.removeNotificationSubscription(responseListener.current);
     };
   }, []);
 
   // Function to register the device for push notifications
   async function registerForPushNotificationsAsync() {
 
-    // Set up notification channel for Android devices
-    if (Platform.OS === 'android') {
-      await Notifications.setNotificationChannelAsync('default', {
-        name: 'default',
-        importance: Notifications.AndroidImportance.MAX,
-        vibrationPattern: [0, 250, 250, 250],
-        lightColor: '#FF231F7C',
-      });
-    }
-
-    // Check if device is supported and has notification permissions
-    if (Device.isDevice) {
-      const { status: existingStatus } = await Notifications.getPermissionsAsync();
-      let finalStatus = existingStatus;
-      if (existingStatus !== 'granted') {
-        const { status } = await Notifications.requestPermissionsAsync();
-        finalStatus = status;
+    try {
+      // Set up notification channel for Android devices
+      if (Platform.OS === 'android') {
+        await Notifications.setNotificationChannelAsync('default', {
+          name: 'default',
+          importance: Notifications.AndroidImportance.MAX,
+          vibrationPattern: [0, 250, 250, 250],
+          lightColor: '#FF231F7C',
+        });
       }
-      if (finalStatus !== 'granted') {
-        alert('Failed to get push token for push notification!');
-        return;
+  
+      // Check if device is supported and has notification permissions
+      if (Device.isDevice) {
+        const { status: existingStatus } = await Notifications.getPermissionsAsync();
+        let finalStatus = existingStatus;
+        if (existingStatus !== 'granted') {
+          const { status } = await Notifications.requestPermissionsAsync();
+          finalStatus = status;
+        }
+        if (finalStatus !== 'granted') {
+          alert('Failed to get push token for push notification!');
+          return;
+        }
+        let token = (await Notifications.getExpoPushTokenAsync()).data;
+      } else {
+        alert('Must use physical device for Push Notifications');
       }
-      token = (await Notifications.getExpoPushTokenAsync()).data;
-    } else {
-      alert('Must use physical device for Push Notifications');
+  
+      return null;
+      
+    } catch (error) {
+      console.log("Error registerForPushNotificationsAsync: ", error);
     }
-
-    return null;
   }
 
 }

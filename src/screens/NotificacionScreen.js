@@ -5,7 +5,7 @@ import {
     TouchableOpacity ,
     StyleSheet
 } from 'react-native';
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 
 import moment from 'moment';
 import { ProgressBar } from 'react-native-paper';
@@ -15,7 +15,7 @@ import useData from '../hooks/useData';
 
 
 const NotificationScreen = () => {
-    // TODO traer los items
+    
     const { notifications } = useData();
 
     return (
@@ -122,6 +122,6 @@ const styles = StyleSheet.create({
         backgroundColor: "#F3F3F3",
         marginBottom: 5
     }
-})
+});
 
 export default NotificationScreen;

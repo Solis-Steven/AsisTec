@@ -31,13 +31,8 @@ const InitApp = () => {
 
     await AsyncStorage.getItem("listaComponents").then(value => {
 
-      console.log("cargando ListaComponentes");
-
       if (value !== null) {
-
         setListaComponents(JSON.parse(value));
-        console.log("ListaComponents", value);
-
       }
     }).catch((error) => {
       console.log(error);

@@ -11,19 +11,25 @@ const DataProvider = ({ children }) => {
     const [notifications, setNotifications] = useState([]);
 
     const getNotifications = () => {
-        const currenDate = moment().format('YYYY-MM-DD');;
-
-        const events = Object.entries(eventItems).map(([date, events]) => ({
-            date,
-            events
-        }));
-        const currentNotifications = events?.filter(
-            event => event.date === currenDate
-        );
+        try {
+            const currenDate = moment().format('YYYY-MM-DD');;
     
-        if(currentNotifications.length > 0) {
-        
-            setNotifications(currentNotifications);
+            const events = Object.entries(eventItems).map(([date, events]) => ({
+                date,
+                events
+            }));
+            const currentNotifications = events?.filter(
+                event => event.date === currenDate || event.date < currenDate
+            );
+            
+            if(currentNotifications.length > 0) {
+            
+                setNotifications(currentNotifications);
+            } else {
+                setNotifications({})
+            }
+        } catch (error) {
+            console.log("Error getNotifications: ", error);
         }
             
     }
