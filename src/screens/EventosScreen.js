@@ -21,6 +21,7 @@ const EventosScreen = () => {
   const [itemInfo, setItemInfo] = useState({});
   
   const {eventItems, setEventItems} = useData();
+  const {getNotifications} = useData();
 
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [showNotification, setShowNotification] = useState(false);
@@ -103,6 +104,7 @@ const EventosScreen = () => {
       // Se guarda el evento en el AsyncStorage
       AsyncStorage.setItem("storedEvents", JSON.stringify({...eventItems, [item["date"]]: newItemsArray}));
     }
+    getNotifications();
   }
 
 

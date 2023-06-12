@@ -73,6 +73,7 @@ const DataProvider = ({ children }) => {
             setEventItems, 
             listaComponents, 
             setListaComponents,
+            getNotifications,
             notifications }}>
             {children}
         </DataContext.Provider>
