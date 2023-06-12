@@ -5,7 +5,7 @@ import {
     TouchableOpacity ,
     StyleSheet
 } from 'react-native';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import moment from 'moment';
 import { ProgressBar } from 'react-native-paper';
@@ -18,13 +18,20 @@ const NotificationScreen = () => {
     
     const { notifications } = useData();
 
+    useEffect(()=> {
+        console.log(notifications);
+    }, [notifications])
+
     return (
         <View style={{backgroundColor: "#FFFFFF", height: "100%"}}>
 
             <FlatList
                 data={notifications}
-                renderItem={({ item }) => (
-                    <View style={styles.listContainer}>
+                renderItem={({ item }) => {
+                    // Calculate the percentage of the day that has elapsed since the start of the event
+                    const {percentage, color, notification} = calculatePercentage(item["date"]);
+                    
+                    return <View style={styles.listContainer}>
 
                         <View>
                             {/* Display the abbreviated weekday name in Spanish */}
@@ -45,39 +52,31 @@ const NotificationScreen = () => {
                         </View>
 
                         <View style={styles.NotificationContainer}>
-                            {
-                                item["events"].map((event, index) => {
-                                    // Calculate the percentage of the day that has elapsed since the start of the event
-                                    const {percentage, color, notification} = calculatePercentage(event.date);
+                            <TouchableOpacity 
+                                key={item["id"]}
+                                style={{
+                                    marginVertical: 5,
+                                    width: "70%"
+                                }}
+                            >
+                                {/* Display a progress bar showing the percentage of the day that has elapsed */}
+                                <ProgressBar 
+                                    progress={percentage} 
+                                    color={color}
+                                    style={styles.progressBar}
+                                />
 
-                                    return (
-                                        <TouchableOpacity 
-                                            key={index}
-                                            style={{
-                                                marginVertical: 5,
-                                                width: "70%"
-                                            }}
-                                        >
-                                            {/* Display a progress bar showing the percentage of the day that has elapsed */}
-                                            <ProgressBar 
-                                                progress={percentage} 
-                                                color={color}
-                                                style={styles.progressBar}
-                                            />
+                                {/* Display the name of the event */}
+                                <Text style={{fontSize: 15, marginBottom: 5}}>{item["name"]}</Text>
 
-                                            {/* Display the name of the event */}
-                                            <Text style={{fontSize: 15, marginBottom: 5}}>{event.name}</Text>
+                                <Text style={{fontSize: 12, color: "#5B83B0"}}>Ver mas</Text>
 
-                                            <Text style={{fontSize: 12, color: "#5B83B0"}}>Ver mas</Text>
-
-                                        </TouchableOpacity>
-                                    )
-                                })
-                            }
+                            </TouchableOpacity>
+                            
                         </View>
                         
                 </View>
-                )}
+                }}
                 keyExtractor={(item, index) => index.toString()}
             />
         </View>

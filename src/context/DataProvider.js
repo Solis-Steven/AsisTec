@@ -1,6 +1,7 @@
-
 import moment from "moment";
 import { useState, useEffect, createContext } from "react";
+import { calculateTimingNotification } from "../helpers/calculateTimingNotification";
+import { formatTime } from "../helpers/formatTime";
 
 const DataContext = createContext();
 
@@ -12,21 +13,46 @@ const DataProvider = ({ children }) => {
 
     const getNotifications = () => {
         try {
-            const currenDate = moment().format('YYYY-MM-DD');;
+            let currentDate = moment().toISOString();
     
-            const events = Object.entries(eventItems).map(([date, events]) => ({
+            const events = Object.entries(eventItems)?.map(([date, events]) => ({
                 date,
                 events
             }));
-            const currentNotifications = events?.filter(
-                event => event.date === currenDate || event.date < currenDate
+
+            // const currentNotifications = events?.flatMap(event =>
+            //     {
+            //         if(event["events"] !== "init") {
+            //             return event["events"].filter(finalEvent => {
+            //                 let date = new Date(finalEvent["initialHour"]);
+            //                 date = calculateTimingNotification(date, finalEvent["reminderText"]);
+            //                 date = new Date(date);
+            //                 currentDate = new Date(currentDate);
+            //                 return date.getTime() === currentDate.getTime() || date.getTime() < currentDate.getTime();
+            //             });
+            //         }
+            //     }
+            // );              
+
+            const currentNotifications = events?.flatMap(event =>
+                {
+                    if(event["events"] !== "init") {
+                        return event["events"].filter(finalEvent => {
+                            const hour = formatTime(finalEvent).trim();
+                            let date = new Date(`${finalEvent["date"]}T${hour}:00`);
+                            date = calculateTimingNotification(date, finalEvent["reminderText"]);
+                            date = new Date(date);
+                            currentDate = new Date(currentDate);
+                            return date.getTime() === currentDate.getTime() || date.getTime() < currentDate.getTime();
+                        });
+                    }
+                }
             );
-            
-            if(currentNotifications.length > 0) {
-            
+
+            if(currentNotifications.length > 0 && currentNotifications[0]) {
                 setNotifications(currentNotifications);
             } else {
-                setNotifications({})
+                setNotifications([])
             }
         } catch (error) {
             console.log("Error getNotifications: ", error);
