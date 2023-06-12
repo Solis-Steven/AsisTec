@@ -7,12 +7,16 @@ const DataContext = createContext();
 
 const DataProvider = ({ children }) => {
 
+
     const [eventItems, setEventItems] = useState({"init": "init"});
     const [listaComponents, setListaComponents] = useState([]);
     const [notifications, setNotifications] = useState([]);
 
     const getNotifications = () => {
         try {
+
+            console.log("eventItems: ", eventItems);
+
             let currentDate = moment().toISOString();
     
             const events = Object.entries(eventItems)?.map(([date, events]) => ({
@@ -43,11 +47,19 @@ const DataProvider = ({ children }) => {
                             date = calculateTimingNotification(date, finalEvent["reminderText"]);
                             date = new Date(date);
                             currentDate = new Date(currentDate);
-                            return date.getTime() === currentDate.getTime() || date.getTime() < currentDate.getTime();
+                            return date.getTime();
                         });
                     }
                 }
             );
+
+            currentNotifications.sort((a, b) => {
+                const hourA = formatTime(a).trim();
+                const hourB = formatTime(b).trim();
+                const dateA = new Date(`${a["date"]}T${hourA}:00`);
+                const dateB = new Date(`${b["date"]}T${hourB}:00`);
+                return dateA.getTime() - dateB.getTime();
+            });
 
             if(currentNotifications.length > 0 && currentNotifications[0]) {
                 setNotifications(currentNotifications);
