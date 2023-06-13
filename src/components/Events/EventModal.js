@@ -31,7 +31,7 @@ const  EventModal = ({ changeModalVisible, daySelected, onEventCreated, isModalV
   const [showInitialHour, setShowInitialHour] = useState(false);
   const [showFinalHour, setShowFinalHour] = useState(false);
   //DropDownPicker
-  const [selectedReminder, setSelectedReminder] = useState("1 dia antes");
+  const [selectedReminder, setSelectedReminder] = useState(3);
   //Switcher
   const [isAllDay, setIsAllDay] = useState(false);
   //Button
@@ -356,7 +356,7 @@ const  EventModal = ({ changeModalVisible, daySelected, onEventCreated, isModalV
                   placeholder={selectedReminder}
                   search={false}
                   boxStyles={{ width: 150, borderWidth: 0 }}
-                  defaultOption={{ key: 3, value: "1 dia antes" }}
+                  defaultOption={{ key: selectedReminder, value: reminderValues[selectedReminder-1].value }}
                   maxHeight={150}
                 />
               </View>
