@@ -500,7 +500,7 @@ const EditCourseModal = ({
                                 fontWeight: "bold",
                             }}
                         >
-                            Crear
+                            Aceptar
                         </Text>
                     </TouchableOpacity>
                 </ScrollView>

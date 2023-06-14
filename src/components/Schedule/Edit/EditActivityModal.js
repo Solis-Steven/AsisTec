@@ -480,7 +480,7 @@ const EditActivityModal = ({
                 fontWeight: "bold",
               }}
             >
-              Crear
+              Aceptar
             </Text>
           </TouchableOpacity>
         </ScrollView>
