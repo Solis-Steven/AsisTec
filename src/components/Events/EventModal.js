@@ -15,6 +15,7 @@ import moment from "moment";
 import { SelectList } from "react-native-dropdown-select-list";
 import { useEffect } from "react";
 import { idGenerator } from "../../helpers/IdGenerator";
+import { set } from "date-fns";
 
 const WIDTH = Dimensions.get("window").width - 70;
 const HEIGHT = Dimensions.get("window").height - 160;
@@ -37,6 +38,9 @@ const  EventModal = ({ changeModalVisible, daySelected, onEventCreated, isModalV
   //Button
   const [modalTitle, setModalTitle] = useState("Crear evento");
   const [buttonText, setButtonText] = useState("Crear");
+
+  //Edited Name
+  const  [editedName, setEditedName] = useState("");
   
 
   //-------------------------------Functions---------------------------------
@@ -80,6 +84,7 @@ const  EventModal = ({ changeModalVisible, daySelected, onEventCreated, isModalV
       setIsAllDay(selectedEvent.isAllDay);
       setModalTitle("Editar evento");
       setButtonText("Aceptar");
+      setEditedName(selectedEvent.name);
     }
   },[]);
 
@@ -92,7 +97,8 @@ const  EventModal = ({ changeModalVisible, daySelected, onEventCreated, isModalV
       finalHourText !== "Seleccionar hora" &&
       selectedReminder 
     ) {
-        if(initialHour.getTime() < finalHour.getTime()){
+        if(new Date(initialHour).getTime() < new Date(finalHour).getTime()){
+    
           const newEvent = {
             [daySelected] : [
               {
@@ -121,7 +127,8 @@ const  EventModal = ({ changeModalVisible, daySelected, onEventCreated, isModalV
           setIsAllDay(false);
           setInitialHour(new Date());
           setFinalHour(new Date());
-          onEventCreated(newEvent);
+          onEventCreated(newEvent, editedName); 
+          setEditedName("");
           changeModalVisible();
         } else {
           alert("La hora de inicio debe ser menor a la hora final");
