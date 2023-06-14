@@ -37,7 +37,7 @@ export const ColorModal = ({ color, setColor, modalColorState, changeModalColorV
                     style={styles.button}
                     onPress={() => {changeModalColorVisible()}}
                     >
-                    <Text style={styles.textButton}>Save</Text>
+                    <Text style={styles.textButton}>Guardar</Text>
                 </TouchableOpacity>
             </View>
         </TouchableOpacity>
