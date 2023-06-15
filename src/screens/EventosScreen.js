@@ -33,7 +33,7 @@ const EventosScreen = () => {
     }
   }, [showNotification]);
 
-  const handleEventCreated = (event) => {
+  const handleEventCreated = (event, oldName) => {
     const eventDate = Object.keys(event)[0];
     const eventsDates = Object.keys(eventItems);
 
@@ -52,13 +52,28 @@ const EventosScreen = () => {
 
     // Si ya hay un evento en la fecha seleccionada y se esta editando, se actualiza el evento
     else if(eventsDates.includes(eventDate) && selectedEvent !== null) {
+
+      
+
       // Se actualiza el evento
       const newEventItems = eventItems[eventDate].map((item) => {
         // Si el nombre del evento es igual al nombre del evento seleccionado, se actualiza el evento esto en caso de que se haya cambiado el nombre
+
+        //se verifica si se cambio el nombre
+        if(oldName !== "") {
+
+          if(item.name === oldName) {
+
+            return event[eventDate][0];
+          }
+    
+        } else{
+
         if(item.name === selectedEvent.name) {
+
           return event[eventDate][0];
         }
-
+        }
         return item;
       });
       setEventItems({...eventItems, [eventDate] : newEventItems});
