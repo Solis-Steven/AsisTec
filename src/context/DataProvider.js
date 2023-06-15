@@ -6,11 +6,17 @@ import { formatTime } from "../helpers/formatTime";
 const DataContext = createContext();
 
 const DataProvider = ({ children }) => {
-
+    
 
     const [eventItems, setEventItems] = useState({"init": "init"});
     const [listaComponents, setListaComponents] = useState([]);
     const [notifications, setNotifications] = useState([]);
+
+    // Para el adecuado funcionamiento de los componentes, se debe tener un id unico para cada uno de ellos
+    // Para ello, se debe tener un contador que se incremente cada vez que se cree un componente
+
+    const [ultimoId, setUltimoId] = useState(0); // Ultimo id de la lista de componentes
+    const [ultimoIdRelacion, setUltimoIdRelacion] = useState(0); // Ultimo id de la lista de componentes
 
     const getNotifications = () => {
         try {
@@ -86,6 +92,10 @@ const DataProvider = ({ children }) => {
             listaComponents, 
             setListaComponents,
             getNotifications,
+            ultimoId,
+            setUltimoId,
+            ultimoIdRelacion,
+            setUltimoIdRelacion,
             notifications }}>
             {children}
         </DataContext.Provider>

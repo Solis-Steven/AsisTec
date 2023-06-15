@@ -11,6 +11,7 @@ const InitApp = () => {
   const { setListaComponents } = useData([]);
 
   const loadData = async () => {
+    //AsyncStorage.clear();
     await AsyncStorage.getItem("storedEvents").then((value) => {
       if (value !== null) {
         setEventItems(JSON.parse(value));

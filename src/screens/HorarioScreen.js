@@ -21,8 +21,10 @@ MomentConfig.updateLocale("es", {
 });
 
 const HorarioScreen = () => {
-  const [ultimoId, setUltimoId] = useState(2); // Ultimo id de la lista de componentes
-  const [ultimoIdRelacion, setUltimoIdRelacion] = useState(2); // Ultimo id de la lista de componentes
+  const {ultimoId, setUltimoId} = useData(0); // Ultimo id de la lista de componentes
+  const {ultimoIdRelacion, setUltimoIdRelacion} = useData(0); // Ultimo id de la lista de componentes
+
+
   const [isModalVisible, setIsModalVisible] = useState(false); //Al ser TRUE muestra el modal de agregar
 
   // Variables para mostrar el componente Message de editar
